@@ -29,7 +29,7 @@ type PointProps = PointMeshProps &
   PointBaseProps & { selectedProps?: PointMeshProps };
 
 /**
- * Have to provide a default mesh properties, otherwise the point will not get restored after selection
+ * Have to provide default mesh properties, otherwise the point will not get restored after selection
  */
 const defaultPointMeshProps: PointMeshProps = { scale: 1 };
 
