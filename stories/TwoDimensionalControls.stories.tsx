@@ -8,6 +8,7 @@ import {
 } from '../src';
 import { Container } from './components';
 import data from './data/point-cloud-2d.json';
+import data2 from './data/point-cloud-2d-alt.json';
 
 const meta: Meta = {
   title: 'TwoDimensionalControls',
@@ -32,6 +33,8 @@ const Template: Story<TwoDimensionalControlsProps> = (props) => (
       <TwoDimensionalControls {...props} />
       {/* @ts-ignore */}
       <Points data={data} pointProps={{ color: 'aqua' }} />
+      {/* @ts-ignore */}
+      <Points data={data2} pointProps={{ color: 'MediumPurple' }} />
     </TwoDimensionalCanvas>
   </Container>
 );
