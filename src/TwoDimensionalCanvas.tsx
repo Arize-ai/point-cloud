@@ -1,6 +1,5 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
-import { MapControls } from '@react-three/drei';
 
 export type TwoDimensionalCanvasProps = {
   children?: React.ReactNode;
@@ -25,8 +24,6 @@ export function TwoDimensionalCanvas({
       }}
     >
       <ambientLight />
-      {/* disable rotation so that it doesn't clash with selection */}
-      <MapControls enableRotate={false} />
       {children}
     </Canvas>
   );

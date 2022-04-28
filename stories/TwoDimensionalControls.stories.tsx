@@ -2,16 +2,16 @@ import React from 'react';
 import { Meta, Story } from '@storybook/react';
 import {
   TwoDimensionalCanvas,
-  TwoDimensionalCanvasProps,
+  TwoDimensionalControls,
+  TwoDimensionalControlsProps,
   Points,
 } from '../src';
 import { Container } from './components';
 import data from './data/point-cloud-2d.json';
-import data2 from './data/point-cloud-2d-alt.json';
 
 const meta: Meta = {
-  title: 'TwoDimensionalCanvas',
-  component: TwoDimensionalCanvas,
+  title: 'TwoDimensionalControls',
+  component: TwoDimensionalControls,
   argTypes: {
     children: {
       control: {
@@ -26,13 +26,12 @@ const meta: Meta = {
 
 export default meta;
 
-const Template: Story<TwoDimensionalCanvasProps> = (args) => (
+const Template: Story<TwoDimensionalControlsProps> = (props) => (
   <Container>
-    <TwoDimensionalCanvas initialCameraZoom={30} {...args}>
+    <TwoDimensionalCanvas initialCameraZoom={30}>
+      <TwoDimensionalControls {...props} />
       {/* @ts-ignore */}
-      <Points data={data} />
-      {/* @ts-ignore */}
-      <Points data={data2} pointProps={{ color: 'red' }} />
+      <Points data={data} pointProps={{ color: 'aqua' }} />
     </TwoDimensionalCanvas>
   </Container>
 );

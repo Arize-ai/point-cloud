@@ -1,7 +1,7 @@
 import React from 'react';
-import { useMemo, useRef, useEffect } from 'react';
+import { useMemo, useRef, useEffect, useState } from 'react';
 import { Vector3 } from 'three';
-import { useSelect } from '@react-three/drei';
+import { useSelect, useCursor } from '@react-three/drei';
 
 type PointMeshProps = {
   /**
@@ -14,6 +14,10 @@ type PointMeshProps = {
    * @default #fffff
    */
   color?: string;
+  /**
+   * The color of the point
+   */
+  scale?: number;
 };
 
 type PointBaseProps = {
@@ -21,17 +25,24 @@ type PointBaseProps = {
   position: [number, number, number] | [number, number];
 };
 
-type PointProps = PointMeshProps & PointBaseProps;
+type PointProps = PointMeshProps &
+  PointBaseProps & { selectedProps?: PointMeshProps };
+
+/**
+ * Have to provide a default mesh properties, otherwise the point will not get restored after selection
+ */
+const defaultPointMeshProps: PointMeshProps = { scale: 1 };
 
 function Point({
   radius = 0.01,
   color = '#ffffff',
   metaData,
   position: propsPosition,
+  selectedProps,
   ...meshProps
 }: PointProps) {
   /**
-   * Normalize the position (alternatively hoist?)
+   * Normalize the position (alternatively hoist higher)
    */
   const position = useMemo(() => {
     const [x, y, z = 0] = propsPosition;
@@ -42,8 +53,25 @@ function Point({
   const ref = useRef(null);
   // Return the view, these are regular Threejs elements expressed in JSX
   const selected = useSelect();
-  // @ts-ignore
-  const isSelected = !!selected.find((sel) => sel.uuid === ref.current?.uuid);
+
+  const isSelected = useMemo(
+    // @ts-ignore
+    () => !!selected.find((sel) => sel.uuid === ref.current?.uuid),
+    [ref.current, selected]
+  );
+
+  /**
+   * Compute the mesh properties based on the selected state
+   */
+  const props = useMemo(() => {
+    return isSelected
+      ? { ...defaultPointMeshProps, ...meshProps, ...selectedProps }
+      : { ...defaultPointMeshProps, ...meshProps };
+  }, [meshProps, selectedProps, isSelected]);
+
+  // For now assume all points are selectable
+  const [hovered, setHovered] = useState<boolean>(false);
+  useCursor(hovered /*'pointer', 'auto'*/);
 
   useEffect(() => {
     if (ref.current) {
@@ -52,15 +80,19 @@ function Point({
       ref.current.metaData = metaData;
     }
   }, [ref, metaData]);
+
   return (
     <mesh
-      {...meshProps}
+      {...props}
       position={position}
       ref={ref}
-      scale={isSelected ? 1.5 : 1} // TODO move this to props
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
     >
       <sphereGeometry args={[radius, 32, 16]} />
-      <meshStandardMaterial color={isSelected ? 'red' : color} />
+      <meshStandardMaterial
+        color={isSelected ? selectedProps?.color || 'lime' : color}
+      />
     </mesh>
   );
 }
@@ -68,13 +100,22 @@ function Point({
 export type PointsProps = {
   data: Array<PointBaseProps>;
   pointProps?: PointMeshProps;
+  /**
+   * Additional props that will be merged with point props when the point is selected
+   */
+  selectedPointProps?: PointMeshProps;
 };
 
-export function Points({ data, pointProps }: PointsProps) {
+export function Points({ data, pointProps, selectedPointProps }: PointsProps) {
   return (
     <>
       {data.map((point, i) => (
-        <Point {...pointProps} {...point} key={i} />
+        <Point
+          {...pointProps}
+          selectedProps={selectedPointProps}
+          {...point}
+          key={i}
+        />
       ))}
     </>
   );
