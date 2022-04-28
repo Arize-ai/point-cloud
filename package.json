@@ -39,8 +39,8 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "point-cloud",
-  "author": "mikeldking",
+  "name": "@arizeai/point-cloud",
+  "author": "Mikyo King <mikyo@arize.com>",
   "module": "dist/point-cloud.esm.js",
   "size-limit": [
     {
