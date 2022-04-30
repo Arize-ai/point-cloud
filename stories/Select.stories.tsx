@@ -23,7 +23,7 @@ export default meta;
 
 function PointCloudWithSelect(props: SelectProps) {
   return (
-    <TwoDimensionalCanvas initialCameraZoom={30}>
+    <TwoDimensionalCanvas camera={{ zoom: 30, up: [0, 0, 1] }}>
       <TwoDimensionalControls />
       <Select box multiple {...props}>
         <Points
