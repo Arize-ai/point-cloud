@@ -36,7 +36,7 @@ export function TwoDimensionalBounds({
    */
   bounds: TwoDimensionalBoundsType;
   /**
-   * The amount to reduce the zoom by to fit the content when bounds are provided.
+   * The amount to reduce the zoom by to give some padding to the points (1 means no padding).
    * @default 0.9
    */
   boundsZoomPaddingFactor?: number;
