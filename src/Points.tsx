@@ -6,7 +6,7 @@ import { useSelect, useCursor } from '@react-three/drei';
 type PointMeshProps = {
   /**
    * The radius of the point.
-   * @default 0.01
+   * @default 0.02
    */
   radius?: number;
   /**
@@ -34,7 +34,7 @@ type PointProps = PointMeshProps &
 const defaultPointMeshProps: PointMeshProps = { scale: 1 };
 
 function Point({
-  radius = 0.01,
+  radius = 0.02,
   color = '#ffffff',
   metaData,
   position: propsPosition,
