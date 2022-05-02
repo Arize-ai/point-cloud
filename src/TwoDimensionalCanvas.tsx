@@ -10,8 +10,8 @@ type CameraPropType = {
 export type TwoDimensionalCanvasProps = {
   children?: React.ReactNode;
   /**
-   * The camera's initial props.
-   * @default 1
+   * The camera's initial props. overrides the defaults
+   * @default { position: [0, 0, 1], zoom: 1, up: [0, 1, 0] }
    */
   camera?: CameraPropType;
 };
