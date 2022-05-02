@@ -12,6 +12,14 @@ describe('getCenterFromTwoDimensionalBounds', () => {
         [0, 3],
       ])
     );
-    expect(center).toMatchInlineSnapshot([0.5, 1.5]);
+    expect(center).toMatchInlineSnapshot(
+      [0.5, 1.5],
+      `
+      Object {
+        "0": 0.5,
+        "1": 1.5,
+      }
+    `
+    );
   });
 });
