@@ -9,11 +9,7 @@ export type TwoDimensionalBoundsType = {
  * Customizable for the camera on initialization
  */
 export type CameraInitProps = {
-  left?: number;
-  right?: number;
-  top?: number;
-  bottom?: number;
-  zoom?: number;
   position?: [number, number, number];
+  zoom?: number;
   up?: [number, number, number];
 };

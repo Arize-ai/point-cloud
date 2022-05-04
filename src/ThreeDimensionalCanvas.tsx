@@ -2,7 +2,7 @@ import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { CameraInitProps } from './types';
 
-export type TwoDimensionalCanvasProps = {
+export type ThreeDimensionalCanvasProps = {
   children?: React.ReactNode;
   /**
    * The camera's initial props. overrides the defaults
@@ -11,13 +11,12 @@ export type TwoDimensionalCanvasProps = {
   camera?: CameraInitProps;
 };
 
-export function TwoDimensionalCanvas({
+export function ThreeDimensionalCanvas({
   children,
   camera,
-}: TwoDimensionalCanvasProps) {
+}: ThreeDimensionalCanvasProps) {
   return (
     <Canvas
-      orthographic
       camera={{
         position: [0, 0, 1],
         zoom: 1,
