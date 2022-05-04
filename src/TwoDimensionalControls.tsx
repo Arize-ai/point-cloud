@@ -13,11 +13,17 @@ export type TwoDimensionalControlsProps = {
    * @default 2
    */
   zoomSpeed?: number;
+  /**
+   * control the zoom
+   * @default true
+   */
+  enableZoom?: boolean;
 };
 
 export function TwoDimensionalControls({
   enabled = true,
   zoomSpeed = 2,
+  enableZoom = true,
 }: TwoDimensionalControlsProps) {
   const { center } = useTwoDimensionalBounds();
   const target = [...center, 0] as [number, number, number];
@@ -29,6 +35,7 @@ export function TwoDimensionalControls({
       enabled={enabled}
       target={target}
       zoomSpeed={zoomSpeed}
+      enableZoom={enableZoom}
     />
   );
 }
