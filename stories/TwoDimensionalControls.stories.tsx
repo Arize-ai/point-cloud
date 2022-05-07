@@ -80,3 +80,28 @@ export const WithBounds: Story<TwoDimensionalControlsProps> = () => {
     </Container>
   );
 };
+
+export const ZoomDisabled: Story<TwoDimensionalControlsProps> = () => {
+  const bounds = React.useMemo(() => {
+    // @ts-ignore
+    return getTwoDimensionalBounds([
+      ...data.map((d) => d.position),
+      ...data2.map((d) => d.position),
+    ]);
+  }, []);
+  return (
+    <Container>
+      <TwoDimensionalCanvas camera={{ up: [0, 0, 1] }}>
+        <TwoDimensionalBounds bounds={bounds}>
+          <TwoDimensionalControls enableZoom={false} />
+          {/* @ts-ignore */}
+          <Points data={data} pointProps={{ color: 'aqua' }} />
+          {/* @ts-ignore */}
+          <Points data={data2} pointProps={{ color: 'MediumPurple' }} />
+          <axesHelper />
+        </TwoDimensionalBounds>
+      </TwoDimensionalCanvas>
+      <axesHelper />
+    </Container>
+  );
+};

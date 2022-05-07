@@ -1,8 +1,7 @@
 import React from 'react';
-import { MapControls } from '@react-three/drei';
-import { useTwoDimensionalBounds } from './TwoDimensionalBounds';
+import { OrbitControls } from '@react-three/drei';
 
-export type TwoDimensionalControlsProps = {
+export type ThreeDimensionalControlsProps = {
   /**
    * A way to disable the controls dynamically.
    * @default true
@@ -20,20 +19,15 @@ export type TwoDimensionalControlsProps = {
   enableZoom?: boolean;
 };
 
-export function TwoDimensionalControls({
+export function ThreeDimensionalControls({
   enabled = true,
   zoomSpeed = 2,
   enableZoom = true,
-}: TwoDimensionalControlsProps) {
-  const { center } = useTwoDimensionalBounds();
-  const target = [...center, 0] as [number, number, number];
-
+}: ThreeDimensionalControlsProps) {
   /* disable rotation so that it doesn't clash with selection */
   return (
-    <MapControls
-      enableRotate={false}
+    <OrbitControls
       enabled={enabled}
-      target={target}
       zoomSpeed={zoomSpeed}
       enableZoom={enableZoom}
     />
