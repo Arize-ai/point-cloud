@@ -108,7 +108,6 @@ export type PointsProps = {
 };
 
 export function Points({ data, pointProps, selectedPointProps }: PointsProps) {
-  console.log(`rendering points #` + data.length);
   return (
     <>
       {data.map((point, i) => (
@@ -116,7 +115,7 @@ export function Points({ data, pointProps, selectedPointProps }: PointsProps) {
           {...pointProps}
           selectedProps={selectedPointProps}
           {...point}
-          key={`${point.position.join(`-`)}-${i}`}
+          key={i}
         />
       ))}
     </>
