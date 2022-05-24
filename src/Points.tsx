@@ -81,6 +81,7 @@ function Point({
     }
   }, [ref, metaData]);
 
+  console.log(`rendering p` + JSON.stringify(position));
   return (
     <mesh
       {...props}
@@ -107,6 +108,7 @@ export type PointsProps = {
 };
 
 export function Points({ data, pointProps, selectedPointProps }: PointsProps) {
+  console.log(`rendering points #` + data.length);
   return (
     <>
       {data.map((point, i) => (
@@ -114,7 +116,7 @@ export function Points({ data, pointProps, selectedPointProps }: PointsProps) {
           {...pointProps}
           selectedProps={selectedPointProps}
           {...point}
-          key={i}
+          key={`${point.position.join(`-`)}-${i}`}
         />
       ))}
     </>

@@ -1,10 +1,28 @@
 import { TwoDimensionalPoint, TwoDimensionalBoundsType } from '../types';
+
+type GetTwoDimensionalBoundsOptions = {
+  fallbackBounds: TwoDimensionalBoundsType;
+};
+
+const DEFAULT_FALLBACK_BOUNDS = {
+  minX: -1,
+  maxX: 1,
+  minY: -1,
+  maxY: 1,
+};
+
 /**
  * A function that computes the bounds
  */
 export function getTwoDimensionalBounds(
-  points: TwoDimensionalPoint[]
+  points: TwoDimensionalPoint[],
+  options?: GetTwoDimensionalBoundsOptions
 ): TwoDimensionalBoundsType {
+  // Handle the case where there are no points
+  if (points.length === 0) {
+    const fallbackBounds = options?.fallbackBounds || DEFAULT_FALLBACK_BOUNDS;
+    return fallbackBounds;
+  }
   // The extent of the points
   let minX = Infinity,
     minY = Infinity,

@@ -48,6 +48,7 @@ export function TwoDimensionalBounds({
   } = useThree();
 
   useEffect(() => {
+    console.log(`Resetting bounds to ${JSON.stringify(bounds)}`);
     const { minX, maxX, minY, maxY } = bounds;
     const boundsWidth = maxX - minX;
     const boundsHeight = maxY - minY;
