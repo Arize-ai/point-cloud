@@ -81,7 +81,6 @@ function Point({
     }
   }, [ref, metaData]);
 
-  console.log(`rendering p` + JSON.stringify(position));
   return (
     <mesh
       {...props}

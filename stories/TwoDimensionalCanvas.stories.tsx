@@ -92,7 +92,7 @@ export const Rerender = () => {
       >
         Load Data
       </button>
-      <TwoDimensionalCanvas key={primaryData.length}>
+      <TwoDimensionalCanvas>
         <TwoDimensionalBounds bounds={bounds}>
           {/* @ts-ignore */}
           <Points data={primaryData} />
