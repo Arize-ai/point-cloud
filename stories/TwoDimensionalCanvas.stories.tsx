@@ -72,4 +72,37 @@ export const WithBounds = () => {
   );
 };
 
+export const Rerender = () => {
+  const [primaryData, setPrimaryData] = React.useState([]);
+  const [secondaryData, setSecondaryData] = React.useState([]);
+  const bounds = React.useMemo(() => {
+    // @ts-ignore
+    return getTwoDimensionalBounds([
+      ...primaryData.map((d) => d.position),
+      ...secondaryData.map((d) => d.position),
+    ]);
+  }, [primaryData, secondaryData]);
+  return (
+    <Container>
+      <button
+        onClick={() => {
+          setPrimaryData(data);
+          setSecondaryData(data2);
+        }}
+      >
+        Load Data
+      </button>
+      <TwoDimensionalCanvas>
+        <TwoDimensionalBounds bounds={bounds}>
+          {/* @ts-ignore */}
+          <Points data={primaryData} />
+          {/* @ts-ignore */}
+          <Points data={secondaryData} pointProps={{ color: 'red' }} />
+          <axesHelper />
+        </TwoDimensionalBounds>
+      </TwoDimensionalCanvas>
+    </Container>
+  );
+};
+
 Default.args = {};
