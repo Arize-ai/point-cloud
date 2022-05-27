@@ -62,7 +62,7 @@ export const WithBounds = () => {
       <TwoDimensionalCanvas>
         <TwoDimensionalBounds bounds={bounds}>
           {/* @ts-ignore */}
-          <Points data={data} />
+          <Points data={data} pointProps={{ color: 'green' }} />
           {/* @ts-ignore */}
           <Points data={data2} pointProps={{ color: 'red' }} />
           <axesHelper />
