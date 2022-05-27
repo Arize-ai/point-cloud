@@ -1,5 +1,10 @@
-import React from 'react';
-import { useMemo, useRef, useEffect, useState } from 'react';
+import React, {
+  useMemo,
+  useRef,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
 import { Vector3 } from 'three';
 import { useSelect, useCursor } from '@react-three/drei';
 
@@ -81,18 +86,30 @@ function Point({
     }
   }, [ref, metaData]);
 
+  const onPointerOver = useCallback(() => setHovered(true), []);
+  const onPointerOut = useCallback(() => setHovered(false), []);
+  const sphere = useMemo(
+    () => <sphereGeometry args={[radius, 13, 8]} />,
+    [radius]
+  );
+  const material = useMemo(
+    () => (
+      <meshStandardMaterial
+        color={isSelected ? selectedProps?.color || 'lime' : color}
+      />
+    ),
+    [isSelected]
+  );
   return (
     <mesh
       {...props}
       position={position}
       ref={ref}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
+      onPointerOver={onPointerOver}
+      onPointerOut={onPointerOut}
     >
-      <sphereGeometry args={[radius, 32, 16]} />
-      <meshStandardMaterial
-        color={isSelected ? selectedProps?.color || 'lime' : color}
-      />
+      {sphere}
+      {material}
     </mesh>
   );
 }
