@@ -42,8 +42,14 @@ function PointCloudWithSelect(props) {
           data={data}
           pointProps={{ color: '#40E0D0' }}
           selectedPointProps={{ color: 'DarkOrchid', scale: 2 }}
-          onPointSelected={(point) => {
+          onPointClicked={(point) => {
             props.onChange(point);
+          }}
+          isPointSelected={(point) => {
+            if (props.selectedPoints.length) {
+              debugger;
+            }
+            return props.selectedPoints.includes(point.metaData.uuid);
           }}
         />
       </TwoDimensionalBounds>
@@ -61,6 +67,7 @@ const Template: Story = (props) => {
           onChange={(sel) => {
             setSelected([sel.metaData.uuid]);
           }}
+          selectedPoints={selected}
         />
       </Container>
       <aside>

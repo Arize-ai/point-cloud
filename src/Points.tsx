@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect, useState } from 'react';
+import React, { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 
@@ -38,7 +38,11 @@ export type PointsProps = {
   /**
    * Callback for when a point gets selected
    */
-  onPointSelected?: (pointOrVoid: PointBaseProps | void) => void;
+  onPointClicked?: (pointOrVoid: PointBaseProps) => void;
+  /**
+   * Function that determines if a point is selected
+   */
+  isPointSelected?: (point: PointBaseProps) => boolean;
 };
 
 const tempObject = new THREE.Object3D();
@@ -48,10 +52,9 @@ export function Points({
   data,
   pointProps = defaultPointMeshProps,
   selectedPointProps,
-  onPointSelected,
+  onPointClicked,
+  isPointSelected = () => false,
 }: PointsProps) {
-  const [selectedInstanceId, setSelectedInstanceId] =
-    useState<number | null>(null);
   const colorArray = useMemo(
     () =>
       Float32Array.from(
@@ -63,11 +66,6 @@ export function Points({
   );
   const scaleArrayRef = useRef(Array.from(new Array(data.length).fill(1)));
   const meshRef = useRef<THREE.InstancedMesh>(null);
-  const prevSelectedInstanceIdRef = useRef<number | null>(null);
-  useEffect(
-    () => void (prevSelectedInstanceIdRef.current = selectedInstanceId),
-    [selectedInstanceId]
-  );
 
   useFrame(() => {
     data.forEach(({ position }, id) => {
@@ -75,7 +73,7 @@ export function Points({
       if (meshRef.current) {
         meshRef.current.setMatrixAt(id, tempObject.matrix);
         meshRef.current.instanceMatrix.needsUpdate = true;
-        const isSelected = id === selectedInstanceId;
+        const isSelected = isPointSelected(data[id]);
 
         (isSelected
           ? tempColor.set(selectedPointProps?.color || 'lime')
@@ -100,11 +98,7 @@ export function Points({
       ref={meshRef}
       onPointerUp={(e) => {
         if (e.instanceId) {
-          setSelectedInstanceId(e.instanceId);
-          onPointSelected && onPointSelected(data[e.instanceId]);
-        } else {
-          setSelectedInstanceId(null);
-          onPointSelected && onPointSelected();
+          onPointClicked && onPointClicked(data[e.instanceId]);
         }
       }}
     >
