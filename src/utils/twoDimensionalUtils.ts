@@ -5,10 +5,10 @@ type GetTwoDimensionalBoundsOptions = {
 };
 
 const DEFAULT_FALLBACK_BOUNDS = {
-  minX: -1,
-  maxX: 1,
-  minY: -1,
-  maxY: 1,
+  minX: 0,
+  maxX: 0,
+  minY: 0,
+  maxY: 0,
 };
 
 /**
