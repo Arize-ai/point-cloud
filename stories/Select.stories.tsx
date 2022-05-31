@@ -35,12 +35,12 @@ function PointCloudWithSelect(props) {
     <TwoDimensionalCanvas camera={{ zoom: 30, up: [0, 0, 1] }}>
       <TwoDimensionalBounds bounds={bounds}>
         <TwoDimensionalControls />
-        <pointLight position={[10, 10, 10]} />
+        <pointLight position={[50, 50, 50]} />
 
         <Points
           /* @ts-ignore */
           data={data}
-          pointProps={{ color: 'aqua' }}
+          pointProps={{ color: '#40E0D0' }}
           selectedPointProps={{ color: 'DarkOrchid', scale: 2 }}
           onPointSelected={(point) => {
             props.onChange(point);

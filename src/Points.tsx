@@ -1,13 +1,6 @@
-import React, {
-  useMemo,
-  useRef,
-  useEffect,
-  useState,
-  useCallback,
-} from 'react';
+import React, { useMemo, useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { useSelect, useCursor } from '@react-three/drei';
 
 type PointMeshProps = {
   /**
@@ -30,13 +23,10 @@ type PointBaseProps = {
   position: [number, number, number] | [number, number];
 };
 
-type PointProps = PointMeshProps &
-  PointBaseProps & { selectedProps?: PointMeshProps };
-
 /**
  * Have to provide default mesh properties, otherwise the point will not get restored after selection
  */
-const defaultPointMeshProps: PointMeshProps = { scale: 1 };
+const defaultPointMeshProps: PointMeshProps = { color: 'blue', scale: 1 };
 
 export type PointsProps = {
   data: Array<PointBaseProps>;
@@ -48,7 +38,7 @@ export type PointsProps = {
   /**
    * Callback for when a point gets selected
    */
-  onPointSelected?: (props: PointBaseProps) => void;
+  onPointSelected?: (pointOrVoid: PointBaseProps | void) => void;
 };
 
 const tempObject = new THREE.Object3D();
@@ -56,7 +46,7 @@ const tempColor = new THREE.Color();
 
 export function Points({
   data,
-  pointProps,
+  pointProps = defaultPointMeshProps,
   selectedPointProps,
   onPointSelected,
 }: PointsProps) {
@@ -85,22 +75,22 @@ export function Points({
       if (meshRef.current) {
         meshRef.current.setMatrixAt(id, tempObject.matrix);
         meshRef.current.instanceMatrix.needsUpdate = true;
-        if (selectedInstanceId !== prevSelectedInstanceIdRef.current) {
-          const isSelected = id === selectedInstanceId;
-          (isSelected
-            ? tempColor.set(selectedPointProps?.color || 'lime')
-            : tempColor.set(pointProps.color)
-          ).toArray(colorArray, id * 3);
-          meshRef.current.geometry.attributes.color.needsUpdate = true;
-        }
+        const isSelected = id === selectedInstanceId;
+
+        (isSelected
+          ? tempColor.set(selectedPointProps?.color || 'lime')
+          : tempColor.set(pointProps.color)
+        ).toArray(colorArray, id * 3);
+        meshRef.current.geometry.attributes.color.needsUpdate = true;
+
         const scale = (scaleArrayRef.current[id] = THREE.MathUtils.lerp(
           scaleArrayRef.current[id],
-          selectedInstanceId ? 2.5 : 1,
+          isSelected ? selectedPointProps?.scale || 1.2 : 1,
           0.1
         ));
         tempObject.scale.setScalar(scale);
-        meshRef.current.setMatrixAt(id, tempObject.matrix);
         tempObject.updateMatrix();
+        meshRef.current.setMatrixAt(id, tempObject.matrix);
       }
     });
   });
@@ -112,11 +102,22 @@ export function Points({
         if (e.instanceId) {
           setSelectedInstanceId(e.instanceId);
           onPointSelected && onPointSelected(data[e.instanceId]);
+        } else {
+          setSelectedInstanceId(null);
+          onPointSelected && onPointSelected();
         }
       }}
     >
-      <sphereGeometry args={[0.02, 20, 20]} />
-      <meshStandardMaterial color={pointProps.color} />
+      <sphereGeometry args={[pointProps.radius || 0.02, 20, 20]}>
+        <instancedBufferAttribute
+          attach="attributes-color"
+          args={[colorArray, 3]}
+        />
+      </sphereGeometry>
+      <meshStandardMaterial
+        // @ts-ignore
+        vertexColors={THREE.VertexColors}
+      />
     </instancedMesh>
   );
 }
