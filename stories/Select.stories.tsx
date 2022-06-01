@@ -3,11 +3,9 @@ import { Meta, Story } from '@storybook/react';
 import {
   TwoDimensionalCanvas,
   TwoDimensionalControls,
-  Select,
-  SelectProps,
-  Points,
   TwoDimensionalBounds,
   getTwoDimensionalBounds,
+  Points,
 } from '../src';
 import { Container } from './components';
 import data from './data/point-cloud-2d.json';
@@ -15,7 +13,7 @@ import data2 from './data/point-cloud-2d-alt.json';
 
 const meta: Meta = {
   title: 'Select',
-  component: Select,
+  component: Points,
   argTypes: {},
   parameters: {
     controls: { expanded: true },
@@ -24,7 +22,7 @@ const meta: Meta = {
 
 export default meta;
 
-function PointCloudWithSelect(props: SelectProps) {
+function PointCloudWithSelect(props) {
   const bounds = React.useMemo(() => {
     // @ts-ignore
     return getTwoDimensionalBounds([
@@ -37,27 +35,29 @@ function PointCloudWithSelect(props: SelectProps) {
     <TwoDimensionalCanvas camera={{ zoom: 30, up: [0, 0, 1] }}>
       <TwoDimensionalBounds bounds={bounds}>
         <TwoDimensionalControls />
-        <pointLight position={[10, 10, 10]} />
-        <Select box multiple {...props}>
-          <Points
-            /* @ts-ignore */
-            data={data}
-            pointProps={{ color: 'aqua' }}
-            selectedPointProps={{ color: 'DarkOrchid', scale: 2 }}
-          />
-          <Points
-            /* @ts-ignore */
-            data={data2}
-            pointProps={{ color: 'MediumPurple' }}
-            selectedPointProps={{ color: 'DarkOrchid', scale: 2 }}
-          />
-        </Select>
+        <pointLight position={[50, 50, 50]} />
+
+        <Points
+          /* @ts-ignore */
+          data={data}
+          pointProps={{ color: '#40E0D0' }}
+          selectedPointProps={{ color: 'DarkOrchid', scale: 2 }}
+          onPointClicked={(point) => {
+            props.onChange(point);
+          }}
+          isPointSelected={(point) => {
+            if (props.selectedPoints.length) {
+              debugger;
+            }
+            return props.selectedPoints.includes(point.metaData.uuid);
+          }}
+        />
       </TwoDimensionalBounds>
     </TwoDimensionalCanvas>
   );
 }
 
-const Template: Story<SelectProps> = (props) => {
+const Template: Story = (props) => {
   const [selected, setSelected] = useState([]);
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -65,14 +65,9 @@ const Template: Story<SelectProps> = (props) => {
         <PointCloudWithSelect
           {...props}
           onChange={(sel) => {
-            setSelected(
-              sel
-                // @ts-ignore
-                .map((s) => s?.metaData)
-                .filter((m) => !!m)
-                .map((m) => m.uuid)
-            );
+            setSelected([sel.metaData.uuid]);
           }}
+          selectedPoints={selected}
         />
       </Container>
       <aside>

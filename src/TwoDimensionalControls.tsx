@@ -27,7 +27,7 @@ export type TwoDimensionalControlsProps = {
 
 export function TwoDimensionalControls({
   enabled = true,
-  zoomSpeed = 3,
+  zoomSpeed = 1.5,
   enableZoom = true,
   panSpeed = 2,
 }: TwoDimensionalControlsProps) {
