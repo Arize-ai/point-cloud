@@ -3,11 +3,6 @@ import { ThreeDimensionalBoundsType, ThreeDimensionalPoint } from './types';
 import { getCenterFromThreeDimensionalBounds } from './utils';
 import { useThree } from '@react-three/fiber';
 
-/**
- * The amount to reduce the zoom by to fit the content when bounds are provided.
- */
-const DEFAULT_BOUNDS_ZOOM_PADDING_FACTOR = 0.9;
-
 export type ThreeDimensionalBoundsContextType = {
   bounds: ThreeDimensionalBoundsType;
   center: ThreeDimensionalPoint;
@@ -28,8 +23,7 @@ export function useThreeDimensionalBounds() {
 export function ThreeDimensionalBounds({
   bounds,
   children,
-  offset = 1.25,
-  boundsZoomPaddingFactor = DEFAULT_BOUNDS_ZOOM_PADDING_FACTOR,
+  offset = 1.5,
 }: {
   children: React.ReactNode;
   /**
@@ -38,15 +32,10 @@ export function ThreeDimensionalBounds({
   bounds: ThreeDimensionalBoundsType;
   /**
    * Offset from the object to make it fit the bounds.
-   * @default 1.25
+   * @default 1.5
    */
   offset?: number;
-  /**
-   * The amount to reduce the zoom by to give some padding to the points (1 means no padding).
-   * @default 0.9
-   */
-  boundsZoomPaddingFactor?: number;
-}) {
+  }) {
   const center = getCenterFromThreeDimensionalBounds(bounds);
   const {
     camera,
@@ -64,18 +53,15 @@ export function ThreeDimensionalBounds({
     const fov = camera.fov * (Math.PI / 180);
     camera.position.x = boundsWidth / 2 + minX;
     camera.position.y = boundsHeight / 2 + minY;
-    camera.position.z = Math.abs((maxDim / 4) * Math.tan(fov * 2)) * offset;
+    const cameraZ = maxDim / (2 * Math.tan(fov / 2));
+    camera.position.z = (cameraZ + center[2]) * offset;
 
-    // // Set the zoom to fit the bounds
-    // // @src https://github.com/pmndrs/react-three-fiber/issues/67#issuecomment-496507403
-    // camera.zoom =
-    //   Math.min(width / boundsWidth, height / boundsHeight) *
-    //   boundsZoomPaddingFactor;
     const cameraToFarEdge =
       minZ < 0 ? -minZ + camera.position.z : camera.position.z - minZ;
 
     camera.far = cameraToFarEdge * 3;
     camera.updateProjectionMatrix();
+    camera.lookAt(...center);
   }, [bounds]);
 
   return (
