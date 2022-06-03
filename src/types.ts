@@ -5,6 +5,18 @@ export type TwoDimensionalBoundsType = {
   maxX: number;
   maxY: number;
 };
+
+export type ThreeDimensionalPoint = [number, number, number];
+
+export type ThreeDimensionalBoundsType = {
+  minX: number;
+  minY: number;
+  minZ: number;
+  maxX: number;
+  maxY: number;
+  maxZ: number;
+};
+
 /**
  * Customizable for the camera on initialization
  */

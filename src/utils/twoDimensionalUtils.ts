@@ -4,7 +4,7 @@ type GetTwoDimensionalBoundsOptions = {
   fallbackBounds: TwoDimensionalBoundsType;
 };
 
-const DEFAULT_FALLBACK_BOUNDS = {
+const DEFAULT_FALLBACK_BOUNDS: TwoDimensionalBoundsType = {
   minX: 0,
   maxX: 0,
   minY: 0,

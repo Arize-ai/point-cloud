@@ -4,6 +4,8 @@ import {
   ThreeDimensionalCanvas,
   ThreeDimensionalCanvasProps,
   ThreeDimensionalControls,
+  ThreeDimensionalBounds,
+  getThreeDimensionalBounds,
   Points,
 } from '../src';
 import { Container } from './components';
@@ -45,6 +47,31 @@ const Template: Story<ThreeDimensionalCanvasProps> = (args) => (
     </ThreeDimensionalCanvas>
   </Container>
 );
+
+export const WithBounds = () => {
+  const bounds = React.useMemo(() => {
+    // @ts-ignore
+    return getThreeDimensionalBounds([
+      ...data.map((d) => d.position),
+      ...data2.map((d) => d.position),
+    ]);
+  }, []);
+  return (
+    <Container>
+      <ThreeDimensionalCanvas>
+        <ThreeDimensionalControls />
+        <axesHelper />
+        <ThreeDimensionalBounds bounds={bounds}>
+          {/* @ts-ignore */}
+          <Points data={data} pointProps={{ color: 'green' }} />
+          {/* @ts-ignore */}
+          <Points data={data2} pointProps={{ color: 'red' }} />
+          <axesHelper />
+        </ThreeDimensionalBounds>
+      </ThreeDimensionalCanvas>
+    </Container>
+  );
+};
 
 // By passing using the Args format for exported stories, you can control the props for a component for reuse in a test
 // https://storybook.js.org/docs/react/workflows/unit-testing
