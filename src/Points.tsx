@@ -111,6 +111,7 @@ export function Points({
       <meshStandardMaterial
         // @ts-ignore
         vertexColors={THREE.VertexColors}
+        metalness={0.5}
       />
     </instancedMesh>
   );

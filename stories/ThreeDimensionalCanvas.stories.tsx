@@ -40,9 +40,9 @@ const Template: Story<ThreeDimensionalCanvasProps> = (args) => (
       <pointLight position={[10, 10, 10]} />
       <ThreeDimensionalControls />
       {/* @ts-ignore */}
-      <Points data={data} pointProps={{ color: 'aqua' }} />
+      <Points data={data} pointProps={{ color: "#7BFFFF" }} />
       {/* @ts-ignore */}
-      <Points data={data2} pointProps={{ color: 'MediumPurple' }} />
+      <Points data={data2} pointProps={{ color: "#BF9FFF" }} />
       <axesHelper />
     </ThreeDimensionalCanvas>
   </Container>
@@ -61,11 +61,42 @@ export const WithBounds = () => {
       <ThreeDimensionalCanvas>
         <ThreeDimensionalControls />
         <axesHelper />
+        <pointLight position={[10, 10, 10]} />
+        <pointLight position={[10, -10, 10]} />
         <ThreeDimensionalBounds bounds={bounds}>
           {/* @ts-ignore */}
-          <Points data={data} pointProps={{ color: 'green' }} />
+          <Points data={data} pointProps={{ color: "#7BFFFF" }} />
           {/* @ts-ignore */}
-          <Points data={data2} pointProps={{ color: 'red' }} />
+          <Points data={data2} pointProps={{ color: "#BF9FFF" }} />
+          <axesHelper />
+        </ThreeDimensionalBounds>
+      </ThreeDimensionalCanvas>
+    </Container>
+  );
+};
+
+const data3 = data.map((d) => ({...d, position: [d.position[0], d.position[1], d.position[2] + 2]}));
+
+export const OverlappingColors= () => {
+  const bounds = React.useMemo(() => {
+    // @ts-ignore
+    return getThreeDimensionalBounds([
+      ...data.map((d) => d.position),
+      ...data3.map((d) => d.position),
+    ]);
+  }, []);
+  return (
+    <Container>
+      <ThreeDimensionalCanvas>
+        <ThreeDimensionalControls />
+        <axesHelper />
+        <pointLight position={[10, 10, 10]} />
+        <pointLight position={[10, -10, 10]} />
+        <ThreeDimensionalBounds bounds={bounds}>
+          {/* @ts-ignore */}
+          <Points data={data} pointProps={{ color: "#7BFFFF" }} />
+          {/* @ts-ignore */}
+          <Points data={data3} pointProps={{ color: "#BF9FFF" }} />
           <axesHelper />
         </ThreeDimensionalBounds>
       </ThreeDimensionalCanvas>
