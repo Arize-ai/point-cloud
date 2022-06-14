@@ -155,7 +155,6 @@ export function Points({
       ref={meshRef}
       onPointerUp={(e) => {
         if (e.intersections) {
-          console.dir(e.intersections);
           onPointsClicked &&
             onPointsClicked(
               e.intersections
