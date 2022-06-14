@@ -1,10 +1,13 @@
 import React, { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
+import { BoxGeometry } from 'three';
+
+type PointShape = 'sphere' | 'cube';
 
 type PointMeshProps = {
   /**
-   * The radius of the point.
+   * The radius of the point if it is a sphere.
    * @default 0.02
    */
   radius?: number;
@@ -16,6 +19,11 @@ type PointMeshProps = {
    * The color of the point
    */
   scale?: number;
+  /**
+   * the dimension of a side if the radius is a sphere
+   * @default 1
+   */
+  size?: number;
 };
 
 type PointBaseProps = {
@@ -43,6 +51,11 @@ export type PointsProps = {
    * Function that determines if a point is selected
    */
   isPointSelected?: (point: PointBaseProps) => boolean;
+  /**
+   * The shape of the points. This value must be uniform for all points.
+   * @default 'sphere'
+   */
+  pointShape?: PointShape;
 };
 
 const tempObject = new THREE.Object3D();
@@ -53,6 +66,7 @@ export function Points({
   pointProps = defaultPointMeshProps,
   selectedPointProps,
   onPointClicked,
+  pointShape = 'sphere',
   isPointSelected = () => false,
 }: PointsProps) {
   const colorArray = useMemo(
@@ -92,6 +106,39 @@ export function Points({
       }
     });
   });
+
+  const geometry = useMemo(() => {
+    switch (pointShape) {
+      case 'sphere': {
+        return (
+          <sphereGeometry args={[pointProps.radius || 0.02, 20, 20]}>
+            <instancedBufferAttribute
+              attach="attributes-color"
+              args={[colorArray, 3]}
+            />
+          </sphereGeometry>
+        );
+      }
+      case 'cube': {
+        const args: [number, number, number] =
+          typeof pointProps?.size === 'number'
+            ? [pointProps.size, pointProps.size, pointProps.size]
+            : [1, 1, 1];
+        return (
+          <boxGeometry args={args}>
+            <instancedBufferAttribute
+              attach="attributes-color"
+              args={[colorArray, 3]}
+            />
+          </boxGeometry>
+        );
+      }
+      default: {
+        throw new Error(`Unsupported point shape: ${pointShape}`);
+      }
+    }
+  }, [pointShape, pointProps]);
+
   return (
     <instancedMesh
       args={[undefined, undefined, data.length]}
@@ -102,12 +149,7 @@ export function Points({
         }
       }}
     >
-      <sphereGeometry args={[pointProps.radius || 0.02, 20, 20]}>
-        <instancedBufferAttribute
-          attach="attributes-color"
-          args={[colorArray, 3]}
-        />
-      </sphereGeometry>
+      {geometry}
       <meshStandardMaterial
         // @ts-ignore
         vertexColors={THREE.VertexColors}
