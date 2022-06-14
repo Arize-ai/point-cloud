@@ -63,9 +63,14 @@ export const WithBounds = () => {
         <axesHelper />
         <ThreeDimensionalBounds bounds={bounds}>
           {/* @ts-ignore */}
-          <Points data={data} pointProps={{ color: 'green' }} />
-          {/* @ts-ignore */}
-          <Points data={data2} pointProps={{ color: 'red' }} />
+          <Points data={data} pointProps={{ color: 'lightgreen' }} />
+
+          <Points
+            // @ts-ignore
+            data={data2}
+            pointShape="cube"
+            pointProps={{ color: 'purple' }}
+          />
           <axesHelper />
         </ThreeDimensionalBounds>
       </ThreeDimensionalCanvas>

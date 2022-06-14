@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { BoxGeometry } from 'three';
 
-type PointShape = 'sphere' | 'cube';
+type PointShape = 'sphere' | 'cube' | 'octahedron';
 
 type PointMeshProps = {
   /**
@@ -21,7 +21,7 @@ type PointMeshProps = {
   scale?: number;
   /**
    * the dimension of a side if the radius is a sphere
-   * @default 1
+   * @default 0.03
    */
   size?: number;
 };
@@ -46,7 +46,7 @@ export type PointsProps = {
   /**
    * Callback for when a point gets selected
    */
-  onPointClicked?: (pointOrVoid: PointBaseProps) => void;
+  onPointsClicked?: (points: PointBaseProps[]) => void;
   /**
    * Function that determines if a point is selected
    */
@@ -65,7 +65,7 @@ export function Points({
   data,
   pointProps = defaultPointMeshProps,
   selectedPointProps,
-  onPointClicked,
+  onPointsClicked,
   pointShape = 'sphere',
   isPointSelected = () => false,
 }: PointsProps) {
@@ -123,7 +123,7 @@ export function Points({
         const args: [number, number, number] =
           typeof pointProps?.size === 'number'
             ? [pointProps.size, pointProps.size, pointProps.size]
-            : [1, 1, 1];
+            : [0.03, 0.03, 0.03];
         return (
           <boxGeometry args={args}>
             <instancedBufferAttribute
@@ -131,6 +131,16 @@ export function Points({
               args={[colorArray, 3]}
             />
           </boxGeometry>
+        );
+      }
+      case 'octahedron': {
+        return (
+          <octahedronGeometry args={[pointProps.radius || 0.02, 0]}>
+            <instancedBufferAttribute
+              attach="attributes-color"
+              args={[colorArray, 3]}
+            />
+          </octahedronGeometry>
         );
       }
       default: {
@@ -144,8 +154,15 @@ export function Points({
       args={[undefined, undefined, data.length]}
       ref={meshRef}
       onPointerUp={(e) => {
-        if (e.instanceId) {
-          onPointClicked && onPointClicked(data[e.instanceId]);
+        if (e.intersections) {
+          console.dir(e.intersections);
+          onPointsClicked &&
+            onPointsClicked(
+              e.intersections
+                .map((e) => e?.instanceId)
+                .filter((i): i is NonNullable<typeof i> => i != null)
+                .map((i) => data[i])
+            );
         }
       }}
     >
