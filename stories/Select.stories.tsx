@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { Meta, Story } from '@storybook/react';
 import {
-  TwoDimensionalCanvas,
-  TwoDimensionalControls,
-  TwoDimensionalBounds,
   getThreeDimensionalBounds,
   Points,
   ThreeDimensionalCanvas,
   ThreeDimensionalBounds,
   ThreeDimensionalControls,
+  Axes,
 } from '../src';
 import { Container } from './components';
 import data from './data/point-cloud-3d.json';
@@ -43,6 +41,7 @@ function PointCloudWithSelect(props) {
       <ThreeDimensionalBounds bounds={bounds}>
         <ThreeDimensionalControls />
         <pointLight position={[50, 50, 50]} />
+        <Axes size={bounds.maxX - bounds.minX} />
         <Points
           /* @ts-ignore */
           data={data}

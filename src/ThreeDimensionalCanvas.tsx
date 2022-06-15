@@ -24,7 +24,6 @@ export function ThreeDimensionalCanvas({
         ...camera,
       }}
     >
-      <ambientLight />
       {children}
     </Canvas>
   );
