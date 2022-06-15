@@ -1,7 +1,6 @@
 import React, { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { BoxGeometry } from 'three';
 
 type PointShape = 'sphere' | 'cube' | 'octahedron';
 
@@ -44,7 +43,11 @@ export type PointsProps = {
    */
   selectedPointProps?: PointMeshProps;
   /**
-   * Callback for when a point gets selected
+   * Callback for when a point gets selected. Returns the selected nearest point
+   */
+  onPointClicked?: (points: PointBaseProps) => void;
+  /**
+   * Callback for when point(s) gets selected. Returns the selected points that correspond to the ray trace hit
    */
   onPointsClicked?: (points: PointBaseProps[]) => void;
   /**
@@ -66,6 +69,7 @@ export function Points({
   pointProps = defaultPointMeshProps,
   selectedPointProps,
   onPointsClicked,
+  onPointClicked,
   pointShape = 'sphere',
   isPointSelected = () => false,
 }: PointsProps) {
@@ -155,13 +159,17 @@ export function Points({
       ref={meshRef}
       onPointerUp={(e) => {
         if (e.intersections) {
-          onPointsClicked &&
-            onPointsClicked(
-              e.intersections
-                .map((e) => e?.instanceId)
-                .filter((i): i is NonNullable<typeof i> => i != null)
-                .map((i) => data[i])
-            );
+          const instanceIds = e.intersections
+            .map((e) => e?.instanceId)
+            .filter((i): i is NonNullable<typeof i> => i != null);
+
+          // Multi click
+          onPointsClicked && onPointsClicked(instanceIds.map((i) => data[i]));
+
+          // Single click
+          instanceIds.length > 0 &&
+            onPointClicked &&
+            onPointClicked(data[instanceIds[0]]);
         }
       }}
     >

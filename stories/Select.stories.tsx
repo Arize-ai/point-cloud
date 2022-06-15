@@ -61,10 +61,10 @@ function PointCloudWithSelect(props) {
           data={data2}
           pointProps={{ color: '#6b40e0' }}
           selectedPointProps={{ color: '#bd2f2f', scale: 2 }}
-          onPointsClicked={(points) => {
-            props.onChange(points);
+          onPointClicked={(point) => {
+            props.onChange([point]);
           }}
-          pointShape="octahedron"
+          pointShape="cube"
           isPointSelected={(point) => {
             const selectedId = props.selectedPoints[0];
             return selectedId === point.metaData.uuid;
