@@ -36,6 +36,8 @@ export default meta;
 const Template: Story<TwoDimensionalCanvasProps> = (args) => (
   <Container>
     <TwoDimensionalCanvas camera={{ zoom: 30 }} {...args}>
+      <ambientLight />
+      <pointLight position={[10, 10, 10]} />
       {/* @ts-ignore */}
       <Points data={data} />
       {/* @ts-ignore */}
@@ -60,6 +62,8 @@ export const WithBounds = () => {
   return (
     <Container>
       <TwoDimensionalCanvas>
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
         <TwoDimensionalBounds bounds={bounds}>
           {/* @ts-ignore */}
           <Points data={data} pointProps={{ color: 'green' }} />
@@ -93,6 +97,8 @@ export const Rerender = () => {
         Load Data
       </button>
       <TwoDimensionalCanvas>
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
         <TwoDimensionalBounds bounds={bounds}>
           {/* @ts-ignore */}
           <Points data={primaryData} />

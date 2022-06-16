@@ -25,7 +25,6 @@ export function TwoDimensionalCanvas({
         ...camera,
       }}
     >
-      <ambientLight />
       {children}
     </Canvas>
   );
