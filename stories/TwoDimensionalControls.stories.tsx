@@ -40,6 +40,8 @@ const Template: Story<TwoDimensionalControlsProps> = (props) => {
   return (
     <Container>
       <TwoDimensionalCanvas camera={{ zoom: 30, up: [0, 0, 1] }}>
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
         <TwoDimensionalControls {...props} />
         {/* @ts-ignore */}
         <Points data={data} pointProps={{ color: 'aqua' }} />
@@ -67,6 +69,8 @@ export const WithBounds: Story<TwoDimensionalControlsProps> = () => {
   return (
     <Container>
       <TwoDimensionalCanvas camera={{ up: [0, 0, 1] }}>
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
         <TwoDimensionalBounds bounds={bounds}>
           <TwoDimensionalControls />
           {/* @ts-ignore */}
@@ -92,6 +96,8 @@ export const ZoomDisabled: Story<TwoDimensionalControlsProps> = () => {
   return (
     <Container>
       <TwoDimensionalCanvas camera={{ up: [0, 0, 1] }}>
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
         <TwoDimensionalBounds bounds={bounds}>
           <TwoDimensionalControls enableZoom={false} />
           {/* @ts-ignore */}
