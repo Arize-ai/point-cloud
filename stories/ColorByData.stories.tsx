@@ -53,7 +53,7 @@ const Template: Story<ThreeDimensionalCanvasProps> = (args) => (
           color: (data) => {
             const { actualLabel } = data.metaData;
             const index = actualLabels.indexOf(actualLabel);
-            return interpolateSpectral(index / actualLabels.length);
+            return interpolateSpectral(index / (actualLabels.length - 1));
           },
         }}
       />
