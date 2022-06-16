@@ -59,15 +59,20 @@ export const WithBounds = () => {
   return (
     <Container>
       <ThreeDimensionalCanvas>
+        <ambientLight />
         <ThreeDimensionalControls />
         <axesHelper />
         <pointLight position={[10, 10, 10]} />
         <pointLight position={[10, -10, 10]} />
         <ThreeDimensionalBounds bounds={bounds}>
-          {/* @ts-ignore */}
+          <Points
+            // @ts-ignore
+            data={data2}
+            pointShape="cube"
+            pointProps={{ color: 'purple' }}
+          />
+           {/* @ts-ignore */}
           <Points data={data} pointProps={{ color: "#7BFFFF" }} />
-          {/* @ts-ignore */}
-          <Points data={data2} pointProps={{ color: "#BF9FFF" }} />
           <axesHelper />
         </ThreeDimensionalBounds>
       </ThreeDimensionalCanvas>

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Meta, Story } from '@storybook/react';
 import {
-  TwoDimensionalCanvas,
-  TwoDimensionalControls,
-  TwoDimensionalBounds,
-  getTwoDimensionalBounds,
+  getThreeDimensionalBounds,
   Points,
+  ThreeDimensionalCanvas,
+  ThreeDimensionalBounds,
+  ThreeDimensionalControls,
+  Axes,
 } from '../src';
 import { Container } from './components';
-import data from './data/point-cloud-2d.json';
-import data2 from './data/point-cloud-2d-alt.json';
+import data from './data/point-cloud-3d.json';
 
 const meta: Meta = {
   title: 'Select',
@@ -20,40 +20,58 @@ const meta: Meta = {
   },
 };
 
+const data2 = data.map((d) => ({
+  ...d,
+  position: [d.position[0], d.position[1], d.position[2] + 1],
+}));
+
 export default meta;
 
 function PointCloudWithSelect(props) {
   const bounds = React.useMemo(() => {
     // @ts-ignore
-    return getTwoDimensionalBounds([
+    return getThreeDimensionalBounds([
       ...data.map((d) => d.position),
       ...data2.map((d) => d.position),
     ]);
   }, []);
 
   return (
-    <TwoDimensionalCanvas camera={{ zoom: 30, up: [0, 0, 1] }}>
-      <TwoDimensionalBounds bounds={bounds}>
-        <TwoDimensionalControls />
-        <pointLight position={[50, 50, 50]} />
-
+    <ThreeDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
+      <ambientLight intensity={0.5} />
+      <pointLight position={[0, 0, 10]} />
+      <ThreeDimensionalBounds bounds={bounds}>
+        <ThreeDimensionalControls />
+        <Axes size={bounds.maxX - bounds.minX} />
         <Points
           /* @ts-ignore */
           data={data}
           pointProps={{ color: '#40E0D0' }}
-          selectedPointProps={{ color: 'DarkOrchid', scale: 2 }}
+          selectedPointProps={{ color: 'pink', scale: 2 }}
           onPointClicked={(point) => {
-            props.onChange(point);
+            props.onChange([point]);
           }}
           isPointSelected={(point) => {
-            if (props.selectedPoints.length) {
-              debugger;
-            }
-            return props.selectedPoints.includes(point.metaData.uuid);
+            const selectedId = props.selectedPoints[0];
+            return selectedId === point.metaData.uuid;
           }}
         />
-      </TwoDimensionalBounds>
-    </TwoDimensionalCanvas>
+        <Points
+          /* @ts-ignore */
+          data={data2}
+          pointProps={{ color: '#6b40e0' }}
+          selectedPointProps={{ color: '#bd2f2f', scale: 2 }}
+          onPointClicked={(point) => {
+            props.onChange([point]);
+          }}
+          pointShape="cube"
+          isPointSelected={(point) => {
+            const selectedId = props.selectedPoints[0];
+            return selectedId === point.metaData.uuid;
+          }}
+        />
+      </ThreeDimensionalBounds>
+    </ThreeDimensionalCanvas>
   );
 }
 
@@ -65,7 +83,7 @@ const Template: Story = (props) => {
         <PointCloudWithSelect
           {...props}
           onChange={(sel) => {
-            setSelected([sel.metaData.uuid]);
+            setSelected(sel.map((s) => s.metaData.uuid));
           }}
           selectedPoints={selected}
         />

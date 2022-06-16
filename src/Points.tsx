@@ -1,21 +1,28 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, useCallback } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 
+type PointShape = 'sphere' | 'cube' | 'octahedron';
+
 type PointMeshProps = {
   /**
-   * The radius of the point.
+   * The radius of the point if it is a sphere.
    * @default 0.02
    */
   radius?: number;
   /**
    * The color of the point
    */
-  color: string;
+  color: string | ((point: PointBaseProps) => string);
   /**
    * The color of the point
    */
   scale?: number;
+  /**
+   * the dimension of a side if the radius is a sphere
+   * @default 0.03
+   */
+  size?: number;
 };
 
 type PointBaseProps = {
@@ -36,13 +43,22 @@ export type PointsProps = {
    */
   selectedPointProps?: PointMeshProps;
   /**
-   * Callback for when a point gets selected
+   * Callback for when a point gets selected. Returns the selected nearest point
    */
-  onPointClicked?: (pointOrVoid: PointBaseProps) => void;
+  onPointClicked?: (points: PointBaseProps) => void;
+  /**
+   * Callback for when point(s) gets selected. Returns the selected points that correspond to the ray trace hit
+   */
+  onPointsClicked?: (points: PointBaseProps[]) => void;
   /**
    * Function that determines if a point is selected
    */
   isPointSelected?: (point: PointBaseProps) => boolean;
+  /**
+   * The shape of the points. This value must be uniform for all points.
+   * @default 'sphere'
+   */
+  pointShape?: PointShape;
 };
 
 const tempObject = new THREE.Object3D();
@@ -52,15 +68,31 @@ export function Points({
   data,
   pointProps = defaultPointMeshProps,
   selectedPointProps,
+  onPointsClicked,
   onPointClicked,
+  pointShape = 'sphere',
   isPointSelected = () => false,
 }: PointsProps) {
+  // Callback function  to get the color of a specific point
+  const getColorPoint = useCallback(
+    (data: PointBaseProps) => {
+      const colorString =
+        typeof pointProps.color === 'function'
+          ? pointProps.color(data)
+          : pointProps.color;
+      return colorString;
+    },
+    [pointProps]
+  );
+
   const colorArray = useMemo(
     () =>
       Float32Array.from(
         new Array(data.length)
           .fill(null)
-          .flatMap((_) => tempColor.set(pointProps.color).toArray())
+          .flatMap((_, idx) =>
+            tempColor.set(getColorPoint(data[idx])).toArray()
+          )
       ),
     [data]
   );
@@ -75,10 +107,21 @@ export function Points({
         meshRef.current.instanceMatrix.needsUpdate = true;
         const isSelected = isPointSelected(data[id]);
 
-        (isSelected
-          ? tempColor.set(selectedPointProps?.color || 'lime')
-          : tempColor.set(pointProps.color)
-        ).toArray(colorArray, id * 3);
+        if (isSelected) {
+          const colorString =
+            typeof selectedPointProps?.color === 'function'
+              ? selectedPointProps.color(data[id])
+              : selectedPointProps?.color || 'lime';
+
+          tempColor.set(colorString);
+        } else {
+          const colorString = getColorPoint(data[id]);
+
+          tempColor.set(colorString);
+        }
+        // Flush the color to the color buffer at the point's index
+        tempColor.toArray(colorArray, id * 3);
+
         meshRef.current.geometry.attributes.color.needsUpdate = true;
 
         const scale = (scaleArrayRef.current[id] = THREE.MathUtils.lerp(
@@ -92,22 +135,70 @@ export function Points({
       }
     });
   });
+
+  const geometry = useMemo(() => {
+    switch (pointShape) {
+      case 'sphere': {
+        return (
+          <sphereGeometry args={[pointProps.radius || 0.02, 20, 20]}>
+            <instancedBufferAttribute
+              attach="attributes-color"
+              args={[colorArray, 3]}
+            />
+          </sphereGeometry>
+        );
+      }
+      case 'cube': {
+        const args: [number, number, number] =
+          typeof pointProps?.size === 'number'
+            ? [pointProps.size, pointProps.size, pointProps.size]
+            : [0.03, 0.03, 0.03];
+        return (
+          <boxGeometry args={args}>
+            <instancedBufferAttribute
+              attach="attributes-color"
+              args={[colorArray, 3]}
+            />
+          </boxGeometry>
+        );
+      }
+      case 'octahedron': {
+        return (
+          <octahedronGeometry args={[pointProps.radius || 0.02, 0]}>
+            <instancedBufferAttribute
+              attach="attributes-color"
+              args={[colorArray, 3]}
+            />
+          </octahedronGeometry>
+        );
+      }
+      default: {
+        throw new Error(`Unsupported point shape: ${pointShape}`);
+      }
+    }
+  }, [pointShape, pointProps]);
+
   return (
     <instancedMesh
       args={[undefined, undefined, data.length]}
       ref={meshRef}
       onPointerUp={(e) => {
-        if (e.instanceId) {
-          onPointClicked && onPointClicked(data[e.instanceId]);
+        if (e.intersections) {
+          const instanceIds = e.intersections
+            .map((e) => e?.instanceId)
+            .filter((i): i is NonNullable<typeof i> => i != null);
+
+          // Multi click
+          onPointsClicked && onPointsClicked(instanceIds.map((i) => data[i]));
+
+          // Single click
+          instanceIds.length > 0 &&
+            onPointClicked &&
+            onPointClicked(data[instanceIds[0]]);
         }
       }}
     >
-      <sphereGeometry args={[pointProps.radius || 0.02, 20, 20]}>
-        <instancedBufferAttribute
-          attach="attributes-color"
-          args={[colorArray, 3]}
-        />
-      </sphereGeometry>
+      {geometry}
       <meshStandardMaterial
         // @ts-ignore
         vertexColors={THREE.VertexColors}
