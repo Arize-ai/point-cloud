@@ -13,7 +13,7 @@ type PointMeshProps = {
   /**
    * The color of the point
    */
-  color: string | ((metaData: any) => string);
+  color: string | ((point: PointBaseProps) => string);
   /**
    * The color of the point
    */
