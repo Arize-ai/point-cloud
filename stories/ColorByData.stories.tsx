@@ -4,13 +4,11 @@ import {
   ThreeDimensionalCanvas,
   ThreeDimensionalCanvasProps,
   ThreeDimensionalControls,
-  ThreeDimensionalBounds,
-  getThreeDimensionalBounds,
   Points,
 } from '../src';
 import { Container } from './components';
 import data from './data/point-cloud-3d.json';
-import { interpolateSpectral } from 'd3-scale-chromatic';
+import { interpolateYlGnBu } from 'd3-scale-chromatic';
 
 const meta: Meta = {
   title: 'ColorByData',
@@ -53,7 +51,7 @@ const Template: Story<ThreeDimensionalCanvasProps> = (args) => (
           color: (data) => {
             const { actualLabel } = data.metaData;
             const index = actualLabels.indexOf(actualLabel);
-            return interpolateSpectral(index / (actualLabels.length - 1));
+            return interpolateYlGnBu(index / (actualLabels.length - 1));
           },
         }}
       />
