@@ -7,7 +7,7 @@ import {
   Points,
 } from '../src';
 import { Container } from './components';
-import data from './data/point-cloud-3d.json';
+import _data from './data/point-cloud-3d.json';
 import { interpolateYlGnBu } from 'd3-scale-chromatic';
 
 const meta: Meta = {
@@ -32,6 +32,10 @@ const meta: Meta = {
 
 export default meta;
 
+const data = _data.map((d) => ({
+  ...d,
+  metaData: { actualLabel: String(Math.floor(Math.random() * 50)) },
+}));
 const actualLabelsSet = data.reduce(
   (acc, d) => acc.add(d.metaData.actualLabel),
   new Set()

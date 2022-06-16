@@ -5,6 +5,11 @@ import { CameraInitProps } from './types';
 export type ThreeDimensionalCanvasProps = {
   children?: React.ReactNode;
   /**
+   * Whether or not to use an orthographic camera or not
+   * @default false
+   */
+  orthographic?: boolean;
+  /**
    * The camera's initial props. overrides the defaults
    * @default { position: [0, 0, 1], zoom: 1, up: [0, 1, 0] }
    */
@@ -14,9 +19,11 @@ export type ThreeDimensionalCanvasProps = {
 export function ThreeDimensionalCanvas({
   children,
   camera,
+  orthographic = false,
 }: ThreeDimensionalCanvasProps) {
   return (
     <Canvas
+      orthographic={orthographic}
       camera={{
         position: [0, 0, 1],
         zoom: 1,
