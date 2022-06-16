@@ -82,7 +82,9 @@
     "example": "example",
     "test": "test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "d3-scale-chromatic": "^3.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Arize-ai/point-cloud.git"

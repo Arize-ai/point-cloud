@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, useCallback } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 
@@ -13,7 +13,7 @@ type PointMeshProps = {
   /**
    * The color of the point
    */
-  color: string;
+  color: string | ((metaData: any) => string);
   /**
    * The color of the point
    */
@@ -73,12 +73,26 @@ export function Points({
   pointShape = 'sphere',
   isPointSelected = () => false,
 }: PointsProps) {
+  // Callback function  to get the color of a specific point
+  const getColorPoint = useCallback(
+    (data: PointBaseProps) => {
+      const colorString =
+        typeof pointProps.color === 'function'
+          ? pointProps.color(data)
+          : pointProps.color;
+      return colorString;
+    },
+    [pointProps]
+  );
+
   const colorArray = useMemo(
     () =>
       Float32Array.from(
         new Array(data.length)
           .fill(null)
-          .flatMap((_) => tempColor.set(pointProps.color).toArray())
+          .flatMap((_, idx) =>
+            tempColor.set(getColorPoint(data[idx])).toArray()
+          )
       ),
     [data]
   );
@@ -93,10 +107,21 @@ export function Points({
         meshRef.current.instanceMatrix.needsUpdate = true;
         const isSelected = isPointSelected(data[id]);
 
-        (isSelected
-          ? tempColor.set(selectedPointProps?.color || 'lime')
-          : tempColor.set(pointProps.color)
-        ).toArray(colorArray, id * 3);
+        if (isSelected) {
+          const colorString =
+            typeof selectedPointProps?.color === 'function'
+              ? selectedPointProps.color(data[id])
+              : selectedPointProps?.color || 'lime';
+
+          tempColor.set(colorString);
+        } else {
+          const colorString = getColorPoint(data[id]);
+
+          tempColor.set(colorString);
+        }
+        // Flush the color to the color buffer at the point's index
+        tempColor.toArray(colorArray, id * 3);
+
         meshRef.current.geometry.attributes.color.needsUpdate = true;
 
         const scale = (scaleArrayRef.current[id] = THREE.MathUtils.lerp(

@@ -38,9 +38,10 @@ function PointCloudWithSelect(props) {
 
   return (
     <ThreeDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
+      <ambientLight intensity={0.2} />
+      <pointLight position={[0, 0, 0]} />
       <ThreeDimensionalBounds bounds={bounds}>
         <ThreeDimensionalControls />
-        <pointLight position={[50, 50, 50]} />
         <Axes size={bounds.maxX - bounds.minX} />
         <Points
           /* @ts-ignore */
