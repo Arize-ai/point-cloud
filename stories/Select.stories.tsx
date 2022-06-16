@@ -38,8 +38,8 @@ function PointCloudWithSelect(props) {
 
   return (
     <ThreeDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
-      <ambientLight intensity={0.2} />
-      <pointLight position={[0, 0, 0]} />
+      <ambientLight intensity={0.5} />
+      <pointLight position={[0, 0, 10]} />
       <ThreeDimensionalBounds bounds={bounds}>
         <ThreeDimensionalControls />
         <Axes size={bounds.maxX - bounds.minX} />
@@ -48,8 +48,8 @@ function PointCloudWithSelect(props) {
           data={data}
           pointProps={{ color: '#40E0D0' }}
           selectedPointProps={{ color: 'pink', scale: 2 }}
-          onPointsClicked={(points) => {
-            props.onChange(points);
+          onPointClicked={(point) => {
+            props.onChange([point]);
           }}
           isPointSelected={(point) => {
             const selectedId = props.selectedPoints[0];

@@ -9,7 +9,7 @@ export type ThreeDimensionalControlsProps = {
   enabled?: boolean;
   /**
    * The speed at which to zoom / pan
-   * @default 2
+   * @default 1
    */
   zoomSpeed?: number;
   /**
@@ -21,7 +21,7 @@ export type ThreeDimensionalControlsProps = {
 
 export function ThreeDimensionalControls({
   enabled = true,
-  zoomSpeed = 2,
+  zoomSpeed = 1,
   enableZoom = true,
 }: ThreeDimensionalControlsProps) {
   /* disable rotation so that it doesn't clash with selection */

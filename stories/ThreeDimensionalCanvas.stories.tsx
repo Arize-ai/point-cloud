@@ -59,6 +59,7 @@ export const WithBounds = () => {
   return (
     <Container>
       <ThreeDimensionalCanvas>
+        <ambientLight />
         <ThreeDimensionalControls />
         <axesHelper />
         <ThreeDimensionalBounds bounds={bounds}>
