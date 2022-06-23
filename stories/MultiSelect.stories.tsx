@@ -7,14 +7,14 @@ import {
   ThreeDimensionalBounds,
   ThreeDimensionalControls,
   Axes,
-  Select,
+  LassoSelect,
 } from '../src';
 import { Container } from './components';
 import data from './data/point-cloud-3d.json';
 
 const meta: Meta = {
-  title: 'MultiSelect',
-  component: Points,
+  title: 'LassoSelect',
+  component: LassoSelect,
   argTypes: {},
   parameters: {
     controls: { expanded: true },
@@ -41,7 +41,7 @@ function PointCloudWithSelect(props) {
     <ThreeDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
       <ambientLight intensity={0.5} />
       <pointLight position={[0, 0, 10]} />
-      <Select>
+      <LassoSelect>
         <ThreeDimensionalBounds bounds={bounds}>
           <ThreeDimensionalControls enabled={false} />
           <Axes size={bounds.maxX - bounds.minX} />
@@ -60,7 +60,7 @@ function PointCloudWithSelect(props) {
             opacity={0.7}
           />
         </ThreeDimensionalBounds>
-      </Select>
+      </LassoSelect>
     </ThreeDimensionalCanvas>
   );
 }

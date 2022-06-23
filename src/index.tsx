@@ -6,6 +6,6 @@ export * from './ThreeDimensionalControls';
 export * from './ThreeDimensionalBounds';
 export * from './Axes';
 export * from './Points';
-export * from './Select';
+export * from './LassoSelect';
 export * from './utils';
 export * from './types';

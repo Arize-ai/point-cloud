@@ -1,16 +1,15 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, ReactNode } from 'react';
 import * as THREE from 'three';
-import { ThreeEvent, useFrame, useThree } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 
 const context = React.createContext<THREE.Object3D[]>([]);
 
-type Props = JSX.IntrinsicElements['group'] & {
-  multiple?: boolean;
-  box?: boolean;
-  border?: string;
-  backgroundColor?: string;
-  onChange?: (selected: THREE.Object3D[]) => void;
-  filter?: (selected: THREE.Object3D[]) => THREE.Object3D[];
+type LassoSelectProps = {
+  /**
+   * The color of the lasso line
+   */
+  lineColor?: string;
+  children: ReactNode;
 };
 
 const selectionPoints: number[] = [];
@@ -18,27 +17,25 @@ let isDragging = false;
 let selectionShapeNeedsUpdate = false;
 
 const selectionShape = new THREE.Line();
-selectionShape.material.color.set('white').convertSRGBToLinear();
 selectionShape.renderOrder = 1;
 selectionShape.position.z = -0.2;
+// @ts-ignore
 selectionShape.depthTest = false;
 selectionShape.scale.setScalar(1);
 
-export function Select({
-  box,
-  multiple,
+export function LassoSelect({
   children,
-  onChange,
-  border = '1px solid #55aaff',
-  backgroundColor = 'rgba(75, 160, 255, 0.1)',
-  filter: customFilter = (item) => item,
-  ...props
-}: Props) {
+  lineColor = '#53d7fb',
+}: LassoSelectProps) {
   const { camera, raycaster, gl, controls, size, scene } = useThree();
 
   // const ref = React.useRef<THREE.Group>(null!);
 
   useEffect(() => {
+    // Set the color of the lasso
+    // @ts-ignore
+    selectionShape.material.color.set(lineColor).convertSRGBToLinear();
+
     // Selection shape
     camera.add(selectionShape);
 
@@ -61,7 +58,6 @@ export function Select({
     const tempVec2 = new THREE.Vector2();
 
     function pointerDown(e: MouseEvent) {
-      debugger;
       prevX = e.clientX - canvasRect.left;
       prevY = e.clientY - canvasRect.top;
       startX = ((e.clientX - canvasRect.left) / canvasRect.width) * 2 - 1;
@@ -70,16 +66,18 @@ export function Select({
       isDragging = true;
     }
 
+    /**
+     * Calculate the points to add to the line segment
+     * @src https://github.com/gkjohnson/three-mesh-bvh/blob/master/example/selection.js
+     */
     function pointerMove(e: MouseEvent) {
       if (isDragging) {
+        // Capture the click event position
         const ex = e.clientX - canvasRect.left;
         const ey = e.clientY - canvasRect.top;
 
-        const nx = ((e.clientX - canvasRect.left) / canvasRect.width) * 2 - 1;
-        const ny = -(
-          ((e.clientY - canvasRect.top) / canvasRect.height) * 2 -
-          1
-        );
+        const nx = (ex / canvasRect.width) * 2 - 1;
+        const ny = -((ey / canvasRect.height) * 2 - 1);
 
         // If the mouse hasn't moved a lot since the last point
         if (Math.abs(ex - prevX) >= 3 || Math.abs(ey - prevY) >= 3) {
@@ -141,6 +139,7 @@ export function Select({
     };
   }, [size, raycaster, camera, controls, gl]);
 
+  // Animation frames to draw the selections
   useFrame(({ camera }) => {
     // Update the selection lasso lines
     if (selectionShapeNeedsUpdate) {
@@ -163,24 +162,14 @@ export function Select({
     }
 
     const yScale =
+      // @ts-ignore
       Math.tan((THREE.MathUtils.DEG2RAD * camera.fov) / 2) *
       selectionShape.position.z;
-    console.log(yScale);
+    // @ts-ignore
     selectionShape.scale.set(-yScale * camera.aspect, -yScale, 1);
   });
-  return children;
-  // return (
-  //   <group
-  //     ref={ref}
-  //     onClick={onClick}
-  //     onPointerOver={() => hover(true)}
-  //     onPointerOut={() => hover(false)}
-  //     onPointerMissed={onPointerMissed}
-  //     {...props}
-  //   >
-  //     <context.Provider value={active}>{children}</context.Provider>
-  //   </group>
-  // );
+
+  return <>{children}</>;
 }
 
 export function useSelect() {
