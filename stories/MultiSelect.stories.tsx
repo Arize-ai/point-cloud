@@ -7,12 +7,13 @@ import {
   ThreeDimensionalBounds,
   ThreeDimensionalControls,
   Axes,
+  Select,
 } from '../src';
 import { Container } from './components';
 import data from './data/point-cloud-3d.json';
 
 const meta: Meta = {
-  title: 'Select',
+  title: 'MultiSelect',
   component: Points,
   argTypes: {},
   parameters: {
@@ -40,38 +41,26 @@ function PointCloudWithSelect(props) {
     <ThreeDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
       <ambientLight intensity={0.5} />
       <pointLight position={[0, 0, 10]} />
-      <ThreeDimensionalBounds bounds={bounds}>
-        <ThreeDimensionalControls />
-        <Axes size={bounds.maxX - bounds.minX} />
-        <Points
-          /* @ts-ignore */
-          data={data}
-          pointProps={{ color: '#40E0D0' }}
-          selectedPointProps={{ color: 'pink', scale: 2 }}
-          onPointClicked={(point) => {
-            props.onChange([point]);
-          }}
-          isPointSelected={(point) => {
-            const selectedId = props.selectedPoints[0];
-            return selectedId === point.metaData.uuid;
-          }}
-        />
-        <Points
-          /* @ts-ignore */
-          data={data2}
-          pointProps={{ color: '#6b40e0' }}
-          selectedPointProps={{ color: '#bd2f2f', scale: 2 }}
-          onPointClicked={(point) => {
-            props.onChange([point]);
-          }}
-          pointShape="cube"
-          isPointSelected={(point) => {
-            const selectedId = props.selectedPoints[0];
-            return selectedId === point.metaData.uuid;
-          }}
-          opacity={0.7}
-        />
-      </ThreeDimensionalBounds>
+      <Select>
+        <ThreeDimensionalBounds bounds={bounds}>
+          <ThreeDimensionalControls enabled={false} />
+          <Axes size={bounds.maxX - bounds.minX} />
+          <Points
+            /* @ts-ignore */
+            data={data}
+            pointProps={{ color: '#40E0D0' }}
+            selectedPointProps={{ color: 'pink', scale: 2 }}
+          />
+          <Points
+            /* @ts-ignore */
+            data={data2}
+            pointProps={{ color: '#6b40e0' }}
+            selectedPointProps={{ color: '#bd2f2f', scale: 2 }}
+            pointShape="cube"
+            opacity={0.7}
+          />
+        </ThreeDimensionalBounds>
+      </Select>
     </ThreeDimensionalCanvas>
   );
 }
