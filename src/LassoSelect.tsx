@@ -1,8 +1,9 @@
 import React, { useEffect, ReactNode } from 'react';
 import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber';
-
-const context = React.createContext<THREE.Object3D[]>([]);
+import { PointBaseProps } from './Points';
+import { isPointInsidePolygon } from './utils/twoDimensionalUtils';
+import { TwoDimensionalPoint } from './types';
 
 type LassoSelectProps = {
   /**
@@ -10,11 +11,20 @@ type LassoSelectProps = {
    */
   lineColor?: string;
   children: ReactNode;
+  points: PointBaseProps[];
+  onChange: (selected: PointBaseProps[]) => void;
 };
 
 const selectionPoints: number[] = [];
 let isDragging = false;
+/**
+ * Whether or not the lasso shape needs rendering
+ */
 let selectionShapeNeedsUpdate = false;
+/**
+ * Whether or not the selection should be updated (e.g. the lasso is closed)
+ */
+let selectionNeedsUpdate = false;
 
 const selectionShape = new THREE.Line();
 selectionShape.renderOrder = 1;
@@ -26,10 +36,11 @@ selectionShape.scale.setScalar(1);
 export function LassoSelect({
   children,
   lineColor = '#53d7fb',
+  onChange,
+  points,
 }: LassoSelectProps) {
   const { camera, raycaster, gl, controls, size, scene } = useThree();
-
-  // const ref = React.useRef<THREE.Group>(null!);
+  const canvasRect = gl.domElement.getClientRects()[0];
 
   useEffect(() => {
     // Set the color of the lasso
@@ -50,8 +61,6 @@ export function LassoSelect({
 
     let prevX = -Infinity;
     let prevY = -Infinity;
-
-    const canvasRect = gl.domElement.getClientRects()[0];
 
     const tempVec0 = new THREE.Vector2();
     const tempVec1 = new THREE.Vector2();
@@ -122,6 +131,7 @@ export function LassoSelect({
       isDragging = false;
       if (selectionPoints.length) {
         selectionShapeNeedsUpdate = true;
+        selectionNeedsUpdate = true;
       }
     }
 
@@ -161,6 +171,18 @@ export function LassoSelect({
       selectionShapeNeedsUpdate = false;
     }
 
+    if (selectionNeedsUpdate && selectionPoints.length > 0) {
+      selectionNeedsUpdate = false;
+      onChange(
+        updateSelection({
+          points,
+          camera,
+          canvasWidth: canvasRect.width,
+          canvasHeight: canvasRect.height,
+        })
+      );
+    }
+
     const yScale =
       // @ts-ignore
       Math.tan((THREE.MathUtils.DEG2RAD * camera.fov) / 2) *
@@ -172,6 +194,29 @@ export function LassoSelect({
   return <>{children}</>;
 }
 
-export function useSelect() {
-  return React.useContext(context);
+function updateSelection({
+  points,
+  camera,
+}: {
+  points: PointBaseProps[];
+  camera: THREE.Camera;
+  canvasWidth: number;
+  canvasHeight: number;
+}) {
+  let selection: PointBaseProps[] = [];
+  let lassoPolygon: TwoDimensionalPoint[] = [];
+  for (let i = 0; i < selectionPoints.length; i += 3) {
+    lassoPolygon.push([selectionPoints[i], selectionPoints[i + 1]]);
+  }
+  const pointVector = new THREE.Vector3();
+  points.forEach((point) => {
+    // Initialize the point vector from the point position
+    pointVector.fromArray(point.position).project(camera);
+    // const x = ((pointVector.x + 1) * canvasWidth) / 2;
+    // const y = (-(pointVector.y - 1) * canvasHeight) / 2;
+    if (isPointInsidePolygon([pointVector.x, pointVector.y], lassoPolygon)) {
+      selection.push(point);
+    }
+  });
+  return selection;
 }

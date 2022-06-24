@@ -25,7 +25,7 @@ type PointMeshProps = {
   size?: number;
 };
 
-type PointBaseProps = {
+export type PointBaseProps = {
   metaData: any;
   position: [number, number, number] | [number, number];
 };

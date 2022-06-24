@@ -41,7 +41,13 @@ function PointCloudWithSelect(props) {
     <ThreeDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
       <ambientLight intensity={0.5} />
       <pointLight position={[0, 0, 10]} />
-      <LassoSelect>
+      {/* @ts-ignore */}
+      <LassoSelect
+        points={[...data, ...data2]}
+        onChange={(selection) => {
+          props.onChange(selection);
+        }}
+      >
         <ThreeDimensionalBounds bounds={bounds}>
           <ThreeDimensionalControls enabled={false} />
           <Axes size={bounds.maxX - bounds.minX} />
@@ -50,6 +56,9 @@ function PointCloudWithSelect(props) {
             data={data}
             pointProps={{ color: '#40E0D0' }}
             selectedPointProps={{ color: 'pink', scale: 2 }}
+            isPointSelected={(p) =>
+              props.selectedPoints.includes(p.metaData.uuid)
+            }
           />
           <Points
             /* @ts-ignore */
@@ -58,6 +67,9 @@ function PointCloudWithSelect(props) {
             selectedPointProps={{ color: '#bd2f2f', scale: 2 }}
             pointShape="cube"
             opacity={0.7}
+            isPointSelected={(p) =>
+              props.selectedPoints.includes(p.metaData.uuid)
+            }
           />
         </ThreeDimensionalBounds>
       </LassoSelect>

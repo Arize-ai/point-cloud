@@ -55,3 +55,35 @@ export function getCenterFromTwoDimensionalBounds({
 }: TwoDimensionalBoundsType): TwoDimensionalPoint {
   return [minX + (maxX - minX) / 2, minY + (maxY - minY) / 2];
 }
+
+/**
+ *
+ * @param point
+ * @param vs
+ * @returns
+ */
+export function isPointInsidePolygon(
+  point: TwoDimensionalPoint,
+  polygonPoints: TwoDimensionalPoint[]
+) {
+  var x = point[0],
+    y = point[1];
+
+  let inside = false;
+  for (
+    var i = 0, j = polygonPoints.length - 1;
+    i < polygonPoints.length;
+    j = i++
+  ) {
+    var xi = polygonPoints[i][0],
+      yi = polygonPoints[i][1];
+    var xj = polygonPoints[j][0],
+      yj = polygonPoints[j][1];
+
+    var intersect =
+      yi > y != yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+    if (intersect) inside = !inside;
+  }
+
+  return inside;
+}
