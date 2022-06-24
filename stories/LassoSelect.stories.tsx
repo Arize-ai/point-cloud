@@ -41,8 +41,8 @@ function PointCloudWithSelect(props) {
     <ThreeDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
       <ambientLight intensity={0.5} />
       <pointLight position={[0, 0, 10]} />
-      {/* @ts-ignore */}
       <LassoSelect
+        /* @ts-ignore */
         points={[...data, ...data2]}
         onChange={(selection) => {
           props.onChange(selection);

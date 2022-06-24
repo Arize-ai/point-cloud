@@ -56,8 +56,6 @@ export function LassoSelect({
     gl.setPixelRatio(window.devicePixelRatio);
 
     // handle building lasso shape
-    let startX = -Infinity;
-    let startY = -Infinity;
 
     let prevX = -Infinity;
     let prevY = -Infinity;
@@ -69,8 +67,6 @@ export function LassoSelect({
     function pointerDown(e: MouseEvent) {
       prevX = e.clientX - canvasRect.left;
       prevY = e.clientY - canvasRect.top;
-      startX = ((e.clientX - canvasRect.left) / canvasRect.width) * 2 - 1;
-      startY = -(((e.clientY - canvasRect.top) / gl.domElement.height) * 2 - 1);
       selectionPoints.length = 0;
       isDragging = true;
     }
@@ -212,8 +208,6 @@ function updateSelection({
   points.forEach((point) => {
     // Initialize the point vector from the point position
     pointVector.fromArray(point.position).project(camera);
-    // const x = ((pointVector.x + 1) * canvasWidth) / 2;
-    // const y = (-(pointVector.y - 1) * canvasHeight) / 2;
     if (isPointInsidePolygon([pointVector.x, pointVector.y], lassoPolygon)) {
       selection.push(point);
     }
