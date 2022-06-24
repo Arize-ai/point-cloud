@@ -3,6 +3,11 @@ import { ThreeDimensionalBoundsType, ThreeDimensionalPoint } from './types';
 import { getCenterFromThreeDimensionalBounds } from './utils';
 import { useThree } from '@react-three/fiber';
 
+export const isOrthographicCamera = (
+  def: THREE.Camera
+): def is THREE.OrthographicCamera =>
+  def && (def as THREE.OrthographicCamera).isOrthographicCamera;
+
 export type ThreeDimensionalBoundsContextType = {
   bounds: ThreeDimensionalBoundsType;
   center: ThreeDimensionalPoint;
@@ -35,7 +40,7 @@ export function ThreeDimensionalBounds({
    * @default 1.5
    */
   offset?: number;
-  }) {
+}) {
   const center = getCenterFromThreeDimensionalBounds(bounds);
   const {
     camera,
@@ -49,17 +54,23 @@ export function ThreeDimensionalBounds({
     const boundsHeight = maxY - minY;
     const boundsDepth = maxZ - minZ;
     const maxDim = Math.max(boundsWidth, boundsHeight, boundsDepth);
-    // @ts-ignore
-    const fov = camera.fov * (Math.PI / 180);
-    camera.position.x = boundsWidth / 2 + minX;
-    camera.position.y = boundsHeight / 2 + minY;
-    const cameraZ = maxDim / (2 * Math.tan(fov / 2));
-    camera.position.z = (cameraZ + center[2]) * offset;
 
-    const cameraToFarEdge =
-      minZ < 0 ? -minZ + camera.position.z : camera.position.z - minZ;
+    if (!isOrthographicCamera(camera)) {
+      // Non orthographic camera
+      const fov = camera.fov * (Math.PI / 180);
+      camera.position.x = boundsWidth / 2 + minX;
+      camera.position.y = boundsHeight / 2 + minY;
+      const cameraZ = maxDim / (2 * Math.tan(fov / 2));
+      camera.position.z = (cameraZ + center[2]) * offset;
+    } else {
+      // Orthographic camera
+      throw new Error('Bounds not supported for orthographic camera');
+    }
 
-    camera.far = cameraToFarEdge * 3;
+    // const cameraToFarEdge =
+    //   minZ < 0 ? -minZ + camera.position.z : camera.position.z - minZ;
+
+    // camera.far = cameraToFarEdge * 3;
     camera.updateProjectionMatrix();
     camera.lookAt(...center);
   }, [bounds]);

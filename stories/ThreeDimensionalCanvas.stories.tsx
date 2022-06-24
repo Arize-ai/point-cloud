@@ -40,9 +40,9 @@ const Template: Story<ThreeDimensionalCanvasProps> = (args) => (
       <pointLight position={[10, 10, 10]} />
       <ThreeDimensionalControls />
       {/* @ts-ignore */}
-      <Points data={data} pointProps={{ color: "#7BFFFF" }} />
+      <Points data={data} pointProps={{ color: '#7BFFFF' }} />
       {/* @ts-ignore */}
-      <Points data={data2} pointProps={{ color: "#BF9FFF" }} />
+      <Points data={data2} pointProps={{ color: '#BF9FFF' }} />
       <axesHelper />
     </ThreeDimensionalCanvas>
   </Container>
@@ -69,10 +69,11 @@ export const WithBounds = () => {
             // @ts-ignore
             data={data2}
             pointShape="cube"
-            pointProps={{ color: 'purple' }}
+            pointProps={{ color: 'white' }}
+            opacity={0.9}
           />
-           {/* @ts-ignore */}
-          <Points data={data} pointProps={{ color: "#7BFFFF" }} />
+          {/* @ts-ignore */}
+          <Points data={data} pointProps={{ color: 'white' }} opacity={0.9} />
           <axesHelper />
         </ThreeDimensionalBounds>
       </ThreeDimensionalCanvas>
@@ -80,9 +81,12 @@ export const WithBounds = () => {
   );
 };
 
-const data3 = data.map((d) => ({...d, position: [d.position[0], d.position[1], d.position[2] + 2]}));
+const data3 = data.map((d) => ({
+  ...d,
+  position: [d.position[0], d.position[1], d.position[2] + 2],
+}));
 
-export const OverlappingColors= () => {
+export const OverlappingColors = () => {
   const bounds = React.useMemo(() => {
     // @ts-ignore
     return getThreeDimensionalBounds([
@@ -96,12 +100,16 @@ export const OverlappingColors= () => {
         <ThreeDimensionalControls />
         <axesHelper />
         <pointLight position={[10, 10, 10]} />
-        <pointLight position={[10, -10, 10]} />
+        <ambientLight />
         <ThreeDimensionalBounds bounds={bounds}>
           {/* @ts-ignore */}
-          <Points data={data} pointProps={{ color: "#7BFFFF" }} />
+          <Points data={data} pointProps={{ color: '#7BFFFF' }} opacity={0.9} />
           {/* @ts-ignore */}
-          <Points data={data3} pointProps={{ color: "#BF9FFF" }} />
+          <Points
+            data={data3}
+            pointProps={{ color: '#BF9FFF' }}
+            opacity={0.9}
+          />
           <axesHelper />
         </ThreeDimensionalBounds>
       </ThreeDimensionalCanvas>

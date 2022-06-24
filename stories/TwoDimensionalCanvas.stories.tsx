@@ -6,6 +6,8 @@ import {
   Points,
   getTwoDimensionalBounds,
   TwoDimensionalBounds,
+  getPointSize,
+  TwoDimensionalControls,
 } from '../src';
 import { Container } from './components';
 import data from './data/point-cloud-2d.json';
@@ -40,8 +42,13 @@ const Template: Story<TwoDimensionalCanvasProps> = (args) => (
       <pointLight position={[10, 10, 10]} />
       {/* @ts-ignore */}
       <Points data={data} />
-      {/* @ts-ignore */}
-      <Points data={data2} pointProps={{ color: 'red' }} />
+      <Points
+        // @ts-ignore
+        data={data2}
+        pointProps={{
+          color: 'red',
+        }}
+      />
       <axesHelper />
     </TwoDimensionalCanvas>
   </Container>
@@ -61,14 +68,35 @@ export const WithBounds = () => {
   }, []);
   return (
     <Container>
-      <TwoDimensionalCanvas>
+      <TwoDimensionalCanvas camera={{ up: [0, 0, 1] }}>
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
         <TwoDimensionalBounds bounds={bounds}>
+          <TwoDimensionalControls />
           {/* @ts-ignore */}
-          <Points data={data} pointProps={{ color: 'green' }} />
+          <Points
+            data={data}
+            pointProps={{
+              color: 'green',
+              radius: getPointSize({
+                sideLength: bounds.maxX - bounds.minX,
+                numPoints: data.length + data2.length,
+              }),
+            }}
+            opacity={0.7}
+          />
           {/* @ts-ignore */}
-          <Points data={data2} pointProps={{ color: 'red' }} />
+          <Points
+            data={data2}
+            pointProps={{
+              color: 'purple',
+              radius: getPointSize({
+                sideLength: bounds.maxX - bounds.minX,
+                numPoints: data.length + data2.length,
+              }),
+            }}
+            opacity={0.7}
+          />
           <axesHelper />
         </TwoDimensionalBounds>
       </TwoDimensionalCanvas>

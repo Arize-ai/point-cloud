@@ -59,6 +59,11 @@ export type PointsProps = {
    * @default 'sphere'
    */
   pointShape?: PointShape;
+  /**
+   * Opacity of the entire mesh
+   * @default 1
+   */
+  opacity?: number;
 };
 
 const tempObject = new THREE.Object3D();
@@ -72,6 +77,7 @@ export function Points({
   onPointClicked,
   pointShape = 'sphere',
   isPointSelected = () => false,
+  opacity = 1,
 }: PointsProps) {
   // Callback function  to get the color of a specific point
   const getColorPoint = useCallback(
@@ -203,6 +209,8 @@ export function Points({
         // @ts-ignore
         vertexColors={THREE.VertexColors}
         metalness={0.5}
+        opacity={opacity}
+        transparent={opacity < 1}
       />
     </instancedMesh>
   );

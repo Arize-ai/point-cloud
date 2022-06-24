@@ -55,3 +55,13 @@ export function getCenterFromTwoDimensionalBounds({
 }: TwoDimensionalBoundsType): TwoDimensionalPoint {
   return [minX + (maxX - minX) / 2, minY + (maxY - minY) / 2];
 }
+
+export function getPointSize({
+  numPoints,
+  sideLength,
+}: {
+  sideLength: number;
+  numPoints: number;
+}) {
+  return sideLength / 8 / Math.sqrt(numPoints);
+}

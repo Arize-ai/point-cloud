@@ -2,6 +2,9 @@ import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { CameraInitProps } from './types';
 
+// Constants relating to the camera parameters.
+const PERSP_CAMERA_FOV_VERTICAL = 70;
+
 export type ThreeDimensionalCanvasProps = {
   children?: React.ReactNode;
   /**
@@ -28,6 +31,7 @@ export function ThreeDimensionalCanvas({
         position: [0, 0, 1],
         zoom: 1,
         up: [0, 1, 0],
+        fov: PERSP_CAMERA_FOV_VERTICAL,
         ...camera,
       }}
     >
