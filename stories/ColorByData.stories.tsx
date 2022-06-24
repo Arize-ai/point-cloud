@@ -43,15 +43,23 @@ const data2 = _data.map((d, idx) => ({
   metaData: { actualLabel: `${idx}` },
 }));
 
-const actualLabelsSet = data.reduce(
-  (acc, d) => acc.add(d.metaData.actualLabel),
-  new Set()
+const actualLabelsArray = Array.from(
+  data.reduce((acc, d) => acc.add(d.metaData.actualLabel), new Set())
 );
-const actualLabels = Array.from(actualLabelsSet);
+
+const labelCount = actualLabelsArray.length - 1;
+
+const actualLabelsColorMap: Map<string, number> = actualLabelsArray.reduce(
+  (acc: Map<string, number>, d, index) => {
+    acc[d as string] = index / labelCount;
+    return acc;
+  },
+  new Map() as Map<string, number>
+);
+
 const colorByFn = (data) => {
   const { actualLabel } = data.metaData;
-  const index = actualLabels.indexOf(actualLabel);
-  return interpolateSinebow(index / (actualLabels.length - 1));
+  return interpolateSinebow(actualLabelsColorMap[actualLabel]);
 };
 const Template: Story<ThreeDimensionalCanvasProps> = (args) => (
   <Container>

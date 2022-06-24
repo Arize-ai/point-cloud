@@ -23,6 +23,11 @@ export type TwoDimensionalControlsProps = {
    * @default true
    */
   enableZoom?: boolean;
+  /**
+   * control the zoom
+   * @default true
+   */
+  enablePan?: boolean;
 };
 
 export function TwoDimensionalControls({
@@ -30,6 +35,7 @@ export function TwoDimensionalControls({
   zoomSpeed = 1.5,
   enableZoom = true,
   panSpeed = 2,
+  enablePan = true,
 }: TwoDimensionalControlsProps) {
   const { center } = useTwoDimensionalBounds();
   const target = [...center, 0] as [number, number, number];
@@ -43,6 +49,7 @@ export function TwoDimensionalControls({
       zoomSpeed={zoomSpeed}
       enableZoom={enableZoom}
       panSpeed={panSpeed}
+      enablePan={enablePan}
     />
   );
 }

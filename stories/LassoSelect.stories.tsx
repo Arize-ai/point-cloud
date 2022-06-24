@@ -8,6 +8,7 @@ import {
   ThreeDimensionalControls,
   Axes,
   LassoSelect,
+  TwoDimensionalControls,
 } from '../src';
 import { Container } from './components';
 import data from './data/point-cloud-3d.json';
@@ -21,10 +22,10 @@ const meta: Meta = {
   },
 };
 
-const data2 = data.map((d) => ({
-  ...d,
-  position: [d.position[0], d.position[1], d.position[2] + 1],
-}));
+// const data2 = data.map((d) => ({
+//   ...d,
+//   position: [d.position[0], d.position[1], d.position[2] + 1],
+// }));
 
 export default meta;
 
@@ -33,7 +34,7 @@ function PointCloudWithSelect(props) {
     // @ts-ignore
     return getThreeDimensionalBounds([
       ...data.map((d) => d.position),
-      ...data2.map((d) => d.position),
+      // ...data2.map((d) => d.position),
     ]);
   }, []);
 
@@ -41,9 +42,10 @@ function PointCloudWithSelect(props) {
     <ThreeDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
       <ambientLight intensity={0.5} />
       <pointLight position={[0, 0, 10]} />
+      <TwoDimensionalControls enablePan={false} />
       <LassoSelect
         /* @ts-ignore */
-        points={[...data, ...data2]}
+        points={[...data]}
         onChange={(selection) => {
           props.onChange(selection);
         }}
@@ -56,17 +58,6 @@ function PointCloudWithSelect(props) {
             data={data}
             pointProps={{ color: '#40E0D0' }}
             selectedPointProps={{ color: 'pink', scale: 2 }}
-            isPointSelected={(p) =>
-              props.selectedPoints.includes(p.metaData.uuid)
-            }
-          />
-          <Points
-            /* @ts-ignore */
-            data={data2}
-            pointProps={{ color: '#6b40e0' }}
-            selectedPointProps={{ color: '#bd2f2f', scale: 2 }}
-            pointShape="cube"
-            opacity={0.7}
             isPointSelected={(p) =>
               props.selectedPoints.includes(p.metaData.uuid)
             }
