@@ -10,6 +10,11 @@ type LassoSelectProps = {
    * The color of the lasso line
    */
   lineColor?: string;
+  /**
+   * Whether or not selection is enabled
+   * @default true
+   */
+  enabled?: boolean;
   children: ReactNode;
   points: PointBaseProps[];
   onChange: (selected: PointBaseProps[]) => void;
@@ -38,6 +43,7 @@ export function LassoSelect({
   lineColor = '#53d7fb',
   onChange,
   points,
+  enabled,
 }: LassoSelectProps) {
   const { camera, raycaster, gl, controls, size, scene } = useThree();
   const canvasRect = gl.domElement.getClientRects()[0];
@@ -51,6 +57,7 @@ export function LassoSelect({
     camera.add(selectionShape);
 
     // Must add the camera to the scene itself
+    // TODO make this run once?
     scene.add(camera);
 
     gl.setPixelRatio(window.devicePixelRatio);
@@ -65,10 +72,12 @@ export function LassoSelect({
     const tempVec2 = new THREE.Vector2();
 
     function pointerDown(e: MouseEvent) {
-      prevX = e.clientX - canvasRect.left;
-      prevY = e.clientY - canvasRect.top;
-      selectionPoints.length = 0;
-      isDragging = true;
+      if (enabled) {
+        prevX = e.clientX - canvasRect.left;
+        prevY = e.clientY - canvasRect.top;
+        selectionPoints.length = 0;
+        isDragging = true;
+      }
     }
 
     /**
@@ -125,7 +134,7 @@ export function LassoSelect({
     function pointerUp() {
       selectionShape.visible = false;
       isDragging = false;
-      if (selectionPoints.length) {
+      if (enabled && selectionPoints.length) {
         selectionShapeNeedsUpdate = true;
         selectionNeedsUpdate = true;
       }
@@ -143,7 +152,7 @@ export function LassoSelect({
       document.removeEventListener('pointermove', pointerMove);
       document.removeEventListener('pointerup', pointerUp);
     };
-  }, [size, raycaster, camera, controls, gl]);
+  }, [size, raycaster, camera, controls, gl, enabled]);
 
   // Animation frames to draw the selections
   useFrame(({ camera }) => {

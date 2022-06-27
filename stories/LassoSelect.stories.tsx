@@ -10,7 +10,7 @@ import {
   LassoSelect,
   TwoDimensionalControls,
 } from '../src';
-import { Container } from './components';
+import { Container, ToolName } from './components';
 import data from './data/point-cloud-3d.json';
 
 const meta: Meta = {
@@ -22,14 +22,10 @@ const meta: Meta = {
   },
 };
 
-// const data2 = data.map((d) => ({
-//   ...d,
-//   position: [d.position[0], d.position[1], d.position[2] + 1],
-// }));
-
 export default meta;
 
 function PointCloudWithSelect(props) {
+  const selectedTool = props.selectedTool;
   const bounds = React.useMemo(() => {
     // @ts-ignore
     return getThreeDimensionalBounds([
@@ -49,9 +45,10 @@ function PointCloudWithSelect(props) {
         onChange={(selection) => {
           props.onChange(selection);
         }}
+        enabled={selectedTool === 'select'}
       >
         <ThreeDimensionalBounds bounds={bounds}>
-          <ThreeDimensionalControls enabled={false} />
+          <ThreeDimensionalControls enabled={selectedTool === 'move'} />
           <Axes size={bounds.maxX - bounds.minX} />
           <Points
             /* @ts-ignore */
@@ -70,15 +67,17 @@ function PointCloudWithSelect(props) {
 
 const Template: Story = (props) => {
   const [selected, setSelected] = useState([]);
+  const [tool, setTool] = useState<ToolName>('move');
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <Container>
+      <Container showToolbar selectedTool={tool} onToolChange={setTool}>
         <PointCloudWithSelect
           {...props}
           onChange={(sel) => {
             setSelected(sel.map((s) => s.metaData.uuid));
           }}
           selectedPoints={selected}
+          selectedTool={tool}
         />
       </Container>
       <aside>
