@@ -54,7 +54,7 @@ function PointCloudWithSelect(props) {
             /* @ts-ignore */
             data={data}
             pointProps={{ color: '#40E0D0' }}
-            selectedPointProps={{ color: 'pink', scale: 2 }}
+            selectedPointProps={{ color: 'green' }}
             isPointSelected={(p) =>
               props.selectedPoints.includes(p.metaData.uuid)
             }

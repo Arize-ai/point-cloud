@@ -48,6 +48,7 @@ export function LassoSelect({
   const { camera, raycaster, gl, controls, size, scene } = useThree();
   const canvasRect = gl.domElement.getClientRects()[0];
 
+  // Initialization step for retting up the selection shape and scene
   useEffect(() => {
     // Set the color of the lasso
     // @ts-ignore
@@ -57,11 +58,11 @@ export function LassoSelect({
     camera.add(selectionShape);
 
     // Must add the camera to the scene itself
-    // TODO make this run once?
     scene.add(camera);
+  }, []);
 
-    gl.setPixelRatio(window.devicePixelRatio);
-
+  // Adds event handlers based on props
+  useEffect(() => {
     // handle building lasso shape
 
     let prevX = -Infinity;
@@ -213,6 +214,8 @@ function updateSelection({
   for (let i = 0; i < selectionPoints.length; i += 3) {
     lassoPolygon.push([selectionPoints[i], selectionPoints[i + 1]]);
   }
+
+  // A vector to re-use in calculating it's intersection with the polygon
   const pointVector = new THREE.Vector3();
   points.forEach((point) => {
     // Initialize the point vector from the point position
