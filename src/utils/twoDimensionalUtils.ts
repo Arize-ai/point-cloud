@@ -57,9 +57,9 @@ export function getCenterFromTwoDimensionalBounds({
 }
 
 /**
- *
- * @param point
- * @param vs
+ * Determines if a point is within a polygon
+ * @param {TwoDimensionalPoint} point
+ * @param {TwoDimensionalPoint[]} polygon
  * @returns
  */
 export function isPointInsidePolygon(
