@@ -46,7 +46,6 @@ export function LassoSelect({
   enabled,
 }: LassoSelectProps) {
   const { camera, raycaster, gl, controls, size, scene } = useThree();
-  const canvasRect = gl.domElement.getClientRects()[0];
 
   // Initialization step for retting up the selection shape and scene
   useEffect(() => {
@@ -74,6 +73,8 @@ export function LassoSelect({
 
     function pointerDown(e: MouseEvent) {
       if (enabled) {
+        // The dimension of the canvas
+        const canvasRect = gl.domElement.getClientRects()[0];
         prevX = e.clientX - canvasRect.left;
         prevY = e.clientY - canvasRect.top;
         selectionPoints.length = 0;
@@ -87,6 +88,8 @@ export function LassoSelect({
      */
     function pointerMove(e: MouseEvent) {
       if (isDragging) {
+        // The dimension of the canvas
+        const canvasRect = gl.domElement.getClientRects()[0];
         // Capture the click event position
         const ex = e.clientX - canvasRect.left;
         const ey = e.clientY - canvasRect.top;
