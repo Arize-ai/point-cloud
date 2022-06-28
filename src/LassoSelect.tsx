@@ -183,8 +183,6 @@ export function LassoSelect({
         updateSelection({
           points,
           camera,
-          canvasWidth: canvasRect.width,
-          canvasHeight: canvasRect.height,
         })
       );
     }
@@ -206,8 +204,6 @@ function updateSelection({
 }: {
   points: PointBaseProps[];
   camera: THREE.Camera;
-  canvasWidth: number;
-  canvasHeight: number;
 }) {
   let selection: PointBaseProps[] = [];
   let lassoPolygon: TwoDimensionalPoint[] = [];
