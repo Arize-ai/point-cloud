@@ -92,6 +92,45 @@ const Template: Story = (props) => {
   );
 };
 
+export const ModalView = () => {
+  const [selected, setSelected] = useState([]);
+  const [tool, setTool] = useState<ToolName>('move');
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: 200,
+        right: 8,
+        display: 'flex',
+        flexDirection: 'row',
+        border: '1px solid blue',
+        borderRadius: '4px',
+        height: 'calc(100% - 200px)',
+        overflow: 'hidden',
+        zIndex: 2,
+      }}
+    >
+      <Container showToolbar selectedTool={tool} onToolChange={setTool}>
+        <PointCloudWithSelect
+          onChange={(sel) => {
+            setSelected(sel.map((s) => s.metaData.uuid));
+          }}
+          selectedPoints={selected}
+          selectedTool={tool}
+        />
+      </Container>
+      <aside>
+        <header>Selected Items</header>
+        <ul>
+          {selected.map((s) => (
+            <li key={s}>{s}</li>
+          ))}
+        </ul>
+      </aside>
+    </div>
+  );
+};
+
 // By passing using the Args format for exported stories, you can control the props for a component for reuse in a test
 // https://storybook.js.org/docs/react/workflows/unit-testing
 export const Default = Template.bind({});

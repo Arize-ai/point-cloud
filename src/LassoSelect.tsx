@@ -15,7 +15,7 @@ type LassoSelectProps = {
    * @default true
    */
   enabled?: boolean;
-  children: ReactNode;
+  children?: ReactNode;
   points: PointBaseProps[];
   onChange: (selected: PointBaseProps[]) => void;
 };
@@ -91,12 +91,16 @@ export function LassoSelect({
         // The dimension of the canvas
         const canvasRect = gl.domElement.getClientRects()[0];
         // Capture the click event position
+
         const ex = e.clientX - canvasRect.left;
         const ey = e.clientY - canvasRect.top;
 
         const nx = (ex / canvasRect.width) * 2 - 1;
         const ny = -((ey / canvasRect.height) * 2 - 1);
 
+        console.log(
+          `point move: ` + JSON.stringify({ ex, ey, nx, ny, canvasRect })
+        );
         // If the mouse hasn't moved a lot since the last point
         if (Math.abs(ex - prevX) >= 3 || Math.abs(ey - prevY) >= 3) {
           // Check if the mouse moved in roughly the same direction as the previous point
