@@ -4,6 +4,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { PointBaseProps } from './Points';
 import { isPointInsidePolygon } from './utils/twoDimensionalUtils';
 import { TwoDimensionalPoint } from './types';
+import { isOrthographicCamera } from './utils';
 
 type LassoSelectProps = {
   /**
@@ -147,7 +148,6 @@ export function LassoSelect({
     }
 
     function pointerUp() {
-      debugger;
       if (
         enabled &&
         selectionState.current.isDragging &&
@@ -213,12 +213,21 @@ export function LassoSelect({
       );
     }
 
-    const yScale =
-      // @ts-ignore
-      Math.tan((THREE.MathUtils.DEG2RAD * camera.fov) / 2) *
-      selectionShape.current.position.z;
-    // @ts-ignore
-    selectionShape.current.scale.set(-yScale * camera.aspect, -yScale, 1);
+    // Set the scale to match the camera
+    if (!isOrthographicCamera(camera)) {
+      const yScale =
+        Math.tan((THREE.MathUtils.DEG2RAD * camera.fov) / 2) *
+        selectionShape.current.position.z;
+
+      selectionShape.current.scale.set(-yScale * camera.aspect, -yScale, 1);
+    } else {
+      // TODO
+      selectionShape.current.scale.set(
+        (camera.right - camera.left) / camera.zoom / 2,
+        (camera.top - camera.bottom) / camera.zoom / 2,
+        1
+      );
+    }
   });
 
   return <>{children}</>;

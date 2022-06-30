@@ -9,9 +9,13 @@ import {
   Axes,
   LassoSelect,
   TwoDimensionalControls,
+  getTwoDimensionalBounds,
+  TwoDimensionalCanvas,
+  TwoDimensionalBounds,
 } from '../src';
 import { Container, ToolName } from './components';
 import data from './data/point-cloud-3d.json';
+import twoDData from './data/point-cloud-2d.json';
 
 const meta: Meta = {
   title: 'LassoSelect',
@@ -24,7 +28,7 @@ const meta: Meta = {
 
 export default meta;
 
-function PointCloudWithSelect(props) {
+function ThreeDPointCloudWithSelect(props) {
   const selectedTool = props.selectedTool;
   const bounds = React.useMemo(() => {
     // @ts-ignore
@@ -65,13 +69,50 @@ function PointCloudWithSelect(props) {
   );
 }
 
+function TwoDPointCloudWithSelect(props) {
+  const selectedTool = props.selectedTool;
+  const bounds = React.useMemo(() => {
+    // @ts-ignore
+    return getTwoDimensionalBounds([...twoDData.map((d) => d.position)]);
+  }, []);
+
+  return (
+    <TwoDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
+      <ambientLight intensity={0.5} />
+      <pointLight position={[0, 0, 10]} />
+      <TwoDimensionalControls enablePan={false} />
+      <LassoSelect
+        /* @ts-ignore */
+        points={twoDData}
+        onChange={(selection) => {
+          props.onChange(selection);
+        }}
+        enabled={selectedTool === 'select'}
+      >
+        <TwoDimensionalBounds bounds={bounds}>
+          <TwoDimensionalControls enabled={selectedTool === 'move'} />
+          <Points
+            /* @ts-ignore */
+            data={twoDData}
+            pointProps={{ color: '#40E0D0' }}
+            selectedPointProps={{ color: 'orange' }}
+            isPointSelected={(p) =>
+              props.selectedPoints.includes(p.metaData.uuid)
+            }
+          />
+        </TwoDimensionalBounds>
+      </LassoSelect>
+    </TwoDimensionalCanvas>
+  );
+}
+
 const Template: Story = (props) => {
   const [selected, setSelected] = useState([]);
   const [tool, setTool] = useState<ToolName>('move');
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <Container showToolbar selectedTool={tool} onToolChange={setTool}>
-        <PointCloudWithSelect
+        <ThreeDPointCloudWithSelect
           {...props}
           onChange={(sel) => {
             setSelected(sel.map((s) => s.metaData.uuid));
@@ -104,7 +145,7 @@ export const MultipleCanvases = () => {
         width={500}
         height={200}
       >
-        <PointCloudWithSelect
+        <ThreeDPointCloudWithSelect
           onChange={(sel) => {
             debugger;
             setSelected(sel.map((s) => s.metaData.uuid));
@@ -120,9 +161,33 @@ export const MultipleCanvases = () => {
         width={500}
         height={200}
       >
-        <PointCloudWithSelect
+        <ThreeDPointCloudWithSelect
           onChange={(sel) => {
             debugger;
+            setSelected(sel.map((s) => s.metaData.uuid));
+          }}
+          selectedPoints={selected}
+          selectedTool={tool}
+        />
+      </Container>
+    </div>
+  );
+};
+
+export const TwoDimensional = () => {
+  const [selected, setSelected] = useState([]);
+  const [tool, setTool] = useState<ToolName>('move');
+  return (
+    <div>
+      <Container
+        showToolbar
+        selectedTool={tool}
+        onToolChange={setTool}
+        width={800}
+        height={800}
+      >
+        <TwoDPointCloudWithSelect
+          onChange={(sel) => {
             setSelected(sel.map((s) => s.metaData.uuid));
           }}
           selectedPoints={selected}
