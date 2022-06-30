@@ -92,41 +92,43 @@ const Template: Story = (props) => {
   );
 };
 
-export const ModalView = () => {
+export const MultipleCanvases = () => {
   const [selected, setSelected] = useState([]);
   const [tool, setTool] = useState<ToolName>('move');
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 200,
-        right: 8,
-        display: 'flex',
-        flexDirection: 'row',
-        border: '1px solid blue',
-        borderRadius: '4px',
-        height: 'calc(100% - 200px)',
-        overflow: 'hidden',
-        zIndex: 2,
-      }}
-    >
-      <Container showToolbar selectedTool={tool} onToolChange={setTool}>
+    <div>
+      <Container
+        showToolbar
+        selectedTool={tool}
+        onToolChange={setTool}
+        width={500}
+        height={200}
+      >
         <PointCloudWithSelect
           onChange={(sel) => {
+            debugger;
             setSelected(sel.map((s) => s.metaData.uuid));
           }}
           selectedPoints={selected}
           selectedTool={tool}
         />
       </Container>
-      <aside>
-        <header>Selected Items</header>
-        <ul>
-          {selected.map((s) => (
-            <li key={s}>{s}</li>
-          ))}
-        </ul>
-      </aside>
+      <Container
+        showToolbar
+        selectedTool={tool}
+        onToolChange={setTool}
+        width={500}
+        height={200}
+      >
+        <PointCloudWithSelect
+          onChange={(sel) => {
+            debugger;
+            setSelected(sel.map((s) => s.metaData.uuid));
+          }}
+          selectedPoints={selected}
+          selectedTool={tool}
+        />
+      </Container>
     </div>
   );
 };
