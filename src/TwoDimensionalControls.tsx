@@ -50,6 +50,7 @@ export function TwoDimensionalControls({
       enableZoom={enableZoom}
       panSpeed={panSpeed}
       enablePan={enablePan}
+      autoRotate={false}
     />
   );
 }

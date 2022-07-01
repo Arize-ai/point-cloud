@@ -251,8 +251,19 @@ function updateSelection({
   // A vector to re-use in calculating it's intersection with the polygon
   const pointVector = new THREE.Vector3();
   points.forEach((point) => {
+    const isThreeD = point.position.length === 3;
     // Initialize the point vector from the point position
-    pointVector.fromArray(point.position).project(camera);
+    const pointPosition = isThreeD
+      ? point.position
+      : [point.position[0], point.position[1], 0];
+    pointVector.fromArray(pointPosition);
+    if (!isThreeD) {
+      // 2D specific adjustments
+      // TODO this is pretty specific to orbital controls and should
+      // be made more generic
+      pointVector.sub(camera.position).applyMatrix4(camera.matrixWorld);
+    }
+    pointVector.project(camera);
     if (isPointInsidePolygon([pointVector.x, pointVector.y], lassoPolygon)) {
       selection.push(point);
     }
