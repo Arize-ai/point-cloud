@@ -39,10 +39,6 @@ export type PointsProps = {
   data: Array<PointBaseProps>;
   pointProps: PointMeshProps;
   /**
-   * Additional props that will be merged with point props when the point is selected
-   */
-  selectedPointProps?: PointMeshProps;
-  /**
    * Callback for when a point gets selected. Returns the selected nearest point
    */
   onPointClicked?: (points: PointBaseProps) => void;
@@ -50,10 +46,6 @@ export type PointsProps = {
    * Callback for when point(s) gets selected. Returns the selected points that correspond to the ray trace hit
    */
   onPointsClicked?: (points: PointBaseProps[]) => void;
-  /**
-   * Function that determines if a point is selected
-   */
-  isPointSelected?: (point: PointBaseProps) => boolean;
   /**
    * The shape of the points. This value must be uniform for all points.
    * @default 'sphere'
@@ -72,11 +64,9 @@ const tempColor = new THREE.Color();
 export function Points({
   data,
   pointProps = defaultPointMeshProps,
-  selectedPointProps,
   onPointsClicked,
   onPointClicked,
   pointShape = 'sphere',
-  isPointSelected = () => false,
   opacity = 1,
 }: PointsProps) {
   // Callback function  to get the color of a specific point
@@ -102,7 +92,7 @@ export function Points({
       ),
     [data]
   );
-  const scaleArrayRef = useRef(Array.from(new Array(data.length).fill(1)));
+
   const meshRef = useRef<THREE.InstancedMesh>(null);
 
   useFrame(() => {
@@ -111,31 +101,15 @@ export function Points({
       if (meshRef.current) {
         meshRef.current.setMatrixAt(id, tempObject.matrix);
         meshRef.current.instanceMatrix.needsUpdate = true;
-        const isSelected = isPointSelected(data[id]);
 
-        if (isSelected) {
-          const colorString =
-            typeof selectedPointProps?.color === 'function'
-              ? selectedPointProps.color(data[id])
-              : selectedPointProps?.color || 'lime';
+        const colorString = getColorPoint(data[id]);
+        tempColor.set(colorString);
 
-          tempColor.set(colorString);
-        } else {
-          const colorString = getColorPoint(data[id]);
-
-          tempColor.set(colorString);
-        }
         // Flush the color to the color buffer at the point's index
         tempColor.toArray(colorArray, id * 3);
 
         meshRef.current.geometry.attributes.color.needsUpdate = true;
 
-        const scale = (scaleArrayRef.current[id] = THREE.MathUtils.lerp(
-          scaleArrayRef.current[id],
-          isSelected ? selectedPointProps?.scale || 1.2 : 1,
-          0.1
-        ));
-        tempObject.scale.setScalar(scale);
         tempObject.updateMatrix();
         meshRef.current.setMatrixAt(id, tempObject.matrix);
       }

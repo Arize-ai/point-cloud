@@ -67,11 +67,16 @@ function ThreeDPointCloudWithSelect(props) {
           <Points
             /* @ts-ignore */
             data={data}
-            pointProps={{ color: '#40E0D0' }}
-            selectedPointProps={{ color: 'orange' }}
-            isPointSelected={(p) =>
-              props.selectedPoints.includes(p.metaData.uuid)
-            }
+            pointProps={{
+              color: (p) => {
+                if (props.selectedPoints.includes(p.metaData.uuid)) {
+                  return '#40E0D0';
+                } else if (props.selectedPoints.length) {
+                  return '#216c64';
+                }
+                return '#40E0D0';
+              },
+            }}
           />
         </ThreeDimensionalBounds>
       </LassoSelect>
@@ -105,11 +110,16 @@ function TwoDPointCloudWithSelect(props) {
           <Points
             /* @ts-ignore */
             data={twoDData}
-            pointProps={{ color: '#40E0D0' }}
-            selectedPointProps={{ color: 'orange' }}
-            isPointSelected={(p) =>
-              props.selectedPoints.includes(p.metaData.uuid)
-            }
+            pointProps={{
+              color: (p) => {
+                if (props.selectedPoints.includes(p.metaData.uuid)) {
+                  return '#40E0D0';
+                } else if (props.selectedPoints.length) {
+                  return '#216c64';
+                }
+                return '#40E0D0';
+              },
+            }}
           />
         </TwoDimensionalBounds>
       </LassoSelect>
