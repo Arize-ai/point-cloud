@@ -69,7 +69,7 @@ export function Points({
   pointShape = 'sphere',
   opacity = 1,
 }: PointsProps) {
-  // Callback function  to get the color of a specific point
+  // Callback function to get the color of a specific point
   const getColorPoint = useCallback(
     (data: PointBaseProps) => {
       const colorString =
@@ -78,7 +78,7 @@ export function Points({
           : pointProps.color;
       return colorString;
     },
-    [pointProps]
+    [pointProps.color]
   );
 
   const colorArray = useMemo(
