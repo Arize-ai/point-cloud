@@ -3,7 +3,7 @@ import { MapControls } from '@react-three/drei';
 import { useTwoDimensionalBounds } from './TwoDimensionalBounds';
 import { ControlProps } from './types';
 
-export type TwoDimensionalControlsProps = ControlProps;
+export type TwoDimensionalControlsProps = Omit<ControlProps, 'enableRotate'>;
 
 export function TwoDimensionalControls({
   enabled = true,
@@ -11,7 +11,6 @@ export function TwoDimensionalControls({
   enableZoom = true,
   panSpeed = 2,
   enablePan = true,
-  enableRotate = true,
 }: TwoDimensionalControlsProps) {
   const { center } = useTwoDimensionalBounds();
   const target = [...center, 0] as [number, number, number];
