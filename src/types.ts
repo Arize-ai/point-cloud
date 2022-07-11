@@ -25,3 +25,39 @@ export type CameraInitProps = {
   zoom?: number;
   up?: [number, number, number];
 };
+
+/**
+ * Control props
+ */
+export type ControlProps = {
+  /**
+   * A way to disable the controls dynamically.
+   * @default true
+   */
+  enabled?: boolean;
+  /**
+   * The speed at which to zoom / pan
+   * @default 2
+   */
+  zoomSpeed?: number;
+  /**
+   * The speed at which to zoom / pan
+   * @default 2
+   */
+  panSpeed?: number;
+  /**
+   * control the zoom
+   * @default true
+   */
+  enableZoom?: boolean;
+  /**
+   * control the pan
+   * @default true
+   */
+  enablePan?: boolean;
+  /**
+   * control the rotation
+   * @default true
+   */
+  enableRotate?: boolean;
+};

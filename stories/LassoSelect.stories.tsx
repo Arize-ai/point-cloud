@@ -52,7 +52,6 @@ function ThreeDPointCloudWithSelect(props) {
     <ThreeDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
       <ambientLight intensity={0.5} />
       <pointLight position={[0, 0, 10]} />
-      <TwoDimensionalControls enablePan={false} />
       <LassoSelect
         /* @ts-ignore */
         points={[...data]}
@@ -61,8 +60,8 @@ function ThreeDPointCloudWithSelect(props) {
         }}
         enabled={selectedTool === 'select'}
       >
+        <ThreeDimensionalControls enableRotate={selectedTool === 'move'} />
         <ThreeDimensionalBounds bounds={bounds}>
-          <ThreeDimensionalControls enabled={selectedTool === 'move'} />
           <Axes size={bounds.maxX - bounds.minX} />
           <Points
             /* @ts-ignore */
@@ -95,7 +94,7 @@ function TwoDPointCloudWithSelect(props) {
     <TwoDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
       <ambientLight intensity={0.5} />
       <pointLight position={[0, 0, 10]} />
-      <TwoDimensionalControls enablePan={false} />
+      <TwoDimensionalControls enableRotate={selectedTool === 'move'} />
       <LassoSelect
         /* @ts-ignore */
         points={twoDData}
@@ -106,7 +105,7 @@ function TwoDPointCloudWithSelect(props) {
       >
         <axesHelper />
         <TwoDimensionalBounds bounds={bounds}>
-          <TwoDimensionalControls enabled={selectedTool === 'move'} />
+          <TwoDimensionalControls enableRotate={selectedTool === 'move'} />
           <Points
             /* @ts-ignore */
             data={twoDData}

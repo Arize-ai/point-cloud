@@ -1,34 +1,9 @@
 import React from 'react';
 import { MapControls } from '@react-three/drei';
 import { useTwoDimensionalBounds } from './TwoDimensionalBounds';
+import { ControlProps } from './types';
 
-export type TwoDimensionalControlsProps = {
-  /**
-   * A way to disable the controls dynamically.
-   * @default true
-   */
-  enabled?: boolean;
-  /**
-   * The speed at which to zoom / pan
-   * @default 2
-   */
-  zoomSpeed?: number;
-  /**
-   * The speed at which to zoom / pan
-   * @default 2
-   */
-  panSpeed?: number;
-  /**
-   * control the zoom
-   * @default true
-   */
-  enableZoom?: boolean;
-  /**
-   * control the zoom
-   * @default true
-   */
-  enablePan?: boolean;
-};
+export type TwoDimensionalControlsProps = ControlProps;
 
 export function TwoDimensionalControls({
   enabled = true,
@@ -36,6 +11,7 @@ export function TwoDimensionalControls({
   enableZoom = true,
   panSpeed = 2,
   enablePan = true,
+  enableRotate = true,
 }: TwoDimensionalControlsProps) {
   const { center } = useTwoDimensionalBounds();
   const target = [...center, 0] as [number, number, number];
