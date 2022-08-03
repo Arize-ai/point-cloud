@@ -55,3 +55,36 @@ export function getCenterFromTwoDimensionalBounds({
 }: TwoDimensionalBoundsType): TwoDimensionalPoint {
   return [minX + (maxX - minX) / 2, minY + (maxY - minY) / 2];
 }
+
+/**
+ * Determines if a point is within a polygon
+ * @src https://wrfranklin.org/Research/Short_Notes/pnpoly.html
+ * @param {TwoDimensionalPoint} point
+ * @param {TwoDimensionalPoint[]} polygon
+ * @returns {boolean}
+ */
+export function isPointInsidePolygon(
+  point: TwoDimensionalPoint,
+  polygonPoints: TwoDimensionalPoint[]
+) {
+  var x = point[0],
+    y = point[1];
+
+  let inside = false;
+  for (
+    let i = 0, j = polygonPoints.length - 1;
+    i < polygonPoints.length;
+    j = i++
+  ) {
+    const xi = polygonPoints[i][0],
+      yi = polygonPoints[i][1];
+    const xj = polygonPoints[j][0],
+      yj = polygonPoints[j][1];
+
+    const intersect =
+      yi > y != yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+    if (intersect) inside = !inside;
+  }
+
+  return inside;
+}

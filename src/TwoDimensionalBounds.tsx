@@ -51,8 +51,8 @@ export function TwoDimensionalBounds({
     const { minX, maxX, minY, maxY } = bounds;
     const boundsWidth = maxX - minX;
     const boundsHeight = maxY - minY;
-    camera.position.x = boundsWidth / 2 + minX;
-    camera.position.y = boundsHeight / 2 + minY;
+    camera.translateX(boundsWidth / 2 + minX);
+    camera.translateY(boundsHeight / 2 + minY);
 
     // Set the zoom to fit the bounds
     // @src https://github.com/pmndrs/react-three-fiber/issues/67#issuecomment-496507403

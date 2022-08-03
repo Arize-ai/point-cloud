@@ -8,7 +8,7 @@ import {
 } from '../src';
 import { Container } from './components';
 import _data from './data/point-cloud-3d.json';
-import { interpolateYlGnBu } from 'd3-scale-chromatic';
+import { interpolateSinebow } from 'd3-scale-chromatic';
 
 const meta: Meta = {
   title: 'ColorByData',
@@ -32,31 +32,61 @@ const meta: Meta = {
 
 export default meta;
 
-const data = _data.map((d) => ({
+const data = _data.map((d, idx) => ({
   ...d,
-  metaData: { actualLabel: String(Math.floor(Math.random() * 50)) },
+  metaData: { actualLabel: `${idx}` },
 }));
-const actualLabelsSet = data.reduce(
-  (acc, d) => acc.add(d.metaData.actualLabel),
-  new Set()
-);
-const actualLabels = Array.from(actualLabelsSet);
 
+const data2 = _data.map((d, idx) => ({
+  ...d,
+  position: [d.position[0], d.position[1] + 1, d.position[2] + 1],
+  metaData: { actualLabel: `${idx}` },
+}));
+
+const actualLabelsArray = Array.from(
+  data.reduce((acc, d) => acc.add(d.metaData.actualLabel), new Set())
+);
+
+const labelCount = actualLabelsArray.length - 1;
+
+const actualLabelsColorMap: Map<string, number> = actualLabelsArray.reduce(
+  (acc: Map<string, number>, d, index) => {
+    acc[d as string] = index / labelCount;
+    return acc;
+  },
+  new Map() as Map<string, number>
+);
+
+const colorByFn = (data) => {
+  const { actualLabel } = data.metaData;
+  return interpolateSinebow(actualLabelsColorMap[actualLabel]);
+};
 const Template: Story<ThreeDimensionalCanvasProps> = (args) => (
   <Container>
     <ThreeDimensionalCanvas {...args} camera={{ position: [0, 0, 10] }}>
       <ambientLight />
       <pointLight position={[10, 10, 10]} />
+      <pointLight position={[10, 10, -10]} />
+      <pointLight position={[10, -10, -10]} />
+      <pointLight position={[0, 0, 0]} />
       <ThreeDimensionalControls />
       <Points
         // @ts-ignore
         data={data}
+        opacity={1}
         pointProps={{
-          color: (data) => {
-            const { actualLabel } = data.metaData;
-            const index = actualLabels.indexOf(actualLabel);
-            return interpolateYlGnBu(index / (actualLabels.length - 1));
-          },
+          scale: 2,
+          color: colorByFn,
+        }}
+      />
+      <Points
+        // @ts-ignore
+        data={data2}
+        opacity={1}
+        pointShape="cube"
+        pointProps={{
+          scale: 2,
+          color: colorByFn,
         }}
       />
       <axesHelper />
