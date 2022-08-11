@@ -40,9 +40,9 @@ const Template: Story<ThreeDimensionalCanvasProps> = (args) => (
       <pointLight position={[10, 10, 10]} />
       <ThreeDimensionalControls />
       {/* @ts-ignore */}
-      <Points data={data} pointProps={{ color: "#7BFFFF" }} />
+      <Points data={data} pointProps={{ color: '#7BFFFF' }} />
       {/* @ts-ignore */}
-      <Points data={data2} pointProps={{ color: "#BF9FFF" }} />
+      <Points data={data2} pointProps={{ color: '#BF9FFF' }} />
       <axesHelper />
     </ThreeDimensionalCanvas>
   </Container>
@@ -71,8 +71,8 @@ export const WithBounds = () => {
             pointShape="cube"
             pointProps={{ color: 'purple' }}
           />
-           {/* @ts-ignore */}
-          <Points data={data} pointProps={{ color: "#7BFFFF" }} />
+          {/* @ts-ignore */}
+          <Points data={data} pointProps={{ color: '#7BFFFF' }} />
           <axesHelper />
         </ThreeDimensionalBounds>
       </ThreeDimensionalCanvas>
@@ -80,9 +80,12 @@ export const WithBounds = () => {
   );
 };
 
-const data3 = data.map((d) => ({...d, position: [d.position[0], d.position[1], d.position[2] + 2]}));
+const data3 = data.map((d) => ({
+  ...d,
+  position: [d.position[0], d.position[1], d.position[2] + 2],
+}));
 
-export const OverlappingColors= () => {
+export const OverlappingColors = () => {
   const bounds = React.useMemo(() => {
     // @ts-ignore
     return getThreeDimensionalBounds([
@@ -99,9 +102,9 @@ export const OverlappingColors= () => {
         <pointLight position={[10, -10, 10]} />
         <ThreeDimensionalBounds bounds={bounds}>
           {/* @ts-ignore */}
-          <Points data={data} pointProps={{ color: "#7BFFFF" }} />
+          <Points data={data} pointProps={{ color: '#7BFFFF' }} />
           {/* @ts-ignore */}
-          <Points data={data3} pointProps={{ color: "#BF9FFF" }} />
+          <Points data={data3} pointProps={{ color: '#BF9FFF' }} />
           <axesHelper />
         </ThreeDimensionalBounds>
       </ThreeDimensionalCanvas>

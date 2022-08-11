@@ -179,10 +179,9 @@ export function Points({
       }}
     >
       {geometry}
-      <meshStandardMaterial
+      <meshMatcapMaterial
         // @ts-ignore
         vertexColors={THREE.VertexColors}
-        metalness={0.5}
         opacity={opacity}
         transparent={opacity < 1}
       />

@@ -94,7 +94,7 @@ function TwoDPointCloudWithSelect(props) {
     <TwoDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
       <ambientLight intensity={0.5} />
       <pointLight position={[0, 0, 10]} />
-      <TwoDimensionalControls enableRotate={selectedTool === 'move'} />
+      <TwoDimensionalControls />
       <LassoSelect
         /* @ts-ignore */
         points={twoDData}
@@ -105,7 +105,7 @@ function TwoDPointCloudWithSelect(props) {
       >
         <axesHelper />
         <TwoDimensionalBounds bounds={bounds}>
-          <TwoDimensionalControls enableRotate={selectedTool === 'move'} />
+          <TwoDimensionalControls />
           <Points
             /* @ts-ignore */
             data={twoDData}
