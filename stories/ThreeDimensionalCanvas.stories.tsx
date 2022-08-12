@@ -112,6 +112,40 @@ export const OverlappingColors = () => {
   );
 };
 
+export const AutoRotateOnInit = () => {
+  const [autoRotate, setAutoRotate] = React.useState<boolean>(true);
+  const bounds = React.useMemo(() => {
+    // @ts-ignore
+    return getThreeDimensionalBounds([
+      ...data.map((d) => d.position),
+      ...data3.map((d) => d.position),
+    ]);
+  }, []);
+  return (
+    <Container>
+      <ThreeDimensionalCanvas>
+        <ThreeDimensionalControls
+          autoRotate={autoRotate}
+          onEnd={(e) => {
+            console.log(e?.type);
+            setAutoRotate(false);
+          }}
+        />
+        <axesHelper />
+        <pointLight position={[10, 10, 10]} />
+        <pointLight position={[10, -10, 10]} />
+        <ThreeDimensionalBounds bounds={bounds}>
+          {/* @ts-ignore */}
+          <Points data={data} pointProps={{ color: '#7BFFFF' }} />
+          {/* @ts-ignore */}
+          <Points data={data3} pointProps={{ color: '#BF9FFF' }} />
+          <axesHelper />
+        </ThreeDimensionalBounds>
+      </ThreeDimensionalCanvas>
+    </Container>
+  );
+};
+
 // By passing using the Args format for exported stories, you can control the props for a component for reuse in a test
 // https://storybook.js.org/docs/react/workflows/unit-testing
 export const Default = Template.bind({});

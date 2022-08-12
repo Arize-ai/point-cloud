@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meta, Story } from '@storybook/react';
+import { Meta } from '@storybook/react';
 import {
   ThreeDimensionalCanvas,
   ThreeDimensionalControls,
@@ -52,9 +52,9 @@ export const Divergent = () => {
       {Object.keys(ColorSchemes.Discrete2).map((scheme, index) => (
         <ul key={index} style={{ padding: 5 }}>
           <span>{scheme}</span>
-          <Container showToolbar={false} width={400} height={300}>
+          <Container showToolbar={false} width={400} height={400}>
             <ThreeDimensionalCanvas>
-              <ThreeDimensionalControls enableZoom={false} />
+              <ThreeDimensionalControls enableZoom={true} autoRotate />
               <axesHelper />
               <pointLight position={[10, 10, 10]} />
               <pointLight position={[10, -10, 10]} />

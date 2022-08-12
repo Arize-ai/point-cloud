@@ -83,7 +83,9 @@
     "test": "test"
   },
   "dependencies": {
-    "d3-scale-chromatic": "^3.0.0"
+    "@storybook/addon-a11y": "^6.5.10",
+    "d3-scale-chromatic": "^3.0.0",
+    "polished": "^4.2.2"
   },
   "repository": {
     "type": "git",

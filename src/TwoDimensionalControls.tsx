@@ -11,6 +11,7 @@ export function TwoDimensionalControls({
   enableZoom = true,
   panSpeed = 2,
   enablePan = true,
+  ...passThroughProps
 }: TwoDimensionalControlsProps) {
   const { center } = useTwoDimensionalBounds();
   const target = [...center, 0] as [number, number, number];
@@ -26,6 +27,7 @@ export function TwoDimensionalControls({
       panSpeed={panSpeed}
       enablePan={enablePan}
       autoRotate={false}
+      {...passThroughProps}
     />
   );
 }

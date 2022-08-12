@@ -17,7 +17,7 @@ const Category10 = {
 /**
  * D3 scale chromatic Rainbow split into 10
  */
-const Rainbow10 = {
+let Rainbow11: Record<string, string> = {
   Purple: '#6e40aa',
   LightPurple: '#bf3caf',
   Pink: '#fe4b83',
@@ -28,23 +28,29 @@ const Rainbow10 = {
   Green: '#1ddfa3',
   LightBlue: '#23abd8',
   Blue: '#4c6edb',
+  White: '#ffffff',
 };
 
 /**
  * Colors that should be used to make 2 records discrete
  */
 const Discrete2: Record<string, [string, string]> = {
-  BlueOrange: [Rainbow10.Blue, Rainbow10.Orange],
-  LightBlueOrange: [Rainbow10.LightBlue, Rainbow10.Orange],
-  LightBlueLightOrange: [Rainbow10.LightBlue, Rainbow10.LightOrange],
-  LimePurple: [Rainbow10.Lime, Rainbow10.Purple],
-  LimeLightPurple: [Rainbow10.Lime, Rainbow10.LightPurple],
-  BlueLime: [Rainbow10.Blue, Rainbow10.Lime],
+  PinkLightGreen: [Rainbow11.Pink, Rainbow11.LightGreen],
+  BlueOrange: [Rainbow11.Blue, Rainbow11.Orange],
+  LightBlueOrange: [Rainbow11.LightBlue, Rainbow11.Orange],
+  LightBlueLightOrange: [Rainbow11.LightBlue, Rainbow11.LightOrange],
+  LimePurple: [Rainbow11.Lime, Rainbow11.Purple],
+  LimeLightPurple: [Rainbow11.Lime, Rainbow11.LightPurple],
+  BlueLime: [Rainbow11.Blue, Rainbow11.Lime],
+  LightBlueLime: [Rainbow11.LightBlue, Rainbow11.Lime],
+  WhiteLime: [Rainbow11.White, Rainbow11.Lime],
+  WhiteLightBlue: [Rainbow11.White, Rainbow11.LightBlue],
+  WhiteOrange: [Rainbow11.White, Rainbow11.Orange],
 };
 
 export const ColorPallettes = {
   Category10,
-  Rainbow10,
+  Rainbow11,
 };
 
 export const ColorSchemes = {

@@ -13,7 +13,7 @@ import {
   TwoDimensionalCanvas,
   TwoDimensionalBounds,
 } from '../src';
-import { Container, ToolName } from './components';
+import { Container, ControlPanel, ToolName } from './components';
 import data from './data/point-cloud-3d.json';
 import twoDData from './data/point-cloud-2d.json';
 
@@ -84,45 +84,47 @@ function ThreeDPointCloudWithSelect(props) {
 }
 
 function TwoDPointCloudWithSelect(props) {
-  const selectedTool = props.selectedTool;
+  const { selectedTool, selectedPoints } = props;
   const bounds = React.useMemo(() => {
     // @ts-ignore
     return getTwoDimensionalBounds([...twoDData.map((d) => d.position)]);
   }, []);
 
   return (
-    <TwoDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
-      <ambientLight intensity={0.5} />
-      <pointLight position={[0, 0, 10]} />
-      <TwoDimensionalControls />
-      <LassoSelect
-        /* @ts-ignore */
-        points={twoDData}
-        onChange={(selection) => {
-          props.onChange(selection);
-        }}
-        enabled={selectedTool === 'select'}
-      >
-        <axesHelper />
-        <TwoDimensionalBounds bounds={bounds}>
-          <TwoDimensionalControls />
-          <Points
-            /* @ts-ignore */
-            data={twoDData}
-            pointProps={{
-              color: (p) => {
-                if (props.selectedPoints.includes(p.metaData.uuid)) {
+    <div style={{ position: 'relative' }}>
+      <TwoDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
+        <ambientLight intensity={0.5} />
+        <pointLight position={[0, 0, 10]} />
+        <TwoDimensionalControls />
+        <LassoSelect
+          /* @ts-ignore */
+          points={twoDData}
+          onChange={(selection) => {
+            props.onChange(selection);
+          }}
+          enabled={selectedTool === 'select'}
+        >
+          <axesHelper />
+          <TwoDimensionalBounds bounds={bounds}>
+            <TwoDimensionalControls />
+            <Points
+              /* @ts-ignore */
+              data={twoDData}
+              pointProps={{
+                color: (p) => {
+                  if (props.selectedPoints.includes(p.metaData.uuid)) {
+                    return '#40E0D0';
+                  } else if (props.selectedPoints.length) {
+                    return '#216c64';
+                  }
                   return '#40E0D0';
-                } else if (props.selectedPoints.length) {
-                  return '#216c64';
-                }
-                return '#40E0D0';
-              },
-            }}
-          />
-        </TwoDimensionalBounds>
-      </LassoSelect>
-    </TwoDimensionalCanvas>
+                },
+              }}
+            />
+          </TwoDimensionalBounds>
+        </LassoSelect>
+      </TwoDimensionalCanvas>
+    </div>
   );
 }
 
@@ -130,7 +132,7 @@ const Template: Story = (props) => {
   const [selected, setSelected] = useState([]);
   const [tool, setTool] = useState<ToolName>('move');
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
+    <div style={{ position: 'relative' }}>
       <Container showToolbar selectedTool={tool} onToolChange={setTool}>
         <ThreeDPointCloudWithSelect
           {...props}
@@ -141,14 +143,14 @@ const Template: Story = (props) => {
           selectedTool={tool}
         />
       </Container>
-      <aside>
+      <ControlPanel>
         <header>Selected Items</header>
         <ul>
           {selected.map((s) => (
             <li key={s}>{s}</li>
           ))}
         </ul>
-      </aside>
+      </ControlPanel>
     </div>
   );
 };

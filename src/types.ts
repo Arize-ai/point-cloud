@@ -1,3 +1,5 @@
+import { OrbitControls } from '@react-three/drei';
+
 export type TwoDimensionalPoint = [number, number];
 export type TwoDimensionalBoundsType = {
   minX: number;
@@ -27,9 +29,17 @@ export type CameraInitProps = {
 };
 
 /**
+ * Pass through some  props directly to the controls
+ */
+type ControlPassthroughProps = Pick<
+  React.ComponentProps<typeof OrbitControls>,
+  'onEnd'
+>;
+
+/**
  * Control props
  */
-export type ControlProps = {
+export type ControlProps = ControlPassthroughProps & {
   /**
    * A way to disable the controls dynamically.
    * @default true
@@ -60,4 +70,14 @@ export type ControlProps = {
    * @default true
    */
   enableRotate?: boolean;
+  /**
+   * Start rotating when the control mounts
+   * @default false
+   */
+  autoRotate?: boolean;
+  /**
+   * auto-rotation speed
+   * @default 3
+   */
+  autoRotateSpeed?: number;
 };
