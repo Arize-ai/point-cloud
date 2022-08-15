@@ -47,7 +47,7 @@ type Discrete2ColorSchemes =
 /**
  * Colors that should be used to make 2 records discrete
  */
-const Discrete2: Record<Discrete2ColorSchemes, [string, string] | undefined> = {
+const Discrete2: Record<Discrete2ColorSchemes, [string, string]> = {
   PinkLightGreen: [Rainbow11.Pink, Rainbow11.LightGreen],
   BlueOrange: [Rainbow11.Blue, Rainbow11.Orange],
   LightBlueOrange: [Rainbow11.LightBlue, Rainbow11.Orange],
