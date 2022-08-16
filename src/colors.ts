@@ -15,9 +15,9 @@ const Category10 = {
 };
 
 /**
- * D3 scale chromatic Rainbow split into 10
+ * D3 scale chromatic Rainbow split into 10 + white
  */
-let Rainbow11: Record<string, string> = {
+const Rainbow11: Record<string, string> = {
   Purple: '#6e40aa',
   LightPurple: '#bf3caf',
   Pink: '#fe4b83',
