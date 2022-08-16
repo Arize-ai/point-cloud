@@ -56,6 +56,11 @@ export type PointsProps = {
    * @default 1
    */
   opacity?: number;
+  /**
+   * The material of the points
+   * @default 'meshMatcap'
+   */
+  material?: 'standard' | 'meshMatcap';
 };
 
 const tempObject = new THREE.Object3D();
@@ -68,6 +73,7 @@ export function Points({
   onPointClicked,
   pointShape = 'sphere',
   opacity = 1,
+  material = 'meshMatcap',
 }: PointsProps) {
   // Callback function to get the color of a specific point
   const getColorPoint = useCallback(
@@ -116,7 +122,7 @@ export function Points({
     });
   });
 
-  const geometry = useMemo(() => {
+  const geometryEl = useMemo(() => {
     switch (pointShape) {
       case 'sphere': {
         return (
@@ -158,6 +164,30 @@ export function Points({
     }
   }, [pointShape, pointProps]);
 
+  const materialEl = useMemo(() => {
+    switch (material) {
+      case 'meshMatcap':
+        return (
+          <meshMatcapMaterial
+            // @ts-ignore
+            vertexColors={THREE.VertexColors}
+            opacity={opacity}
+            transparent={opacity < 1}
+          />
+        );
+
+      default:
+        return (
+          <meshStandardMaterial
+            // @ts-ignore
+            vertexColors={THREE.VertexColors}
+            opacity={opacity}
+            transparent={opacity < 1}
+          />
+        );
+    }
+  }, [material]);
+
   return (
     <instancedMesh
       args={[undefined, undefined, data.length]}
@@ -178,14 +208,8 @@ export function Points({
         }
       }}
     >
-      {geometry}
-      <meshStandardMaterial
-        // @ts-ignore
-        vertexColors={THREE.VertexColors}
-        metalness={0.5}
-        opacity={opacity}
-        transparent={opacity < 1}
-      />
+      {geometryEl}
+      {materialEl}
     </instancedMesh>
   );
 }

@@ -11,7 +11,7 @@ export function Container({
   children: React.ReactNode;
   width?: number;
   height?: number;
-  showToolbar: boolean;
+  showToolbar?: boolean;
 }) {
   return (
     <section>

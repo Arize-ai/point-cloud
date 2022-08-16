@@ -7,5 +7,6 @@ export * from './ThreeDimensionalBounds';
 export * from './Axes';
 export * from './Points';
 export * from './LassoSelect';
+export * from './colors';
 export * from './utils';
 export * from './types';

@@ -161,7 +161,10 @@ export function LassoSelect({
       selectionState.current.isDragging = false;
     }
 
-    document.addEventListener('pointerdown', pointerDown, { passive: true });
+    // Only start the lasso tool when you place the mouse down on the canvas
+    gl.domElement.addEventListener('pointerdown', pointerDown, {
+      passive: true,
+    });
     document.addEventListener('pointermove', pointerMove, {
       passive: true,
       capture: true,
@@ -169,7 +172,7 @@ export function LassoSelect({
     document.addEventListener('pointerup', pointerUp, { passive: true });
 
     return () => {
-      document.removeEventListener('pointerdown', pointerDown);
+      gl.domElement.removeEventListener('pointerdown', pointerDown);
       document.removeEventListener('pointermove', pointerMove);
       document.removeEventListener('pointerup', pointerUp);
     };

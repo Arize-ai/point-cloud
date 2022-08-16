@@ -2,7 +2,16 @@ import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { CameraInitProps } from './types';
 
-export type ThreeDimensionalCanvasProps = {
+/**
+ * Pass through some  props directly to the canvas
+ * Expose onPointerMissed to work with selection
+ */
+type CanvasPassthroughProps = Pick<
+  React.ComponentProps<typeof Canvas>,
+  'onPointerMissed'
+>;
+
+export type ThreeDimensionalCanvasProps = CanvasPassthroughProps & {
   children?: React.ReactNode;
   /**
    * Whether or not to use an orthographic camera or not
@@ -20,6 +29,7 @@ export function ThreeDimensionalCanvas({
   children,
   camera,
   orthographic = false,
+  ...passThroughProps
 }: ThreeDimensionalCanvasProps) {
   return (
     <Canvas
@@ -30,6 +40,7 @@ export function ThreeDimensionalCanvas({
         up: [0, 1, 0],
         ...camera,
       }}
+      {...passThroughProps}
     >
       {children}
     </Canvas>

@@ -1,6 +1,6 @@
 {
   "name": "@arizeai/point-cloud",
-  "version": "2.0.6",
+  "version": "2.0.9",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -83,7 +83,9 @@
     "test": "test"
   },
   "dependencies": {
-    "d3-scale-chromatic": "^3.0.0"
+    "@storybook/addon-a11y": "^6.5.10",
+    "d3-scale-chromatic": "^3.0.0",
+    "polished": "^4.2.2"
   },
   "repository": {
     "type": "git",
