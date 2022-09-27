@@ -1,32 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Meta, Story } from '@storybook/react';
 import {
-  ThreeDimensionalCanvas,
-  ThreeDimensionalControls,
-  ThreeDimensionalBounds,
   getThreeDimensionalBounds,
   Points,
+  ThreeDimensionalCanvas,
+  ThreeDimensionalBounds,
+  ThreeDimensionalControls,
+  Axes,
+  LassoSelect,
+  TwoDimensionalControls,
+  getTwoDimensionalBounds,
+  TwoDimensionalCanvas,
+  TwoDimensionalBounds,
   Cluster,
 } from '../src';
-import { Container } from './components';
+import { Container, ControlPanel, ToolName } from './components';
 import data from './data/point-cloud-3d.json';
-import data2 from './data/point-cloud-3d-alt.json';
+import twoDData from './data/point-cloud-2d.json';
+
+// const data = [
+//   { metaData: { uuid: 1 }, position: [1, 1, 0] },
+//   { metaData: { uuid: 2 }, position: [-1, 1, 0] },
+// ];
+
+// const twoDData = [
+//   { metaData: { uuid: 1 }, position: [1, 1] },
+//   { metaData: { uuid: 1 }, position: [-1, 1] },
+// ];
 
 const meta: Meta = {
   title: 'Cluster',
   component: Cluster,
-  argTypes: {
-    children: {
-      control: {
-        type: 'text',
-      },
-    },
-    boundsZoomPaddingFactor: {
-      control: {
-        type: 'text',
-      },
-    },
-  },
+  argTypes: {},
   parameters: {
     controls: { expanded: true },
   },
@@ -34,44 +39,85 @@ const meta: Meta = {
 
 export default meta;
 
-const Template = () => {
+function ThreeDPointCloudWithSelect(props) {
+  const selectedTool = props.selectedTool;
   const bounds = React.useMemo(() => {
     // @ts-ignore
     return getThreeDimensionalBounds([
       ...data.map((d) => d.position),
-      ...data2.map((d) => d.position),
+      // ...data2.map((d) => d.position),
     ]);
   }, []);
+
   return (
-    <Container>
-      <ThreeDimensionalCanvas>
-        <ambientLight />
-        <ThreeDimensionalControls />
-        <axesHelper />
+    <ThreeDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
+      <ambientLight intensity={0.5} />
+      <pointLight position={[0, 0, 10]} />
+      <LassoSelect
+        /* @ts-ignore */
+        points={[...data]}
+        onChange={(selection) => {
+          props.onChange(selection);
+        }}
+        enabled={selectedTool === 'select'}
+      >
+        <ThreeDimensionalControls enableRotate={selectedTool === 'move'} />
         <ThreeDimensionalBounds bounds={bounds}>
+          <Axes size={bounds.maxX - bounds.minX} />
           <Points
-            // @ts-ignore
-            data={data2}
-            pointShape="cube"
-            pointProps={{ color: 'purple' }}
+            /* @ts-ignore */
+            data={data}
+            pointProps={{
+              color: (p) => {
+                if (props.selectedPoints.includes(p.metaData.uuid)) {
+                  return '#40E0D0';
+                } else if (props.selectedPoints.length) {
+                  return '#216c64';
+                }
+                return '#40E0D0';
+              },
+            }}
+            onPointClicked={(p) => {
+              props.onChange([p]);
+            }}
           />
           <Cluster
-            // @ts-ignore
-            data={data2}
-            pointShape="sphere"
-            color={'white'}
+            /* @ts-ignore */
+            data={data}
           />
-          {/* @ts-ignore */}
-          <Points data={data} pointProps={{ color: '#7BFFFF' }} />
-          <axesHelper />
         </ThreeDimensionalBounds>
-      </ThreeDimensionalCanvas>
-    </Container>
+      </LassoSelect>
+    </ThreeDimensionalCanvas>
+  );
+}
+
+const Template: Story = (props) => {
+  const [selected, setSelected] = useState([]);
+  const [tool, setTool] = useState<ToolName>('move');
+  return (
+    <div style={{ position: 'relative' }}>
+      <Container showToolbar selectedTool={tool} onToolChange={setTool}>
+        <ThreeDPointCloudWithSelect
+          {...props}
+          onChange={(sel) => {
+            setSelected(sel.map((s) => s.metaData.uuid));
+          }}
+          selectedPoints={selected}
+          selectedTool={tool}
+        />
+      </Container>
+      <ControlPanel>
+        <header>Selected Items</header>
+        <ul>
+          {selected.map((s) => (
+            <li key={s}>{s}</li>
+          ))}
+        </ul>
+      </ControlPanel>
+    </div>
   );
 };
 
 // By passing using the Args format for exported stories, you can control the props for a component for reuse in a test
 // https://storybook.js.org/docs/react/workflows/unit-testing
 export const Default = Template.bind({});
-
-Default.args = {};
