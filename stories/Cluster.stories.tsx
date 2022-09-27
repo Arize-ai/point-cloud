@@ -59,7 +59,7 @@ const Template = () => {
             // @ts-ignore
             data={data2}
             pointShape="sphere"
-            color={'green'}
+            color={'white'}
           />
           {/* @ts-ignore */}
           <Points data={data} pointProps={{ color: '#7BFFFF' }} />

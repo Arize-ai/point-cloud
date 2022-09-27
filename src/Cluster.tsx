@@ -16,7 +16,7 @@ type ClusterMeshProps = {
   scale?: number;
   /**
    * the dimension of a side if the radius is a sphere
-   * @default 0.03
+   * @default 0.1
    */
   size?: number;
 };
@@ -32,15 +32,19 @@ export type ClusterProps = {
   /**
    * The color of the cluster
    */
-  color: string;
+  color?: string;
   /**
    * The opacity of the cluster
-   * @default 0.5
+   * @default 0.1
    */
   opacity?: number;
 };
 
-export function Cluster({ data, color, opacity = 0.4 }: ClusterProps) {
+export function Cluster({
+  data,
+  color = '#999999',
+  opacity = 0.1,
+}: ClusterProps) {
   const singleGeometry = useMemo(() => {
     let geometries: THREE.SphereGeometry[] = [];
     const pointSet = new Set();
@@ -48,7 +52,7 @@ export function Cluster({ data, color, opacity = 0.4 }: ClusterProps) {
       const { position } = point;
       // Remove duplicates
       if (!pointSet.has(position.join(','))) {
-        const geometry = new THREE.SphereGeometry(DEFAULT_RADIUS);
+        const geometry = new THREE.SphereGeometry(DEFAULT_RADIUS, 8, 8);
         geometry.translate(position[0], position[1], position[2] || 0);
         geometries.push(geometry);
         pointSet.add(position.join(','));
@@ -65,8 +69,6 @@ export function Cluster({ data, color, opacity = 0.4 }: ClusterProps) {
         opacity={opacity}
         transparent={opacity < 1}
         color={color}
-        depthTest={false}
-        depthWrite={false}
       />
     </mesh>
   );
