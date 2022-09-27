@@ -4,33 +4,19 @@ import { mergeBufferGeometries } from 'three-stdlib';
 
 const DEFAULT_RADIUS = 0.1;
 
-type ClusterMeshProps = {
-  /**
-   * The radius of the point if it is a sphere.
-   * @default 0.02
-   */
-  radius?: number;
-  /**
-   * The color of the point
-   */
-  scale?: number;
-  /**
-   * the dimension of a side if the radius is a sphere
-   * @default 0.1
-   */
-  size?: number;
-};
-
-export type ClusterBaseProps = {
-  metaData: any;
+export type ClusterPoint = {
   position: [number, number, number] | [number, number];
 };
 
 export type ClusterProps = {
-  data: Array<ClusterBaseProps>;
-  pointProps: ClusterMeshProps;
+  data: Array<ClusterPoint>;
+  /**
+   * The radius of each cluster point
+   */
+  pointRadius?: number;
   /**
    * The color of the cluster
+   * @default '#999999'
    */
   color?: string;
   /**
@@ -42,17 +28,19 @@ export type ClusterProps = {
 
 export function Cluster({
   data,
+  pointRadius = DEFAULT_RADIUS,
   color = '#999999',
   opacity = 0.1,
 }: ClusterProps) {
   const singleGeometry = useMemo(() => {
     let geometries: THREE.SphereGeometry[] = [];
+    // Keep track of the points added so that we can remove duplicates
     const pointSet = new Set();
     data.forEach((point) => {
       const { position } = point;
       // Remove duplicates
       if (!pointSet.has(position.join(','))) {
-        const geometry = new THREE.SphereGeometry(DEFAULT_RADIUS, 8, 8);
+        const geometry = new THREE.SphereGeometry(pointRadius, 8, 8);
         geometry.translate(position[0], position[1], position[2] || 0);
         geometries.push(geometry);
         pointSet.add(position.join(','));
