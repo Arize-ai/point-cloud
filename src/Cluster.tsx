@@ -1,8 +1,8 @@
-import React, { useMemo, useRef, useCallback } from 'react';
+import React, { useMemo, useRef, useCallback, useState } from 'react';
 import * as THREE from 'three';
-import { useFrame } from '@react-three/fiber';
+import { mergeBufferGeometries } from 'three-stdlib';
 
-const DEFAULT_RADIUS = 0.08;
+const DEFAULT_RADIUS = 0.1;
 
 type ClusterMeshProps = {
   /**
@@ -26,11 +26,6 @@ export type ClusterBaseProps = {
   position: [number, number, number] | [number, number];
 };
 
-/**
- * Have to provide default mesh properties, otherwise the point will not get restored after selection
- */
-const defaultPointMeshProps: ClusterMeshProps = { scale: 1 };
-
 export type ClusterProps = {
   data: Array<ClusterBaseProps>;
   pointProps: ClusterMeshProps;
@@ -45,71 +40,34 @@ export type ClusterProps = {
   opacity?: number;
 };
 
-const tempObject = new THREE.Object3D();
-const tempColor = new THREE.Color();
-
-export function Cluster({
-  data,
-  pointProps = defaultPointMeshProps,
-  color,
-  opacity = 0.5,
-}: ClusterProps) {
-  const colorArray = useMemo(
-    () =>
-      Float32Array.from(
-        new Array(data.length)
-          .fill(null)
-          .flatMap(() => tempColor.set(color).toArray())
-      ),
-    [data]
-  );
-
-  const meshRef = useRef<THREE.InstancedMesh>(null);
-
-  useFrame(() => {
-    data.forEach(({ position }, id) => {
-      tempObject.position.set(position[0], position[1], position[2] || 0);
-      if (meshRef.current) {
-        meshRef.current.setMatrixAt(id, tempObject.matrix);
-        meshRef.current.instanceMatrix.needsUpdate = true;
-
-        const colorString = color;
-        tempColor.set(colorString);
-
-        // Flush the color to the color buffer at the point's index
-        tempColor.toArray(colorArray, id * 3);
-
-        meshRef.current.geometry.attributes.color.needsUpdate = true;
-
-        tempObject.updateMatrix();
-        meshRef.current.setMatrixAt(id, tempObject.matrix);
+export function Cluster({ data, color, opacity = 0.4 }: ClusterProps) {
+  const singleGeometry = useMemo(() => {
+    let geometries: THREE.SphereGeometry[] = [];
+    const pointSet = new Set();
+    data.forEach((point) => {
+      const { position } = point;
+      // Remove duplicates
+      if (!pointSet.has(position.join(','))) {
+        const geometry = new THREE.SphereGeometry(DEFAULT_RADIUS);
+        geometry.translate(position[0], position[1], position[2] || 0);
+        geometries.push(geometry);
+        pointSet.add(position.join(','));
       }
     });
-  });
+
+    const geometry = mergeBufferGeometries(geometries);
+    return geometry;
+  }, [data]);
 
   return (
-    <instancedMesh
-      args={[undefined, undefined, data.length]}
-      ref={meshRef}
-      //   onPointerUp={(e) => {
-      //     if (e.intersections) {
-      //       const instanceIds = e.intersections
-      //         .map((e) => e?.instanceId)
-      //         .filter((i): i is NonNullable<typeof i> => i != null);
-      //     }
-      //   }}
-    >
-      <sphereGeometry args={[pointProps.radius || DEFAULT_RADIUS, 20, 20]}>
-        <instancedBufferAttribute
-          attach="attributes-color"
-          args={[colorArray, 3]}
-        />
-      </sphereGeometry>
+    <mesh geometry={singleGeometry ?? undefined}>
       <meshBasicMaterial
-        vertexColors
         opacity={opacity}
         transparent={opacity < 1}
+        color={color}
+        depthTest={false}
+        depthWrite={false}
       />
-    </instancedMesh>
+    </mesh>
   );
 }

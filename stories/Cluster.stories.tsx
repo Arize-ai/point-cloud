@@ -48,7 +48,6 @@ const Template = () => {
         <ambientLight />
         <ThreeDimensionalControls />
         <axesHelper />
-
         <ThreeDimensionalBounds bounds={bounds}>
           <Points
             // @ts-ignore
