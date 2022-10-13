@@ -18,16 +18,6 @@ import { Container, ControlPanel, ToolName } from './components';
 import data from './data/point-cloud-3d.json';
 import twoDData from './data/point-cloud-2d.json';
 
-// const data = [
-//   { metaData: { uuid: 1 }, position: [1, 1, 0] },
-//   { metaData: { uuid: 2 }, position: [-1, 1, 0] },
-// ];
-
-// const twoDData = [
-//   { metaData: { uuid: 1 }, position: [1, 1] },
-//   { metaData: { uuid: 1 }, position: [-1, 1] },
-// ];
-
 const meta: Meta = {
   title: 'Cluster',
   component: Cluster,
