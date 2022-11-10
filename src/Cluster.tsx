@@ -30,7 +30,7 @@ export function Cluster({
   data,
   pointRadius = DEFAULT_RADIUS,
   color = '#999999',
-  opacity = 0.1,
+  opacity = 0.2,
 }: ClusterProps) {
   const singleGeometry = useMemo(() => {
     let geometries: THREE.SphereGeometry[] = [];
@@ -40,7 +40,7 @@ export function Cluster({
       const { position } = point;
       // Remove duplicates
       if (!pointSet.has(position.join(','))) {
-        const geometry = new THREE.SphereGeometry(pointRadius, 8, 8);
+        const geometry = new THREE.SphereGeometry(pointRadius, 12, 12);
         geometry.translate(position[0], position[1], position[2] || 0);
         geometries.push(geometry);
         pointSet.add(position.join(','));
