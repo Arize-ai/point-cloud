@@ -24,6 +24,11 @@ export type ClusterProps = {
    * @default 0.1
    */
   opacity?: number;
+  /**
+   * Whether or not to render the mesh as a wire frame
+   * @default false
+   */
+  wireframe?: boolean;
 };
 
 export function Cluster({
@@ -31,6 +36,7 @@ export function Cluster({
   pointRadius = DEFAULT_RADIUS,
   color = '#999999',
   opacity = 0.2,
+  wireframe = false,
 }: ClusterProps) {
   const singleGeometry = useMemo(() => {
     let geometries: THREE.SphereGeometry[] = [];
@@ -57,6 +63,7 @@ export function Cluster({
         opacity={opacity}
         transparent={opacity < 1}
         color={color}
+        wireframe={wireframe}
       />
     </mesh>
   );

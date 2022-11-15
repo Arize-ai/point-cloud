@@ -74,6 +74,7 @@ function ThreeDPointCloudWithSelect(props) {
           <Cluster
             /* @ts-ignore */
             data={data}
+            wireframe={true}
           />
         </ThreeDimensionalBounds>
       </LassoSelect>
