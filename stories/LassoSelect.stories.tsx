@@ -12,6 +12,7 @@ import {
   getTwoDimensionalBounds,
   TwoDimensionalCanvas,
   TwoDimensionalBounds,
+  Cluster,
 } from '../src';
 import { Container, ControlPanel, ToolName } from './components';
 import data from './data/point-cloud-3d.json';
@@ -76,6 +77,10 @@ function ThreeDPointCloudWithSelect(props) {
                 return '#40E0D0';
               },
             }}
+          />
+          <Cluster
+            /* @ts-ignore */
+            data={data}
           />
         </ThreeDimensionalBounds>
       </LassoSelect>

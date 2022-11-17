@@ -1,6 +1,6 @@
 {
   "name": "@arizeai/point-cloud",
-  "version": "2.0.9",
+  "version": "2.1.2",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -57,6 +57,7 @@
     "@react-three/drei": "^9.5.4",
     "@react-three/fiber": "^8.0.12",
     "@size-limit/preset-small-lib": "^7.0.8",
+    "@storybook/addon-a11y": "^6.5.10",
     "@storybook/addon-essentials": "^6.4.22",
     "@storybook/addon-info": "^5.3.21",
     "@storybook/addon-links": "^6.4.22",
@@ -67,6 +68,7 @@
     "@types/three": "^0.139.0",
     "babel-loader": "^8.2.5",
     "chromatic": "^6.5.4",
+    "d3-scale-chromatic": "^3.0.0",
     "husky": "^7.0.4",
     "react": "18",
     "react-dom": "18",
@@ -82,11 +84,7 @@
     "example": "example",
     "test": "test"
   },
-  "dependencies": {
-    "@storybook/addon-a11y": "^6.5.10",
-    "d3-scale-chromatic": "^3.0.0",
-    "polished": "^4.2.2"
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Arize-ai/point-cloud.git"
