@@ -45,7 +45,7 @@
   "size-limit": [
     {
       "path": "dist/point-cloud.cjs.production.min.js",
-      "limit": "10 KB"
+      "limit": "800 KB"
     },
     {
       "path": "dist/point-cloud.esm.js",
