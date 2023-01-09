@@ -65,11 +65,13 @@ export function ThreeDimensionalBounds({
     camera.position.x = boundsWidth / 2 + minX;
     camera.position.y = boundsHeight / 2 + minY;
     if (isOrthographicCamera(camera)) {
-      const cameraZ = boundsDepth / 2 + minZ;
-      camera.position.z = cameraZ;
+      // Orthographic camera
+      // Set the zoom to fit the bounds
+      // @src https://github.com/pmndrs/react-three-fiber/issues/67#issuecomment-496507403
       camera.zoom =
         Math.min(width / boundsWidth, height / boundsHeight) *
         boundsZoomPaddingFactor;
+      // Set the near plane to be a bit closer than the maxZ to allow for rotation of the cloud without clipping through the near plane
       const cameraToNearEdge =
         maxZ < 0 ? -maxZ + camera.position.z : camera.position.z - maxZ;
       camera.near = cameraToNearEdge * 3;
@@ -80,6 +82,7 @@ export function ThreeDimensionalBounds({
       camera.position.z = (cameraZ + center[2]) * offset;
     }
 
+    // Set the far plane to be a bit further than the minZ, to allow for rotation of the cloud without clipping through the far plane
     const cameraToFarEdge =
       minZ < 0 ? -minZ + camera.position.z : camera.position.z - minZ;
     camera.far = cameraToFarEdge * 3;

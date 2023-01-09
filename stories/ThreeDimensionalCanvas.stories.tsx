@@ -167,7 +167,7 @@ export const OrthographicCamera = () => {
             // @ts-ignore
             data={data2}
             pointShape="cube"
-            pointProps={{ color: 'purple' }}
+            pointProps={{ color: '#BF9FFF' }}
           />
           {/* @ts-ignore */}
           <Points data={data} pointProps={{ color: '#7BFFFF' }} />
