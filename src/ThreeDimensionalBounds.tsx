@@ -1,6 +1,10 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { ThreeDimensionalBoundsType, ThreeDimensionalPoint } from './types';
-import { getCenterFromThreeDimensionalBounds } from './utils';
+import {
+  getCenterFromThreeDimensionalBounds,
+  getMaxDimensionFromThreeDimensionalBounds,
+  isOrthographicCamera,
+} from './utils';
 import { useThree } from '@react-three/fiber';
 
 export type ThreeDimensionalBoundsContextType = {
@@ -13,6 +17,8 @@ const BoundsContext = createContext<ThreeDimensionalBoundsContextType>({
   center: [0, 0, 0],
 });
 
+const ORTHOGRAPHIC_CAMERA_Z_OFFSET = 10;
+
 export function useThreeDimensionalBounds() {
   return useContext(BoundsContext);
 }
@@ -24,6 +30,7 @@ export function ThreeDimensionalBounds({
   bounds,
   children,
   offset = 1.5,
+  boundsZoomPaddingFactor = 0.9,
 }: {
   children: React.ReactNode;
   /**
@@ -32,14 +39,23 @@ export function ThreeDimensionalBounds({
   bounds: ThreeDimensionalBoundsType;
   /**
    * Offset from the object to make it fit the bounds.
+   *
+   * Only affects perspective cameras.
    * @default 1.5
    */
   offset?: number;
-  }) {
+  /**
+   * The amount to reduce the zoom by to give some padding to the points (1 means no padding).
+   *
+   * Only affects orthographic cameras.
+   * @default 0.9
+   */
+  boundsZoomPaddingFactor?: number;
+}) {
   const center = getCenterFromThreeDimensionalBounds(bounds);
   const {
     camera,
-    // size: { width, height },
+    size: { width, height },
   } = useThree();
 
   useEffect(() => {
@@ -49,17 +65,40 @@ export function ThreeDimensionalBounds({
     const boundsHeight = maxY - minY;
     const boundsDepth = maxZ - minZ;
     const maxDim = Math.max(boundsWidth, boundsHeight, boundsDepth);
-    // @ts-ignore
-    const fov = camera.fov * (Math.PI / 180);
     camera.position.x = boundsWidth / 2 + minX;
     camera.position.y = boundsHeight / 2 + minY;
-    const cameraZ = maxDim / (2 * Math.tan(fov / 2));
-    camera.position.z = (cameraZ + center[2]) * offset;
+    if (isOrthographicCamera(camera)) {
+      // Orthographic camera
+      // Set the zoom to fit the bounds
+      // @src https://github.com/pmndrs/react-three-fiber/issues/67#issuecomment-496507403
+      camera.zoom =
+        Math.min(width / boundsWidth, height / boundsHeight) *
+        boundsZoomPaddingFactor;
+      const furthestPointDim =
+        getMaxDimensionFromThreeDimensionalBounds(bounds);
 
-    const cameraToFarEdge =
-      minZ < 0 ? -minZ + camera.position.z : camera.position.z - minZ;
+      // Set the camera position to be a bit further away than the furthest coordinate value, to allow for rotation of the cloud without clipping through the near plane
+      // The default near value is .1, so if we move the camera back this far, we are guaranteed to be not clip the near plane
+      const cameraZ = Math.abs(furthestPointDim) + ORTHOGRAPHIC_CAMERA_Z_OFFSET;
+      camera.position.z = cameraZ;
 
-    camera.far = cameraToFarEdge * 3;
+      // Set the far edge to be a bit further away than the furthest coordinate value + the camera's position, to allow for rotation of the cloud without clipping through the far plane
+      const cameraToFarEdge = Math.max(
+        camera.far,
+        cameraZ + furthestPointDim + ORTHOGRAPHIC_CAMERA_Z_OFFSET
+      );
+      camera.far = cameraToFarEdge;
+    } else {
+      // Perspective camera
+      const fov = camera.fov * (Math.PI / 180);
+      const cameraZ = maxDim / (2 * Math.tan(fov / 2));
+      camera.position.z = (cameraZ + center[2]) * offset;
+
+      const cameraToFarEdge =
+        minZ < 0 ? -minZ + camera.position.z : camera.position.z - minZ;
+      camera.far = cameraToFarEdge * 3;
+    }
+
     camera.updateProjectionMatrix();
     camera.lookAt(...center);
   }, [bounds]);

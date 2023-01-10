@@ -69,3 +69,24 @@ export function getCenterFromThreeDimensionalBounds({
     minZ + (maxZ - minZ) / 2,
   ];
 }
+
+/**
+ * Gets the absolute value of the largest
+ */
+export function getMaxDimensionFromThreeDimensionalBounds({
+  minX,
+  maxX,
+  minY,
+  maxY,
+  minZ,
+  maxZ,
+}: ThreeDimensionalBoundsType): number {
+  return Math.max(
+    Math.abs(minX),
+    Math.abs(maxX),
+    Math.abs(minY),
+    Math.abs(maxY),
+    Math.abs(minZ),
+    Math.abs(maxZ)
+  );
+}

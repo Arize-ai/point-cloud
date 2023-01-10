@@ -146,6 +146,38 @@ export const AutoRotateOnInit = () => {
   );
 };
 
+export const OrthographicCamera = () => {
+  const bounds = React.useMemo(() => {
+    // @ts-ignore
+    return getThreeDimensionalBounds([
+      ...data.map((d) => d.position),
+      ...data2.map((d) => d.position),
+    ]);
+  }, []);
+  return (
+    <Container>
+      <ThreeDimensionalCanvas orthographic>
+        <ambientLight />
+        <ThreeDimensionalControls />
+        <axesHelper />
+        <pointLight position={[10, 10, 10]} />
+        <pointLight position={[10, -10, 10]} />
+        <ThreeDimensionalBounds bounds={bounds}>
+          <Points
+            // @ts-ignore
+            data={data2}
+            pointShape="cube"
+            pointProps={{ color: '#BF9FFF' }}
+          />
+          {/* @ts-ignore */}
+          <Points data={data} pointProps={{ color: '#7BFFFF' }} />
+          <axesHelper />
+        </ThreeDimensionalBounds>
+      </ThreeDimensionalCanvas>
+    </Container>
+  );
+};
+
 // By passing using the Args format for exported stories, you can control the props for a component for reuse in a test
 // https://storybook.js.org/docs/react/workflows/unit-testing
 export const Default = Template.bind({});
