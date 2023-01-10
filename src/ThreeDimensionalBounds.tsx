@@ -78,6 +78,7 @@ export function ThreeDimensionalBounds({
         getMaxDimensionFromThreeDimensionalBounds(bounds);
 
       // Set the camera position to be a bit further away than the furthest coordinate value, to allow for rotation of the cloud without clipping through the near plane
+      // The default near value is .1, so if we move the camera back this far, we are guaranteed to be not clip the near plane
       const cameraZ = Math.abs(furthestPointDim) + ORTHOGRAPHIC_CAMERA_Z_OFFSET;
       camera.position.z = cameraZ;
 
