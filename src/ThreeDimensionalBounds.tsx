@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect } from 'react';
 import { ThreeDimensionalBoundsType, ThreeDimensionalPoint } from './types';
 import {
   getCenterFromThreeDimensionalBounds,
+  getMaxDimensionFromThreeDimensionalBounds,
   isOrthographicCamera,
 } from './utils';
 import { useThree } from '@react-three/fiber';
@@ -15,6 +16,8 @@ const BoundsContext = createContext<ThreeDimensionalBoundsContextType>({
   bounds: { minX: -10, maxX: 10, minY: -10, maxY: 10, minZ: -10, maxZ: 10 },
   center: [0, 0, 0],
 });
+
+const ORTHOGRAPHIC_CAMERA_Z_OFFSET = 10;
 
 export function useThreeDimensionalBounds() {
   return useContext(BoundsContext);
@@ -71,21 +74,30 @@ export function ThreeDimensionalBounds({
       camera.zoom =
         Math.min(width / boundsWidth, height / boundsHeight) *
         boundsZoomPaddingFactor;
-      // Set the near plane to be a bit closer than the maxZ to allow for rotation of the cloud without clipping through the near plane
-      const cameraToNearEdge =
-        maxZ < 0 ? -maxZ + camera.position.z : camera.position.z - maxZ;
-      camera.near = cameraToNearEdge * 3;
+      const furthestPointDim =
+        getMaxDimensionFromThreeDimensionalBounds(bounds);
+
+      // Set the camera position to be a bit further away than the furthest coordinate value, to allow for rotation of the cloud without clipping through the near plane
+      const cameraZ = Math.abs(furthestPointDim) + ORTHOGRAPHIC_CAMERA_Z_OFFSET;
+      camera.position.z = cameraZ;
+
+      // Set the far edge to be a bit further away than the furthest coordinate value + the camera's position, to allow for rotation of the cloud without clipping through the far plane
+      const cameraToFarEdge = Math.max(
+        camera.far,
+        cameraZ + furthestPointDim + ORTHOGRAPHIC_CAMERA_Z_OFFSET
+      );
+      camera.far = cameraToFarEdge;
     } else {
       // Perspective camera
       const fov = camera.fov * (Math.PI / 180);
       const cameraZ = maxDim / (2 * Math.tan(fov / 2));
       camera.position.z = (cameraZ + center[2]) * offset;
+
+      const cameraToFarEdge =
+        minZ < 0 ? -minZ + camera.position.z : camera.position.z - minZ;
+      camera.far = cameraToFarEdge * 3;
     }
 
-    // Set the far plane to be a bit further than the minZ, to allow for rotation of the cloud without clipping through the far plane
-    const cameraToFarEdge =
-      minZ < 0 ? -minZ + camera.position.z : camera.position.z - minZ;
-    camera.far = cameraToFarEdge * 3;
     camera.updateProjectionMatrix();
     camera.lookAt(...center);
   }, [bounds]);
