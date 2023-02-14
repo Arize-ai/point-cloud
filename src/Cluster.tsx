@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
 import * as THREE from 'three';
 import { mergeBufferGeometries } from 'three-stdlib';
+import { PointCoordinates } from './types';
 
 const DEFAULT_RADIUS = 0.1;
 
 export type ClusterPoint = {
-  position: [number, number, number] | [number, number];
+  position: PointCoordinates;
 };
 
 export type ClusterProps = {
