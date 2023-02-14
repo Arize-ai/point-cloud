@@ -1,7 +1,7 @@
 import React from 'react';
 import { MapControls } from '@react-three/drei';
 import { useTwoDimensionalBounds } from './TwoDimensionalBounds';
-import { ControlProps } from './types';
+import { ControlProps, ThreeDimensionalPoint } from './types';
 
 export type TwoDimensionalControlsProps = Omit<ControlProps, 'enableRotate'>;
 
@@ -14,7 +14,7 @@ export function TwoDimensionalControls({
   ...passThroughProps
 }: TwoDimensionalControlsProps) {
   const { center } = useTwoDimensionalBounds();
-  const target = [...center, 0] as [number, number, number];
+  const target = [...center, 0] as ThreeDimensionalPoint;
 
   /* disable rotation so that it doesn't clash with selection */
   return (

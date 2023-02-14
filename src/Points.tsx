@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useCallback } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
+import { PointCoordinates, ThreeDimensionalPoint } from './types';
 
 type PointShape = 'sphere' | 'cube' | 'octahedron';
 
@@ -27,7 +28,7 @@ type PointMeshProps = {
 
 export type PointBaseProps = {
   metaData: any;
-  position: [number, number, number] | [number, number];
+  position: PointCoordinates;
 };
 
 /**
@@ -135,7 +136,7 @@ export function Points({
         );
       }
       case 'cube': {
-        const args: [number, number, number] =
+        const args: ThreeDimensionalPoint =
           typeof pointProps?.size === 'number'
             ? [pointProps.size, pointProps.size, pointProps.size]
             : [0.03, 0.03, 0.03];

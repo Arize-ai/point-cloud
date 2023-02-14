@@ -10,6 +10,11 @@ export type TwoDimensionalBoundsType = {
 
 export type ThreeDimensionalPoint = [number, number, number];
 
+/**
+ * A point's coordinates in 2 or 3 dimensions
+ */
+export type PointCoordinates = TwoDimensionalPoint | ThreeDimensionalPoint;
+
 export type ThreeDimensionalBoundsType = {
   minX: number;
   minY: number;
@@ -23,9 +28,9 @@ export type ThreeDimensionalBoundsType = {
  * Customizable for the camera on initialization
  */
 export type CameraInitProps = {
-  position?: [number, number, number];
+  position?: ThreeDimensionalPoint;
   zoom?: number;
-  up?: [number, number, number];
+  up?: ThreeDimensionalPoint;
 };
 
 /**
