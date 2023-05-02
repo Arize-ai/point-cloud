@@ -38,7 +38,7 @@ export type CameraInitProps = {
  */
 type ControlPassthroughProps = Pick<
   React.ComponentProps<typeof OrbitControls>,
-  'onEnd' | 'domElement'
+  'onStart' | 'onChange' | 'onEnd' | 'domElement'
 >;
 
 /**
