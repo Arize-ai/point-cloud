@@ -13,20 +13,16 @@ import {
   TwoDimensionalCanvas,
   TwoDimensionalBounds,
   Cluster,
+  PointBaseProps,
+  ThreeDimensionalPoint,
+  TwoDimensionalPoint,
 } from '../src';
 import { Container, ControlPanel, ToolName } from './components';
-import data from './data/point-cloud-3d.json';
-import twoDData from './data/point-cloud-2d.json';
+import _data from './data/point-cloud-3d.json';
+import _twoDData from './data/point-cloud-2d.json';
 
-// const data = [
-//   { metaData: { uuid: 1 }, position: [1, 1, 0] },
-//   { metaData: { uuid: 2 }, position: [-1, 1, 0] },
-// ];
-
-// const twoDData = [
-//   { metaData: { uuid: 1 }, position: [1, 1] },
-//   { metaData: { uuid: 1 }, position: [-1, 1] },
-// ];
+const data = _data as unknown as Array<PointBaseProps>;
+const twoDData = _twoDData as unknown as Array<PointBaseProps>;
 
 const meta: Meta = {
   title: 'LassoSelect',
@@ -42,10 +38,8 @@ export default meta;
 function ThreeDPointCloudWithSelect(props) {
   const selectedTool = props.selectedTool;
   const bounds = React.useMemo(() => {
-    // @ts-ignore
     return getThreeDimensionalBounds([
-      ...data.map((d) => d.position),
-      // ...data2.map((d) => d.position),
+      ...data.map((d) => d.position as ThreeDimensionalPoint),
     ]);
   }, []);
 
@@ -54,8 +48,7 @@ function ThreeDPointCloudWithSelect(props) {
       <ambientLight intensity={0.5} />
       <pointLight position={[0, 0, 10]} />
       <LassoSelect
-        /* @ts-ignore */
-        points={[...data]}
+        points={data}
         onChange={(selection) => {
           props.onChange(selection);
         }}
@@ -78,10 +71,7 @@ function ThreeDPointCloudWithSelect(props) {
               },
             }}
           />
-          <Cluster
-            /* @ts-ignore */
-            data={data}
-          />
+          <Cluster data={data} />
         </ThreeDimensionalBounds>
       </LassoSelect>
     </ThreeDimensionalCanvas>
@@ -91,43 +81,38 @@ function ThreeDPointCloudWithSelect(props) {
 function TwoDPointCloudWithSelect(props) {
   const { selectedTool, selectedPoints } = props;
   const bounds = React.useMemo(() => {
-    // @ts-ignore
-    return getTwoDimensionalBounds([...twoDData.map((d) => d.position)]);
+    return getTwoDimensionalBounds([
+      ...twoDData.map((d) => d.position as TwoDimensionalPoint),
+    ]);
   }, []);
 
   return (
     <div style={{ position: 'relative' }}>
-      <TwoDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
-        <ambientLight intensity={0.5} />
-        <pointLight position={[0, 0, 10]} />
-        <TwoDimensionalControls />
-        <LassoSelect
-          /* @ts-ignore */
-          points={twoDData}
-          onChange={(selection) => {
-            props.onChange(selection);
-          }}
-          enabled={selectedTool === 'select'}
-        >
+      <TwoDimensionalCanvas camera={{ zoom: 30, up: [0, 0, 1] }}>
+        <TwoDimensionalBounds bounds={bounds}>
+          <TwoDimensionalControls />
+          <LassoSelect
+            points={twoDData}
+            onChange={(selection) => {
+              props.onChange(selection);
+            }}
+            enabled={selectedTool === 'select'}
+          />
           <axesHelper />
-          <TwoDimensionalBounds bounds={bounds}>
-            <TwoDimensionalControls />
-            <Points
-              /* @ts-ignore */
-              data={twoDData}
-              pointProps={{
-                color: (p) => {
-                  if (props.selectedPoints.includes(p.metaData.uuid)) {
-                    return '#40E0D0';
-                  } else if (props.selectedPoints.length) {
-                    return '#216c64';
-                  }
+          <Points
+            data={twoDData}
+            pointProps={{
+              color: (p) => {
+                if (props.selectedPoints.includes(p.metaData.uuid)) {
                   return '#40E0D0';
-                },
-              }}
-            />
-          </TwoDimensionalBounds>
-        </LassoSelect>
+                } else if (props.selectedPoints.length) {
+                  return '#216c64';
+                }
+                return '#40E0D0';
+              },
+            }}
+          />
+        </TwoDimensionalBounds>
       </TwoDimensionalCanvas>
     </div>
   );

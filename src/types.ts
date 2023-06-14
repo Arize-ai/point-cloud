@@ -1,4 +1,4 @@
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControlsProps } from '@react-three/drei';
 
 export type TwoDimensionalPoint = [number, number];
 export type TwoDimensionalBoundsType = {
@@ -37,9 +37,14 @@ export type CameraInitProps = {
  * Pass through some  props directly to the controls
  */
 type ControlPassthroughProps = Pick<
-  React.ComponentProps<typeof OrbitControls>,
-  'onStart' | 'onChange' | 'onEnd' | 'domElement'
->;
+  OrbitControlsProps,
+  'onStart' | 'onEnd' | 'domElement'
+> & {
+  /**
+   * A normalized event handler across all controls
+   */
+  onChange?: (e?: THREE.Event) => void;
+};
 
 /**
  * Control props

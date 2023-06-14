@@ -59,8 +59,10 @@ const actualLabelsColorMap: Map<string, number> = actualLabelsArray.reduce(
 
 const colorByFn = (data) => {
   const { actualLabel } = data.metaData;
+  debugger;
   return interpolateSinebow(actualLabelsColorMap[actualLabel]);
 };
+
 const Template: Story<ThreeDimensionalCanvasProps> = (args) => (
   <Container>
     <ThreeDimensionalCanvas {...args} camera={{ position: [0, 0, 10] }}>

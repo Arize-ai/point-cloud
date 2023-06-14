@@ -7,6 +7,7 @@ import {
   Points,
   getTwoDimensionalBounds,
   TwoDimensionalBounds,
+  TwoDimensionalPoint,
 } from '../src';
 import { Container } from './components';
 import data from './data/point-cloud-2d.json';
@@ -31,10 +32,9 @@ export default meta;
 
 const Template: Story<TwoDimensionalControlsProps> = (props) => {
   const bounds = React.useMemo(() => {
-    // @ts-ignore
     return getTwoDimensionalBounds([
-      ...data.map((d) => d.position),
-      ...data2.map((d) => d.position),
+      ...data.map((d) => d.position as TwoDimensionalPoint),
+      ...data2.map((d) => d.position as TwoDimensionalPoint),
     ]);
   }, []);
   return (
