@@ -87,34 +87,32 @@ function TwoDPointCloudWithSelect(props) {
   }, []);
 
   return (
-    <div style={{ position: 'relative' }}>
-      <TwoDimensionalCanvas camera={{ zoom: 30, up: [0, 0, 1] }}>
-        <TwoDimensionalBounds bounds={bounds}>
-          <TwoDimensionalControls />
-          <LassoSelect
-            points={twoDData}
-            onChange={(selection) => {
-              props.onChange(selection);
-            }}
-            enabled={selectedTool === 'select'}
-          />
-          <axesHelper />
-          <Points
-            data={twoDData}
-            pointProps={{
-              color: (p) => {
-                if (props.selectedPoints.includes(p.metaData.uuid)) {
-                  return '#40E0D0';
-                } else if (props.selectedPoints.length) {
-                  return '#216c64';
-                }
+    <TwoDimensionalCanvas camera={{ zoom: 30, up: [0, 0, 1] }}>
+      <TwoDimensionalBounds bounds={bounds}>
+        <TwoDimensionalControls enabled={selectedTool === 'move'} />
+        <LassoSelect
+          points={twoDData}
+          onChange={(selection) => {
+            props.onChange(selection);
+          }}
+          enabled={selectedTool === 'select'}
+        />
+        <axesHelper />
+        <Points
+          data={twoDData}
+          pointProps={{
+            color: (p) => {
+              if (selectedPoints.includes(p.metaData.uuid)) {
                 return '#40E0D0';
-              },
-            }}
-          />
-        </TwoDimensionalBounds>
-      </TwoDimensionalCanvas>
-    </div>
+              } else if (props.selectedPoints.length) {
+                return '#216c64';
+              }
+              return '#40E0D0';
+            },
+          }}
+        />
+      </TwoDimensionalBounds>
+    </TwoDimensionalCanvas>
   );
 }
 
