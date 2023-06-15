@@ -1,7 +1,7 @@
 import {
   getTwoDimensionalBounds,
   getCenterFromTwoDimensionalBounds,
-} from '../src';
+} from '../src/utils';
 
 describe('getCenterFromTwoDimensionalBounds', () => {
   it('Should help compute the center of bounds', () => {

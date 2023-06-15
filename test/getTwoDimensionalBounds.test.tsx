@@ -1,4 +1,4 @@
-import { getTwoDimensionalBounds } from '../src';
+import { getTwoDimensionalBounds } from '../src/utils/twoDimensionalUtils';
 
 describe('getTwoDimensionalBounds', () => {
   it('Should get the extent of points', () => {

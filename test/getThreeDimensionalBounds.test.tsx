@@ -1,4 +1,4 @@
-import { getThreeDimensionalBounds } from '../src';
+import { getThreeDimensionalBounds } from '../src/utils/threeDimensionalUtils';
 
 describe('getThreeDimensionalBounds', () => {
   it('Should get the extent of points', () => {

@@ -170,8 +170,7 @@ export function Points({
       case 'meshMatcap':
         return (
           <meshMatcapMaterial
-            // @ts-ignore
-            vertexColors={THREE.VertexColors}
+            vertexColors={true}
             opacity={opacity}
             transparent={opacity < 1}
           />
@@ -180,8 +179,7 @@ export function Points({
       default:
         return (
           <meshStandardMaterial
-            // @ts-ignore
-            vertexColors={THREE.VertexColors}
+            vertexColors={true}
             opacity={opacity}
             transparent={opacity < 1}
           />
