@@ -1,7 +1,7 @@
 import {
   getThreeDimensionalBounds,
   getCenterFromThreeDimensionalBounds,
-} from '../src';
+} from '../src/utils';
 
 describe('getCenterFromThreeDimensionalBounds', () => {
   it('Should help compute the center of bounds', () => {

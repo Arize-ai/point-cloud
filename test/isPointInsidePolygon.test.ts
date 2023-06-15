@@ -1,4 +1,4 @@
-import { isPointInsidePolygon } from '../src';
+import { isPointInsidePolygon } from '../src/utils/twoDimensionalUtils';
 
 describe('isPointInsidePolygon', () => {
   it('Should detect points within a polygon', () => {
