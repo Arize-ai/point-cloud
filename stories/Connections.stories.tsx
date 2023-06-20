@@ -98,7 +98,7 @@ function PointsWithConnections() {
             setSelectedPoint(point);
           });
         }}
-        onPointHoverLeave={() => {
+        onPointerLeave={() => {
           startTransition(() => {
             setSelectedPoint(null);
           });
