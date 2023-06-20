@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Meta, Story } from '@storybook/react';
 import {
   Axes,
@@ -16,6 +16,7 @@ import _data from './data/point-cloud-3d.json';
 import { Container, ToolName } from './components';
 import { QuadraticBezierCurve3 } from 'three';
 import { QuadraticBezierLine } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
 
 const data = _data as unknown as Array<PointBaseProps>;
 
@@ -29,13 +30,13 @@ const connections: Array<{
   end: ThreeDimensionalPoint;
 }> = [];
 
-for (let i = 3; i < data.length / 2; i++) {
+for (let i = 10; i < data.length; i++) {
   const startPoint = data[i];
   const x = startPoint.position[0];
   const y = startPoint.position[1];
   const z = startPoint.position[2] as number;
   const start: ThreeDimensionalPoint = [x, y, z];
-  for (let j = 0; j < 3; j++) {
+  for (let j = 0; j < 10; j++) {
     const endPoint = data[i - j - 1];
     const x2 = endPoint.position[0];
     const y2 = endPoint.position[1];
@@ -48,15 +49,12 @@ for (let i = 3; i < data.length / 2; i++) {
 export default meta;
 
 export function Default() {
-  const [selected, setSelected] = useState([]);
   const [tool, setTool] = useState<ToolName>('move');
   const bounds = React.useMemo(() => {
     return getThreeDimensionalBounds([
       ...data.map((d) => d.position as ThreeDimensionalPoint),
     ]);
   }, []);
-  const [selectedPoint, setSelectedPoint] =
-    useState<PointBaseProps | null>(null);
   return (
     <Container showToolbar selectedTool={tool} onToolChange={setTool}>
       <ThreeDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
@@ -65,32 +63,68 @@ export function Default() {
         <ThreeDimensionalControls />
         <ThreeDimensionalBounds bounds={bounds}>
           <Axes size={bounds.maxX - bounds.minX} />
-          <Points
-            data={data}
-            pointProps={{
-              color: 'limegreen',
-            }}
-            onPointClicked={(point) => {
-              setSelectedPoint(point);
-            }}
-          />
+          <PointsWithConnections />
         </ThreeDimensionalBounds>
-        {connections.map((connection, i) => {
+      </ThreeDimensionalCanvas>
+    </Container>
+  );
+}
+
+function PointsWithConnections() {
+  const group = useRef<THREE.Group>(null);
+  const [selectedPoint, setSelectedPoint] =
+    useState<PointBaseProps | null>(null);
+  const filteredConnections = connections.filter((connection) => {
+    return connection.id === selectedPoint?.metaData.uuid;
+  });
+  useFrame((_, delta) => {
+    if (group.current) {
+      group.current.children.forEach(
+        (group) =>
+          // @ts-ignore
+          (group.children[0].material.uniforms.dashOffset.value -= delta * 5)
+      );
+    }
+  });
+  return (
+    <>
+      <Points
+        data={data}
+        pointProps={{
+          color: 'limegreen',
+        }}
+        onPointHovered={(point) => {
+          setSelectedPoint(point);
+        }}
+      />
+      <group ref={group}>
+        {filteredConnections.map((connection, i) => {
           return (
-            <QuadraticBezierLine
-              key={i}
-              start={connection.start}
-              end={connection.end}
-              color="white"
-              opacity={
-                connection.id === selectedPoint?.metaData.uuid ? 1 : 0.05
-              }
-              transparent
-            />
+            <group>
+              <QuadraticBezierLine
+                key={i}
+                start={connection.start}
+                end={connection.end}
+                color="white"
+                opacity={0.8}
+                transparent
+                dashed
+                dashScale={50}
+                gapSize={20}
+              />
+              <QuadraticBezierLine
+                key={i}
+                start={connection.start}
+                end={connection.end}
+                color="white"
+                lineWidth={0.5}
+                transparent
+                opacity={0.5}
+              />
+            </group>
           );
         })}
-      </ThreeDimensionalCanvas>
-      <div>Selected ID: {selectedPoint?.metaData.uuid}</div>
-    </Container>
+      </group>
+    </>
   );
 }
