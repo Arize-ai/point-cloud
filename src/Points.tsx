@@ -48,6 +48,14 @@ export type PointsProps = {
    */
   onPointsClicked?: (points: PointBaseProps[]) => void;
   /**
+   * Callback for when a point is hovered
+   */
+  onPointHovered?: (points: PointBaseProps) => void;
+  /**
+   * Callback for when the mouse pointer leaves the point meshes. Best used to detect when  the mouse is no longer over ANY point
+   */
+  onPointerLeave?: () => void;
+  /**
    * The shape of the points. This value must be uniform for all points.
    * @default 'sphere'
    */
@@ -72,6 +80,8 @@ export function Points({
   pointProps = defaultPointMeshProps,
   onPointsClicked,
   onPointClicked,
+  onPointHovered,
+  onPointerLeave,
   pointShape = 'sphere',
   opacity = 1,
   material = 'meshMatcap',
@@ -205,6 +215,21 @@ export function Points({
             onPointClicked &&
             onPointClicked(data[instanceIds[0]]);
         }
+      }}
+      onPointerOver={(e) => {
+        if (e.intersections) {
+          const instanceIds = e.intersections
+            .map((e) => e?.instanceId)
+            .filter((i): i is NonNullable<typeof i> => i != null);
+
+          // Single instance callback
+          instanceIds.length > 0 &&
+            onPointHovered &&
+            onPointHovered(data[instanceIds[0]]);
+        }
+      }}
+      onPointerLeave={() => {
+        onPointerLeave && onPointerLeave();
       }}
     >
       {geometryEl}
