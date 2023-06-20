@@ -52,6 +52,10 @@ export type PointsProps = {
    */
   onPointHovered?: (points: PointBaseProps) => void;
   /**
+   * Callback for when the mouse pointer leaves a point
+   */
+  onPointHoverLeave: () => void;
+  /**
    * The shape of the points. This value must be uniform for all points.
    * @default 'sphere'
    */
@@ -77,6 +81,7 @@ export function Points({
   onPointsClicked,
   onPointClicked,
   onPointHovered,
+  onPointHoverLeave,
   pointShape = 'sphere',
   opacity = 1,
   material = 'meshMatcap',
@@ -222,6 +227,9 @@ export function Points({
             onPointHovered &&
             onPointHovered(data[instanceIds[0]]);
         }
+      }}
+      onPointerLeave={() => {
+        onPointHoverLeave && onPointHoverLeave();
       }}
     >
       {geometryEl}

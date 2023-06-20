@@ -1,8 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { startTransition, useRef, useState } from 'react';
 import { Meta, Story } from '@storybook/react';
 import {
   Axes,
-  Cluster,
   PointBaseProps,
   Points,
   ThreeDimensionalBounds,
@@ -14,7 +13,6 @@ import {
 
 import _data from './data/point-cloud-3d.json';
 import { Container, ToolName } from './components';
-import { QuadraticBezierCurve3 } from 'three';
 import { QuadraticBezierLine } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 
@@ -30,13 +28,14 @@ const connections: Array<{
   end: ThreeDimensionalPoint;
 }> = [];
 
-for (let i = 10; i < data.length; i++) {
+const CONNECTIONS_PER_POINT = 10;
+for (let i = CONNECTIONS_PER_POINT; i < data.length; i++) {
   const startPoint = data[i];
   const x = startPoint.position[0];
   const y = startPoint.position[1];
   const z = startPoint.position[2] as number;
   const start: ThreeDimensionalPoint = [x, y, z];
-  for (let j = 0; j < 10; j++) {
+  for (let j = 0; j < CONNECTIONS_PER_POINT; j++) {
     const endPoint = data[i - j - 1];
     const x2 = endPoint.position[0];
     const y2 = endPoint.position[1];
@@ -71,6 +70,7 @@ export function Default() {
 }
 
 function PointsWithConnections() {
+  const lineWidth = 1;
   const group = useRef<THREE.Group>(null);
   const [selectedPoint, setSelectedPoint] =
     useState<PointBaseProps | null>(null);
@@ -94,7 +94,14 @@ function PointsWithConnections() {
           color: 'limegreen',
         }}
         onPointHovered={(point) => {
-          setSelectedPoint(point);
+          startTransition(() => {
+            setSelectedPoint(point);
+          });
+        }}
+        onPointHoverLeave={() => {
+          startTransition(() => {
+            setSelectedPoint(null);
+          });
         }}
       />
       <group ref={group}>
@@ -106,20 +113,21 @@ function PointsWithConnections() {
                 start={connection.start}
                 end={connection.end}
                 color="white"
-                opacity={0.8}
+                opacity={1}
                 transparent
                 dashed
                 dashScale={50}
                 gapSize={20}
+                lineWidth={lineWidth}
               />
               <QuadraticBezierLine
                 key={i}
                 start={connection.start}
                 end={connection.end}
                 color="white"
-                lineWidth={0.5}
+                lineWidth={lineWidth / 2}
                 transparent
-                opacity={0.5}
+                opacity={0.8}
               />
             </group>
           );
