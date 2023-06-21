@@ -1,5 +1,5 @@
 import React, { startTransition, useRef, useState } from 'react';
-import { Meta, Story } from '@storybook/react';
+import { Meta } from '@storybook/react';
 import {
   Axes,
   PointBaseProps,
