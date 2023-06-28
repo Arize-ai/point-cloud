@@ -59,7 +59,7 @@ export function Cluster({
   }, [data]);
 
   return (
-    <mesh geometry={singleGeometry ?? undefined}>
+    <mesh geometry={singleGeometry ?? undefined} visible={opacity > 0}>
       <meshBasicMaterial
         opacity={opacity}
         transparent={opacity < 1}
