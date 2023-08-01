@@ -115,6 +115,13 @@ export function Points({
   useFrame(() => {
     data.forEach(({ position }, id) => {
       tempObject.position.set(position[0], position[1], position[2] || 0);
+      if (pointProps.scale) {
+        tempObject.scale.set(
+          pointProps.scale,
+          pointProps.scale,
+          pointProps.scale
+        );
+      }
       if (meshRef.current) {
         meshRef.current.setMatrixAt(id, tempObject.matrix);
         meshRef.current.instanceMatrix.needsUpdate = true;
