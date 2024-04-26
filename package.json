@@ -24,7 +24,7 @@
     "chromatic": "npx chromatic --project-token=46df7a59e0a8"
   },
   "peerDependencies": {
-    "@react-three/drei": "^9.5.4",
+    "@react-three/drei": "^9.105.4",
     "@react-three/fiber": "^8.0.12",
     "react": ">=18",
     "three": "^0.139.2",
@@ -55,15 +55,15 @@
   ],
   "devDependencies": {
     "@babel/core": "^7.17.9",
-    "@react-three/drei": "9.74.5",
+    "@react-three/drei": "^9.105.4",
     "@react-three/fiber": "8.13.3",
     "@size-limit/preset-small-lib": "^7.0.8",
     "@storybook/addon-a11y": "^6.5.10",
-    "@storybook/addon-essentials": "^6.4.22",
+    "@storybook/addon-essentials": "^8.0.9",
     "@storybook/addon-info": "^5.3.21",
-    "@storybook/addon-links": "^6.4.22",
-    "@storybook/addons": "^6.4.22",
-    "@storybook/react": "^6.4.22",
+    "@storybook/addon-links": "^8.0.9",
+    "@storybook/addons": "^6.5.16",
+    "@storybook/react": "^6.5.16",
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.0",
     "@types/three": "^0.139.0",
@@ -85,7 +85,6 @@
     "example": "example",
     "test": "test"
   },
-  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Arize-ai/point-cloud.git"
