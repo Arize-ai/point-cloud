@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import {
   getThreeDimensionalBounds,
   Points,
@@ -35,7 +35,11 @@ const meta: Meta = {
 
 export default meta;
 
-function ThreeDPointCloudWithSelect(props) {
+function ThreeDPointCloudWithSelect(props: {
+  onChange: (sel: PointBaseProps[]) => void;
+  selectedPoints: string[];
+  selectedTool: ToolName;
+}) {
   const selectedTool = props.selectedTool;
   const bounds = React.useMemo(() => {
     return getThreeDimensionalBounds([
@@ -78,7 +82,11 @@ function ThreeDPointCloudWithSelect(props) {
   );
 }
 
-function TwoDPointCloudWithSelect(props) {
+function TwoDPointCloudWithSelect(props: {
+  onChange: (sel: PointBaseProps[]) => void;
+  selectedPoints: string[];
+  selectedTool: ToolName;
+}) {
   const { selectedTool, selectedPoints } = props;
   const bounds = React.useMemo(() => {
     return getTwoDimensionalBounds([
@@ -116,8 +124,8 @@ function TwoDPointCloudWithSelect(props) {
   );
 }
 
-const Template: Story = (props) => {
-  const [selected, setSelected] = useState([]);
+const Template: StoryFn = (props) => {
+  const [selected, setSelected] = useState<string[]>([]);
   const [tool, setTool] = useState<ToolName>('move');
   return (
     <div style={{ position: 'relative' }}>
@@ -144,7 +152,7 @@ const Template: Story = (props) => {
 };
 
 export const MultipleCanvases = () => {
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState<string[]>([]);
   const [tool, setTool] = useState<ToolName>('move');
   return (
     <div>
@@ -185,7 +193,7 @@ export const MultipleCanvases = () => {
 };
 
 export const TwoDimensional = () => {
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState<string[]>([]);
   const [tool, setTool] = useState<ToolName>('move');
   return (
     <div>

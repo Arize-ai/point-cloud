@@ -1,11 +1,14 @@
 import React from 'react';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import {
   TwoDimensionalCanvas,
   TwoDimensionalCanvasProps,
   Points,
   getTwoDimensionalBounds,
   TwoDimensionalBounds,
+  TwoDimensionalPoint,
+  PointBaseProps,
+  TwoDimensionalControls,
 } from '../src';
 import { Container } from './components';
 import data from './data/point-cloud-2d.json';
@@ -33,9 +36,10 @@ const meta: Meta = {
 
 export default meta;
 
-const Template: Story<TwoDimensionalCanvasProps> = (args) => (
-  <Container>
-    <TwoDimensionalCanvas camera={{ zoom: 30 }} {...args}>
+const Template: StoryFn<TwoDimensionalCanvasProps> = (args) => (
+  <Container showToolbar={false}>
+    <TwoDimensionalCanvas camera={{ zoom: 30, up: [0, 0, 1] }} {...args}>
+      <TwoDimensionalControls />
       <ambientLight />
       <pointLight position={[10, 10, 10]} />
       {/* @ts-ignore */}
@@ -60,11 +64,12 @@ export const WithBounds = () => {
     ]);
   }, []);
   return (
-    <Container>
-      <TwoDimensionalCanvas>
+    <Container showToolbar={false}>
+      <TwoDimensionalCanvas camera={{ zoom: 30, up: [0, 0, 1] }}>
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
         <TwoDimensionalBounds bounds={bounds}>
+          <TwoDimensionalControls />
           {/* @ts-ignore */}
           <Points data={data} pointProps={{ color: 'green' }} />
           {/* @ts-ignore */}
@@ -77,32 +82,37 @@ export const WithBounds = () => {
 };
 
 export const Rerender = () => {
-  const [primaryData, setPrimaryData] = React.useState([]);
-  const [secondaryData, setSecondaryData] = React.useState([]);
+  const [primaryData, setPrimaryData] = React.useState<PointBaseProps[]>([]);
+  const [secondaryData, setSecondaryData] = React.useState<PointBaseProps[]>(
+    []
+  );
   const bounds = React.useMemo(() => {
-    // @ts-ignore
     return getTwoDimensionalBounds([
-      ...primaryData.map((d) => d.position),
-      ...secondaryData.map((d) => d.position),
+      ...(primaryData.map((d) => d.position) as TwoDimensionalPoint[]),
+      ...(secondaryData.map((d) => d.position) as TwoDimensionalPoint[]),
     ]);
   }, [primaryData, secondaryData]);
   return (
-    <Container>
+    <Container showToolbar={false}>
       <button
         onClick={() => {
-          setPrimaryData(data);
-          setSecondaryData(data2);
+          setPrimaryData(data as PointBaseProps[]);
+          setSecondaryData(data2 as PointBaseProps[]);
         }}
       >
         Load Data
       </button>
-      <TwoDimensionalCanvas>
+      <TwoDimensionalCanvas camera={{ zoom: 30, up: [0, 0, 1] }}>
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
         <TwoDimensionalBounds bounds={bounds}>
-          {/* @ts-ignore */}
-          <Points data={primaryData} />
-          {/* @ts-ignore */}
+          <TwoDimensionalControls />
+          <Points
+            data={primaryData}
+            pointProps={{
+              color: 'green',
+            }}
+          />
           <Points data={secondaryData} pointProps={{ color: 'red' }} />
           <axesHelper />
         </TwoDimensionalBounds>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import {
   getThreeDimensionalBounds,
   Points,
@@ -8,15 +8,12 @@ import {
   ThreeDimensionalControls,
   Axes,
   LassoSelect,
-  TwoDimensionalControls,
-  getTwoDimensionalBounds,
-  TwoDimensionalCanvas,
-  TwoDimensionalBounds,
   Cluster,
+  PointBaseProps,
+  ThreeDimensionalPoint,
 } from '../src';
 import { Container, ControlPanel, ToolName } from './components';
 import data from './data/point-cloud-3d.json';
-import twoDData from './data/point-cloud-2d.json';
 
 const meta: Meta = {
   title: 'Cluster',
@@ -29,13 +26,15 @@ const meta: Meta = {
 
 export default meta;
 
-function ThreeDPointCloudWithSelect(props) {
+function ThreeDPointCloudWithSelect(props: {
+  onChange: (sel: PointBaseProps[]) => void;
+  selectedPoints: string[];
+  selectedTool: ToolName;
+}) {
   const selectedTool = props.selectedTool;
   const bounds = React.useMemo(() => {
-    // @ts-ignore
     return getThreeDimensionalBounds([
-      ...data.map((d) => d.position),
-      // ...data2.map((d) => d.position),
+      ...(data.map((d) => d.position) as ThreeDimensionalPoint[]),
     ]);
   }, []);
 
@@ -82,8 +81,8 @@ function ThreeDPointCloudWithSelect(props) {
   );
 }
 
-const Template: Story = (props) => {
-  const [selected, setSelected] = useState([]);
+const Template: StoryFn = (props) => {
+  const [selected, setSelected] = useState<string[]>([]);
   const [tool, setTool] = useState<ToolName>('move');
   return (
     <div style={{ position: 'relative' }}>
