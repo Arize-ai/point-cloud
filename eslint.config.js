@@ -62,5 +62,6 @@ module.exports = [
         version: 'detect', // React version. "detect" automatically picks the version you have installed.
       },
     },
+    ignores: ['dist/*'],
   },
 ];
