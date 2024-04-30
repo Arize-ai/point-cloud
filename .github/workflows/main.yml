@@ -1,9 +1,24 @@
 name: CI
 on: [push]
 jobs:
+  ci: 
+    name: Lint TypeScript
+    runs-on: ubuntu-latest
+    steps:
+       - name: Checkout Repository
+         uses: actions/checkout@v3
+       - name: Set up Nodejs
+         uses: actions/setup-node@v3
+         with:
+          node-version: 18
+       - name: Install deps and build (with cache)
+         uses: bahmutov/npm-install@v1
+       - name: Lint
+         run: yarn lint
+       - name: Prettier
+         run: yarn prettier:check
   build:
     name: Build, lint, and test on Node ${{ matrix.node }} and ${{ matrix.os }}
-
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -21,12 +36,6 @@ jobs:
 
       - name: Install deps and build (with cache)
         uses: bahmutov/npm-install@v1
-
-      - name: Lint
-        run: yarn lint
-          
-      - name: Prettier
-        run: yarn prettier:check
 
       - name: Test
         run: yarn test --ci --coverage --maxWorkers=2
