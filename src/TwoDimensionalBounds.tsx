@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect } from "react";
+import { useThree } from "@react-three/fiber";
 import { TwoDimensionalBoundsType, TwoDimensionalPoint } from "./types";
 import { getCenterFromTwoDimensionalBounds } from "./utils";
-import { useThree } from "@react-three/fiber";
 
 /**
  * The amount to reduce the zoom by to fit the content when bounds are provided.

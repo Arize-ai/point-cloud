@@ -15,7 +15,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
-    "lint": "eslint ./src/**/*",
+    "lint": "eslint ./src",
     "lint:ts:fix": "eslint --fix ./src",
     "prettier": "prettier --write './src/**/*'",
     "prettier:check": "prettier --check './src/**/*'",
@@ -79,7 +79,7 @@
     "babel-loader": "^8.2.5",
     "chromatic": "^6.5.4",
     "d3-scale-chromatic": "^3.0.0",
-    "eslint": "^9.1.1",
+    "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-react": "^7.34.1",
@@ -94,7 +94,7 @@
     "three": "^0.153.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.4.0",
-    "typescript": "^4.6.3"
+    "typescript": "^5.4.5"
   },
   "description": "A point cloud library for visualizing point clouds using 2D and 3D canvases.",
   "directories": {

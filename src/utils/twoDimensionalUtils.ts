@@ -68,7 +68,7 @@ export function isPointInsidePolygon(
     point: TwoDimensionalPoint,
     polygonPoints: TwoDimensionalPoint[],
 ) {
-    var x = point[0],
+    const x = point[0],
         y = point[1];
 
     let inside = false;

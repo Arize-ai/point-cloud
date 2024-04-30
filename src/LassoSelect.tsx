@@ -260,8 +260,8 @@ function updateSelection({
     camera: THREE.Camera;
     selectionPoints: number[];
 }) {
-    let selection: PointBaseProps[] = [];
-    let lassoPolygon: TwoDimensionalPoint[] = [];
+    const selection: PointBaseProps[] = [];
+    const lassoPolygon: TwoDimensionalPoint[] = [];
     for (let i = 0; i < selectionPoints.length; i += 3) {
         lassoPolygon.push([selectionPoints[i], selectionPoints[i + 1]]);
     }

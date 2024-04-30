@@ -40,7 +40,7 @@ export function Cluster({
     wireframe = false,
 }: ClusterProps) {
     const singleGeometry = useMemo(() => {
-        let geometries: THREE.SphereGeometry[] = [];
+        const geometries: THREE.SphereGeometry[] = [];
         // Keep track of the points added so that we can remove duplicates
         const pointSet = new Set();
         data.forEach((point) => {

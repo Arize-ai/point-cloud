@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useEffect } from "react";
+import { useThree } from "@react-three/fiber";
 import { ThreeDimensionalBoundsType, ThreeDimensionalPoint } from "./types";
 import {
     getCenterFromThreeDimensionalBounds,
     getMaxDimensionFromThreeDimensionalBounds,
     isOrthographicCamera,
 } from "./utils";
-import { useThree } from "@react-three/fiber";
 
 export type ThreeDimensionalBoundsContextType = {
     bounds: ThreeDimensionalBoundsType;
