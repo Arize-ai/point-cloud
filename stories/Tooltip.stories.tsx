@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta } from '@storybook/react';
 import { startTransition, useState } from 'react';
 import { Container, ToolName } from './components';
 import {
@@ -24,7 +24,6 @@ const meta: Meta = {
 export default meta;
 
 export function Default() {
-  const [tool, setTool] = useState<ToolName>('move');
   const bounds = React.useMemo(() => {
     return getThreeDimensionalBounds([
       ...data.map((d) => d.position as ThreeDimensionalPoint),
@@ -34,7 +33,7 @@ export function Default() {
     useState<PointBaseProps | null>(null);
 
   return (
-    <Container showToolbar selectedTool={tool} onToolChange={setTool}>
+    <Container showToolbar={false}>
       <ThreeDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[0, 0, 10]} />

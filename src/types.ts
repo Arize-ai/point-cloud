@@ -1,11 +1,11 @@
-import { OrbitControlsProps } from '@react-three/drei';
+import { OrbitControlsProps } from "@react-three/drei";
 
 export type TwoDimensionalPoint = [number, number];
 export type TwoDimensionalBoundsType = {
-  minX: number;
-  minY: number;
-  maxX: number;
-  maxY: number;
+    minX: number;
+    minY: number;
+    maxX: number;
+    maxY: number;
 };
 
 export type ThreeDimensionalPoint = [number, number, number];
@@ -16,78 +16,78 @@ export type ThreeDimensionalPoint = [number, number, number];
 export type PointCoordinates = TwoDimensionalPoint | ThreeDimensionalPoint;
 
 export type ThreeDimensionalBoundsType = {
-  minX: number;
-  minY: number;
-  minZ: number;
-  maxX: number;
-  maxY: number;
-  maxZ: number;
+    minX: number;
+    minY: number;
+    minZ: number;
+    maxX: number;
+    maxY: number;
+    maxZ: number;
 };
 
 /**
  * Customizable for the camera on initialization
  */
 export type CameraInitProps = {
-  position?: ThreeDimensionalPoint;
-  zoom?: number;
-  up?: ThreeDimensionalPoint;
+    position?: ThreeDimensionalPoint;
+    zoom?: number;
+    up?: ThreeDimensionalPoint;
 };
 
 /**
  * Pass through some  props directly to the controls
  */
 type ControlPassthroughProps = Pick<
-  OrbitControlsProps,
-  'onStart' | 'onEnd' | 'domElement'
+    OrbitControlsProps,
+    "onStart" | "onEnd" | "domElement"
 > & {
-  /**
-   * A normalized event handler across all controls
-   */
-  onChange?: (e?: THREE.Event) => void;
+    /**
+     * A normalized event handler across all controls
+     */
+    onChange?: (e?: THREE.Event) => void;
 };
 
 /**
  * Control props
  */
 export type ControlProps = ControlPassthroughProps & {
-  /**
-   * A way to disable the controls dynamically.
-   * @default true
-   */
-  enabled?: boolean;
-  /**
-   * The speed at which to zoom / pan
-   * @default 2
-   */
-  zoomSpeed?: number;
-  /**
-   * The speed at which to zoom / pan
-   * @default 2
-   */
-  panSpeed?: number;
-  /**
-   * control the zoom
-   * @default true
-   */
-  enableZoom?: boolean;
-  /**
-   * control the pan
-   * @default true
-   */
-  enablePan?: boolean;
-  /**
-   * control the rotation
-   * @default true
-   */
-  enableRotate?: boolean;
-  /**
-   * Start rotating when the control mounts
-   * @default false
-   */
-  autoRotate?: boolean;
-  /**
-   * auto-rotation speed
-   * @default 3
-   */
-  autoRotateSpeed?: number;
+    /**
+     * A way to disable the controls dynamically.
+     * @default true
+     */
+    enabled?: boolean;
+    /**
+     * The speed at which to zoom / pan
+     * @default 2
+     */
+    zoomSpeed?: number;
+    /**
+     * The speed at which to zoom / pan
+     * @default 2
+     */
+    panSpeed?: number;
+    /**
+     * control the zoom
+     * @default true
+     */
+    enableZoom?: boolean;
+    /**
+     * control the pan
+     * @default true
+     */
+    enablePan?: boolean;
+    /**
+     * control the rotation
+     * @default true
+     */
+    enableRotate?: boolean;
+    /**
+     * Start rotating when the control mounts
+     * @default false
+     */
+    autoRotate?: boolean;
+    /**
+     * auto-rotation speed
+     * @default 3
+     */
+    autoRotateSpeed?: number;
 };

@@ -1,5 +1,5 @@
 export function isOrthographicCamera(
-  c: THREE.Camera
+    c: THREE.Camera,
 ): c is THREE.OrthographicCamera {
-  return (c as THREE.OrthographicCamera).isOrthographicCamera;
+    return (c as THREE.OrthographicCamera).isOrthographicCamera;
 }

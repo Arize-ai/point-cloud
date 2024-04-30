@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import {
   ThreeDimensionalCanvas,
   ThreeDimensionalCanvasProps,
   ThreeDimensionalControls,
   Points,
+  PointBaseProps,
 } from '../src';
 import { Container } from './components';
 import _data from './data/point-cloud-3d.json';
@@ -46,22 +47,22 @@ const labelCount = actualLabelsArray.length - 1;
 
 const actualLabelsColorMap: Map<string, number> = actualLabelsArray.reduce(
   (acc: Map<string, number>, d, index) => {
-    acc[d as string] = index / labelCount;
+    acc.set(d as string, index / labelCount);
     return acc;
   },
   new Map() as Map<string, number>
 );
 
-const colorByFn = (data) => {
+const colorByFn = (data: PointBaseProps) => {
   const { actualLabel } = data.metaData;
-  return interpolateSinebow(actualLabelsColorMap[actualLabel]);
+  return interpolateSinebow(actualLabelsColorMap.get(actualLabel) ?? 0);
 };
 
-const Template: Story<ThreeDimensionalCanvasProps> = (args) => {
+const Template: StoryFn<ThreeDimensionalCanvasProps> = (args) => {
   const [scale, setScale] = useState(1);
   return (
     <div>
-      <Container>
+      <Container showToolbar={false}>
         <ThreeDimensionalCanvas {...args} camera={{ position: [0, 0, 10] }}>
           <ambientLight />
           <pointLight position={[10, 10, 10]} />

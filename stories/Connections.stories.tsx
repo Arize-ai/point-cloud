@@ -48,14 +48,13 @@ for (let i = CONNECTIONS_PER_POINT; i < data.length; i++) {
 export default meta;
 
 export function Default() {
-  const [tool, setTool] = useState<ToolName>('move');
   const bounds = React.useMemo(() => {
     return getThreeDimensionalBounds([
       ...data.map((d) => d.position as ThreeDimensionalPoint),
     ]);
   }, []);
   return (
-    <Container showToolbar selectedTool={tool} onToolChange={setTool}>
+    <Container showToolbar={false}>
       <ThreeDimensionalCanvas camera={{ zoom: 1, up: [0, 0, 1] }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[0, 0, 10]} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import {
   TwoDimensionalCanvas,
   TwoDimensionalControls,
@@ -8,6 +8,7 @@ import {
   getTwoDimensionalBounds,
   TwoDimensionalBounds,
   TwoDimensionalPoint,
+  PointBaseProps,
 } from '../src';
 import { Container } from './components';
 import data from './data/point-cloud-2d.json';
@@ -30,7 +31,9 @@ const meta: Meta = {
 
 export default meta;
 
-const Template: Story<TwoDimensionalControlsProps> = (props) => {
+const Template: StoryFn<TwoDimensionalControlsProps> = (
+  props: TwoDimensionalControlsProps
+) => {
   const bounds = React.useMemo(() => {
     return getTwoDimensionalBounds([
       ...data.map((d) => d.position as TwoDimensionalPoint),
@@ -38,16 +41,22 @@ const Template: Story<TwoDimensionalControlsProps> = (props) => {
     ]);
   }, []);
   return (
-    <Container>
+    <Container showToolbar={false}>
       <TwoDimensionalCanvas camera={{ zoom: 30, up: [0, 0, 1] }}>
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
-        <TwoDimensionalControls {...props} />
-        {/* @ts-ignore */}
-        <Points data={data} pointProps={{ color: 'aqua' }} />
-        {/* @ts-ignore */}
-        <Points data={data2} pointProps={{ color: 'MediumPurple' }} />
-        <axesHelper />
+        <TwoDimensionalBounds bounds={bounds}>
+          <TwoDimensionalControls {...props} />
+          <Points
+            data={data as PointBaseProps[]}
+            pointProps={{ color: 'aqua' }}
+          />
+          <Points
+            data={data2 as PointBaseProps[]}
+            pointProps={{ color: 'MediumPurple' }}
+          />
+          <axesHelper />
+        </TwoDimensionalBounds>
       </TwoDimensionalCanvas>
       <axesHelper />
     </Container>
@@ -58,7 +67,7 @@ const Template: Story<TwoDimensionalControlsProps> = (props) => {
 // https://storybook.js.org/docs/react/workflows/unit-testing
 export const Default = Template.bind({});
 
-export const WithBounds: Story<TwoDimensionalControlsProps> = () => {
+export const WithBounds: StoryFn<TwoDimensionalControlsProps> = () => {
   const bounds = React.useMemo(() => {
     // @ts-ignore
     return getTwoDimensionalBounds([
@@ -67,16 +76,20 @@ export const WithBounds: Story<TwoDimensionalControlsProps> = () => {
     ]);
   }, []);
   return (
-    <Container>
+    <Container showToolbar={false}>
       <TwoDimensionalCanvas camera={{ up: [0, 0, 1] }}>
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
         <TwoDimensionalBounds bounds={bounds}>
           <TwoDimensionalControls />
-          {/* @ts-ignore */}
-          <Points data={data} pointProps={{ color: 'aqua' }} />
-          {/* @ts-ignore */}
-          <Points data={data2} pointProps={{ color: 'MediumPurple' }} />
+          <Points
+            data={data as PointBaseProps[]}
+            pointProps={{ color: 'aqua' }}
+          />
+          <Points
+            data={data2 as PointBaseProps[]}
+            pointProps={{ color: 'MediumPurple' }}
+          />
           <axesHelper />
         </TwoDimensionalBounds>
       </TwoDimensionalCanvas>
@@ -85,7 +98,7 @@ export const WithBounds: Story<TwoDimensionalControlsProps> = () => {
   );
 };
 
-export const ZoomDisabled: Story<TwoDimensionalControlsProps> = () => {
+export const ZoomDisabled: StoryFn<TwoDimensionalControlsProps> = () => {
   const bounds = React.useMemo(() => {
     // @ts-ignore
     return getTwoDimensionalBounds([
@@ -94,7 +107,7 @@ export const ZoomDisabled: Story<TwoDimensionalControlsProps> = () => {
     ]);
   }, []);
   return (
-    <Container>
+    <Container showToolbar={false}>
       <TwoDimensionalCanvas camera={{ up: [0, 0, 1] }}>
         <ambientLight />
         <pointLight position={[10, 10, 10]} />

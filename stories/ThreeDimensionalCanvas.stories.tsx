@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import {
   ThreeDimensionalCanvas,
   ThreeDimensionalCanvasProps,
@@ -34,8 +34,8 @@ const meta: Meta = {
 
 export default meta;
 
-const Template: Story<ThreeDimensionalCanvasProps> = (args) => (
-  <Container>
+const Template: StoryFn<ThreeDimensionalCanvasProps> = (args) => (
+  <Container showToolbar={false}>
     <ThreeDimensionalCanvas {...args} camera={{ position: [0, 0, 10] }}>
       <pointLight position={[10, 10, 10]} />
       <ThreeDimensionalControls />
@@ -57,7 +57,7 @@ export const WithBounds = () => {
     ]);
   }, []);
   return (
-    <Container>
+    <Container showToolbar={false}>
       <ThreeDimensionalCanvas>
         <ambientLight />
         <ThreeDimensionalControls />
@@ -94,7 +94,7 @@ export const OverlappingColors = () => {
     ]);
   }, []);
   return (
-    <Container>
+    <Container showToolbar={false}>
       <ThreeDimensionalCanvas>
         <ThreeDimensionalControls />
         <axesHelper />
@@ -122,7 +122,7 @@ export const AutoRotateOnInit = () => {
     ]);
   }, []);
   return (
-    <Container>
+    <Container showToolbar={false}>
       <ThreeDimensionalCanvas>
         <ThreeDimensionalControls
           autoRotate={autoRotate}
@@ -155,7 +155,7 @@ export const OrthographicCamera = () => {
     ]);
   }, []);
   return (
-    <Container>
+    <Container showToolbar={false}>
       <ThreeDimensionalCanvas orthographic>
         <ambientLight />
         <ThreeDimensionalControls />
