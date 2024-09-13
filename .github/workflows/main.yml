@@ -36,6 +36,8 @@ jobs:
 
       - name: Install deps and build (with cache)
         uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: false
 
       - name: Test
         run: yarn test --ci --coverage --maxWorkers=2
