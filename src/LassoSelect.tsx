@@ -191,8 +191,10 @@ export function LassoSelect({
 
     // Animation frames to draw the selections
     useFrame(({ camera }) => {
-        const { selectionShapeNeedsUpdate, selectionPoints } =
-            selectionState.current;
+        const {
+            selectionShapeNeedsUpdate,
+            selectionPoints,
+        } = selectionState.current;
         // Update the selection lasso lines
         if (selectionShapeNeedsUpdate) {
             const ogLength = selectionPoints.length;
@@ -268,7 +270,7 @@ function updateSelection({
 
     // A vector to re-use in calculating it's intersection with the polygon
     const pointVector = new THREE.Vector3();
-    points.forEach((point) => {
+    points.forEach(point => {
         const isThreeD = point.position.length === 3;
         // Initialize the point vector from the point position
         const pointPosition = isThreeD
