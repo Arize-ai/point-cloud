@@ -208,15 +208,15 @@ export function Points({
         <instancedMesh
             args={[undefined, undefined, data.length]}
             ref={meshRef}
-            onPointerUp={(e) => {
+            onPointerUp={e => {
                 if (e.intersections) {
                     const instanceIds = e.intersections
-                        .map((e) => e?.instanceId)
+                        .map(e => e?.instanceId)
                         .filter((i): i is NonNullable<typeof i> => i != null);
 
                     // Multi click
                     onPointsClicked &&
-                        onPointsClicked(instanceIds.map((i) => data[i]));
+                        onPointsClicked(instanceIds.map(i => data[i]));
 
                     // Single click
                     instanceIds.length > 0 &&
@@ -224,10 +224,10 @@ export function Points({
                         onPointClicked(data[instanceIds[0]]);
                 }
             }}
-            onPointerOver={(e) => {
+            onPointerOver={e => {
                 if (e.intersections) {
                     const instanceIds = e.intersections
-                        .map((e) => e?.instanceId)
+                        .map(e => e?.instanceId)
                         .filter((i): i is NonNullable<typeof i> => i != null);
 
                     // Single instance callback

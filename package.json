@@ -1,115 +1,112 @@
 {
-  "name": "@arizeai/point-cloud",
-  "version": "3.0.6",
-  "license": "MIT",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "engines": {
-    "node": ">=10"
-  },
-  "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test --passWithNoTests",
-    "lint": "eslint ./src",
-    "lint:ts:fix": "eslint --fix ./src",
-    "prettier": "prettier --write './src/**/*'",
-    "prettier:check": "prettier --check './src/**/*'",
-    "prepare": "tsdx build",
-    "size": "size-limit",
-    "analyze": "size-limit --why",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "chromatic": "npx chromatic --project-token=46df7a59e0a8"
-  },
-  "peerDependencies": {
-    "@react-three/drei": "^9.105.5",
-    "@react-three/fiber": "^8.0.12",
-    "react": ">=18",
-    "three": "^0.139.2",
-    "three-stdlib": "2.23.9"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
-  },
-  "prettier": {
-    "tabWidth": 4,
-    "semi": true,
-    "singleQuote": false,
-    "trailingComma": "all"
-  },
-  "author": "Mikyo King <mikyo@arize.com>",
-  "module": "dist/point-cloud.esm.js",
-  "size-limit": [
-    {
-      "path": "dist/point-cloud.cjs.production.min.js",
-      "limit": "800 KB"
+    "name": "@arizeai/point-cloud",
+    "version": "3.0.6",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "typings": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "src"
+    ],
+    "engines": {
+        "node": ">=10"
     },
-    {
-      "path": "dist/point-cloud.esm.js",
-      "limit": "10 KB"
-    }
-  ],
-  "devDependencies": {
-    "@babel/core": "^7.17.9",
-    "@babel/preset-react": "^7.24.1",
-    "@react-three/drei": "^9.105.5",
-    "@react-three/fiber": "8.13.3",
-    "@size-limit/preset-small-lib": "^7.0.8",
-    "@storybook/addon-a11y": "^8.0.9",
-    "@storybook/addon-essentials": "^8.0.9",
-    "@storybook/addon-info": "^5.3.21",
-    "@storybook/addon-links": "^8.0.9",
-    "@storybook/addon-webpack5-compiler-babel": "^3.0.3",
-    "@storybook/addons": "^7.6.17",
-    "@storybook/react": "^8.0.9",
-    "@storybook/react-webpack5": "^8.0.9",
-    "@types/d3-scale-chromatic": "^3.0.3",
-    "@types/react": "^18.0.8",
-    "@types/react-dom": "^18.0.0",
-    "@types/three": "^0.139.0",
-    "@typescript-eslint/eslint-plugin": "^7.7.1",
-    "@typescript-eslint/parser": "^7.7.1",
-    "babel-loader": "^8.2.5",
-    "chromatic": "^6.5.4",
-    "d3-scale-chromatic": "^3.0.0",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-react": "^7.34.1",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-unused-imports": "^3.1.0",
-    "husky": "^7.0.4",
-    "react": "18",
-    "react-dom": "18",
-    "react-is": "^18.1.0",
-    "size-limit": "^7.0.8",
-    "storybook": "^8.0.9",
-    "three": "^0.153.0",
-    "tsdx": "^0.14.1",
-    "tslib": "^2.4.0",
-    "typescript": "^5.4.5"
-  },
-  "description": "A point cloud library for visualizing point clouds using 2D and 3D canvases.",
-  "directories": {
-    "example": "example",
-    "test": "test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Arize-ai/point-cloud.git"
-  },
-  "keywords": [
-    "point-cloud"
-  ],
-  "bugs": {
-    "url": "https://github.com/Arize-ai/point-cloud/issues"
-  },
-  "homepage": "https://github.com/Arize-ai/point-cloud#readme"
+    "scripts": {
+        "start": "tsdx watch",
+        "build": "tsdx build",
+        "test": "tsdx test --passWithNoTests",
+        "lint": "eslint ./src",
+        "lint:ts:fix": "eslint --fix ./src",
+        "prettier": "prettier --write './src/**/*'",
+        "prettier:check": "prettier --check './src/**/*'",
+        "prepare": "tsdx build",
+        "size": "size-limit",
+        "analyze": "size-limit --why",
+        "storybook": "storybook dev -p 6006",
+        "build-storybook": "storybook build",
+        "chromatic": "npx chromatic --project-token=46df7a59e0a8"
+    },
+    "peerDependencies": {
+        "@react-three/drei": "^9.105.5",
+        "@react-three/fiber": "^8.0.12",
+        "react": ">=18",
+        "three": "^0.139.2",
+        "three-stdlib": "2.23.9"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "tsdx lint"
+        }
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "semi": true,
+        "singleQuote": false,
+        "trailingComma": "all"
+    },
+    "author": "Mikyo King <mikyo@arize.com>",
+    "module": "dist/point-cloud.esm.js",
+    "size-limit": [
+        {
+            "path": "dist/point-cloud.cjs.production.min.js",
+            "limit": "800 KB"
+        },
+        {
+            "path": "dist/point-cloud.esm.js",
+            "limit": "10 KB"
+        }
+    ],
+    "devDependencies": {
+        "@babel/core": "^7.17.9",
+        "@babel/preset-react": "^7.24.1",
+        "@babel/preset-typescript": "^7.24.7",
+        "@react-three/drei": "^9.105.5",
+        "@react-three/fiber": "8.13.3",
+        "@size-limit/preset-small-lib": "^7.0.8",
+        "@storybook/addon-webpack5-compiler-babel": "^3.0.3",
+        "@storybook/addons": "^7.6.17",
+        "@storybook/react": "^8.0.9",
+        "@storybook/react-webpack5": "^8.0.9",
+        "@types/d3-scale-chromatic": "^3.0.3",
+        "@types/react": "^18.0.8",
+        "@types/react-dom": "^18.0.0",
+        "@types/three": "^0.139.0",
+        "@typescript-eslint/eslint-plugin": "^7.7.1",
+        "@typescript-eslint/parser": "^7.7.1",
+        "babel-loader": "^8.2.5",
+        "chromatic": "^6.5.4",
+        "d3-scale-chromatic": "^3.0.0",
+        "eslint": "^8.56.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-import": "^2.29.1",
+        "eslint-plugin-react": "^7.34.1",
+        "eslint-plugin-react-hooks": "^4.6.2",
+        "eslint-plugin-unused-imports": "^3.1.0",
+        "husky": "^7.0.4",
+        "react": "18",
+        "react-dom": "18",
+        "react-is": "^18.1.0",
+        "size-limit": "^7.0.8",
+        "storybook": "^8.0.9",
+        "three": "^0.153.0",
+        "tsdx": "^0.14.1",
+        "tslib": "^2.4.0",
+        "typescript": "^5.4.5"
+    },
+    "description": "A point cloud library for visualizing point clouds using 2D and 3D canvases.",
+    "directories": {
+        "example": "example",
+        "test": "test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Arize-ai/point-cloud.git"
+    },
+    "keywords": [
+        "point-cloud"
+    ],
+    "bugs": {
+        "url": "https://github.com/Arize-ai/point-cloud/issues"
+    },
+    "homepage": "https://github.com/Arize-ai/point-cloud#readme"
 }

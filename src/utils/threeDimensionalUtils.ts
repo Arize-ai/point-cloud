@@ -34,7 +34,7 @@ export function getThreeDimensionalBounds(
         minZ = Infinity,
         maxZ = -Infinity;
 
-    points.forEach((p) => {
+    points.forEach(p => {
         minX = Math.min(minX, p[0]);
         minY = Math.min(minY, p[1]);
         minZ = Math.min(minZ, p[2]);

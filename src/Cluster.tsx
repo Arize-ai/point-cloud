@@ -43,7 +43,7 @@ export function Cluster({
         const geometries: THREE.SphereGeometry[] = [];
         // Keep track of the points added so that we can remove duplicates
         const pointSet = new Set();
-        data.forEach((point) => {
+        data.forEach(point => {
             const { position } = point;
             // Remove duplicates
             if (!pointSet.has(position.join(","))) {
