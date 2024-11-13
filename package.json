@@ -55,18 +55,22 @@
     },
     "size-limit": [
         {
-            "path": "dist/point-cloud.cjs.production.min.js",
-            "limit": "800 KB"
+            "name": "cjs",
+            "path": "dist/index.cjs",
+            "limit": "10 kB"
         },
         {
-            "path": "dist/point-cloud.esm.js",
-            "limit": "10 KB"
+            "name": "esm",
+            "path": "dist/index.js",
+            "limit": "10 kB"
         }
     ],
     "devDependencies": {
         "@react-three/drei": "^9.105.5",
         "@react-three/fiber": "8.13.3",
-        "@size-limit/preset-small-lib": "^7.0.8",
+        "@size-limit/esbuild": "^11.1.6",
+        "@size-limit/esbuild-why": "^11.1.6",
+        "@size-limit/preset-small-lib": "^11.1.6",
         "@storybook/addons": "^7.6.17",
         "@storybook/react": "^8.0.9",
         "@storybook/react-webpack5": "^8.0.9",
@@ -91,7 +95,7 @@
         "react": "18",
         "react-dom": "18",
         "react-is": "^18.1.0",
-        "size-limit": "^7.0.8",
+        "size-limit": "^11.1.6",
         "storybook": "^8.0.9",
         "three": "^0.153.0",
         "tslib": "^2.8.1",
