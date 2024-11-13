@@ -6,3 +6,5 @@ dist
 .vscode
 storybook-static
 yarn.lock
+pnpm-lock.yaml
+coverage
