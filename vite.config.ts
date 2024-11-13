@@ -26,13 +26,24 @@ export default mergeConfig(
             rollupOptions: {
                 // make sure to externalize deps that shouldn't be bundled
                 // into your library
-                external: ["react", "react-dom"],
+                external: [
+                    "react",
+                    "react-dom",
+                    "@react-three/fiber",
+                    "@react-three/drei",
+                    "three",
+                    "three-stdlib",
+                ],
                 output: {
                     // Provide global variables to use in the UMD build
                     // for externalized deps
                     globals: {
                         react: "React",
                         "react-dom": "ReactDOM",
+                        "@react-three/fiber": "ReactThreeFiber",
+                        "@react-three/drei": "ReactThreeDrei",
+                        three: "Three",
+                        "three-stdlib": "ThreeStdlib",
                     },
                 },
             },
