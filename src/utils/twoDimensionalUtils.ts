@@ -30,7 +30,7 @@ export function getTwoDimensionalBounds(
         maxX = -Infinity,
         maxY = -Infinity;
 
-    points.forEach(p => {
+    points.forEach((p) => {
         minX = Math.min(minX, p[0]);
         minY = Math.min(minY, p[1]);
         maxX = Math.max(maxX, p[0]);
