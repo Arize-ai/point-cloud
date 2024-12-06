@@ -17,7 +17,6 @@ export default mergeConfig(
             lib: {
                 // Could also be a dictionary or array of multiple entry points
                 entry: resolve(__dirname, "src/index.tsx"),
-                name: "PointCloud",
                 // the proper extensions will be added
                 fileName: "index",
                 formats: ["es", "cjs"],
@@ -34,18 +33,6 @@ export default mergeConfig(
                     "three",
                     "three-stdlib",
                 ],
-                output: {
-                    // Provide global variables to use in the UMD build
-                    // for externalized deps
-                    globals: {
-                        react: "React",
-                        "react-dom": "ReactDOM",
-                        "@react-three/fiber": "ReactThreeFiber",
-                        "@react-three/drei": "ReactThreeDrei",
-                        three: "Three",
-                        "three-stdlib": "ThreeStdlib",
-                    },
-                },
             },
         },
     }),
