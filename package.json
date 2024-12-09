@@ -35,7 +35,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "chromatic": "npx chromatic --project-token=46df7a59e0a8",
-    "ci:publish": "pnpm publish -r"
+    "ci:publish": "pnpm publish -r",
+    "ci:version": "pnpm changeset version"
   },
   "peerDependencies": {
     "@react-three/drei": "^9.105.5",
