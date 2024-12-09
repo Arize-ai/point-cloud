@@ -34,7 +34,8 @@
     "analyze": "size-limit --why",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "chromatic": "npx chromatic --project-token=46df7a59e0a8"
+    "chromatic": "npx chromatic --project-token=46df7a59e0a8",
+    "ci:publish": "pnpm publish -r"
   },
   "peerDependencies": {
     "@react-three/drei": "^9.105.5",
@@ -67,6 +68,7 @@
     }
   ],
   "devDependencies": {
+    "@changesets/cli": "^2.27.10",
     "@react-three/drei": "^9.105.5",
     "@react-three/fiber": "8.13.3",
     "@size-limit/esbuild": "^11.1.6",
