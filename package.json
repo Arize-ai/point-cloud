@@ -1,6 +1,6 @@
 {
   "name": "@arizeai/point-cloud",
-  "version": "4.0.0-1",
+  "version": "4.0.0",
   "license": "MIT",
   "author": "Mikyo King <mikyo@arize.com>",
   "main": "dist/index.cjs",
