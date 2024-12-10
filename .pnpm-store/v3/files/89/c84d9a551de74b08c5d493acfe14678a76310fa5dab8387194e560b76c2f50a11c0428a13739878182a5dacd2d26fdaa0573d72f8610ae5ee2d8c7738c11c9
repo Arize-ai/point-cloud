@@ -1,0 +1,28 @@
+{
+  "name": "@size-limit/preset-small-lib",
+  "version": "11.1.6",
+  "description": "Size Limit preset for small open source libraries",
+  "type": "module",
+  "keywords": [
+    "size-limit",
+    "preset",
+    "performance",
+    "budget",
+    "performance budget"
+  ],
+  "author": "Andrey Sitnik <andrey@sitnik.ru>",
+  "license": "MIT",
+  "repository": "ai/size-limit",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
+  "peerDependencies": {
+    "size-limit": "11.1.6"
+  },
+  "dependencies": {
+    "@size-limit/esbuild": "11.1.6",
+    "@size-limit/file": "11.1.6",
+    "size-limit": "11.1.6"
+  }
+}
