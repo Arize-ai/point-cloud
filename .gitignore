@@ -9,3 +9,4 @@ yarn.lock
 pnpm-lock.yaml
 coverage
 esbuild-why*
+.pnpm-store
