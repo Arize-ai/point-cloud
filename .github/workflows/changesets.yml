@@ -32,7 +32,12 @@ jobs:
             - name: install dependencies
               run: pnpm install
             - name: Setup npmrc
-              run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+              # cp .npmrc to $HOME, append authToken to .npmrc
+              # changeset will use the .npmrc in $HOME, and writing there instead of in the repo
+              # prevents pnpm from complaining about a dirty worktree
+              run: |
+                  cp .npmrc $HOME
+                  echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> $HOME/.npmrc
             - name: create and publish versions
               uses: changesets/action@v1
               with:
@@ -44,4 +49,3 @@ jobs:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  HOME: ${{ github.workspace }}
