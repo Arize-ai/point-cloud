@@ -23,14 +23,16 @@ jobs:
                   scope: "@arizeai"
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-            - name: install pnpm
-              run: npm i pnpm@latest -g
-            - name: Setup npmrc
-              run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+            - name: Setup PNPM
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 9.8.0
             - name: setup pnpm config
               run: pnpm config set store-dir $PNPM_CACHE_FOLDER
             - name: install dependencies
               run: pnpm install
+            - name: Setup npmrc
+              run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
             - name: create and publish versions
               uses: changesets/action@v1
               with:
