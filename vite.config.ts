@@ -28,6 +28,8 @@ export default mergeConfig(
                 external: [
                     "react",
                     "react-dom",
+                    "react-dom/client",
+                    "react/jsx-runtime",
                     "@react-three/fiber",
                     "@react-three/drei",
                     "three",
